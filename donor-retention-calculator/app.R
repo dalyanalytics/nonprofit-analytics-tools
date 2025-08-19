@@ -1,11 +1,13 @@
-# Donor Retention Calculator - Shinylive App
+# Donor Retention Calculator - Shinylive App with bslib
 # File: donor-retention-calculator/app.R
 
 library(shiny)
-library(DT)
-library(plotly)
+library(bslib)
 library(dplyr)
 library(lubridate)
+library(reactable)
+library(sparkline)
+library(shinyjs)
 
 # Generate realistic dummy data for demo
 set.seed(123)
@@ -131,253 +133,423 @@ calculate_retention_metrics <- function(gifts_data) {
   ))
 }
 
+# Define theme colors matching Daly Analytics
+theme_colors <- list(
+  primary = "#F9B397",
+  secondary = "#D68A93", 
+  success = "#aecbed",
+  info = "#AD92B1",
+  warning = "#B07891",
+  danger = "#dc3545"
+)
+
+# Custom theme
+custom_theme <- bs_theme(
+  version = 5,
+  preset = "bootstrap",
+  primary = theme_colors$primary,
+  secondary = theme_colors$secondary,
+  success = theme_colors$success,
+  info = theme_colors$info,
+  warning = theme_colors$warning,
+  danger = theme_colors$danger,
+  base_font = font_google("Inter"),
+  heading_font = font_google("Inter", wght = 600),
+  font_scale = 1.1
+)
+
+# Loading screen CSS
+loading_css <- "
+#loading-content {
+  position: fixed;
+  background: linear-gradient(135deg, rgba(249, 179, 151, 0.95), rgba(214, 138, 147, 0.95), rgba(173, 146, 177, 0.95), rgba(176, 120, 145, 0.95));
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+  z-index: 9999;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-family: 'Inter', sans-serif;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 30px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.loading-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  text-align: center;
+  max-width: 400px;
+  line-height: 1.4;
+}
+
+.loading-icon {
+  font-size: 4rem;
+  margin-bottom: 30px;
+  opacity: 0.9;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+"
+
 # UI
-ui <- fluidPage(
-  tags$head(
-    tags$style(HTML("
-      .metric-box {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 20px;
-        border-radius: 8px;
-        text-align: center;
-        margin-bottom: 10px;
-      }
-      .metric-value {
-        font-size: 2.5em;
-        font-weight: bold;
-        margin: 0;
-      }
-      .metric-label {
-        font-size: 1.1em;
-        margin: 5px 0 0 0;
-        opacity: 0.9;
-      }
-      .sample-data-box {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        color: white;
-        padding: 20px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-      }
-      .info-box {
-        background: #f8f9fa;
-        padding: 15px;
-        border-radius: 5px;
-        border-left: 4px solid #007bff;
-        margin-bottom: 20px;
-      }
-      .benchmark-box {
-        background: #e8f5e8;
-        padding: 15px;
-        border-radius: 5px;
-        border-left: 4px solid #28a745;
-        margin-bottom: 20px;
-      }
-      .cta-box {
-        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-        color: white;
-        padding: 25px;
-        border-radius: 8px;
-        text-align: center;
-        margin-top: 30px;
-      }
-      .cta-button {
-        background: #f39c12;
-        color: white;
-        padding: 12px 25px;
-        border: none;
-        border-radius: 5px;
-        font-size: 1.1em;
-        font-weight: bold;
-        text-decoration: none;
-        display: inline-block;
-        margin-top: 10px;
-        transition: background 0.3s ease;
-      }
-      .cta-button:hover {
-        background: #e67e22;
-        color: white;
-        text-decoration: none;
-      }
-    "))
+ui <- page_fluid(
+  theme = custom_theme,
+  title = "Donor Retention Calculator",
+  useShinyjs(),
+  tags$head(tags$style(HTML(loading_css))),
+  
+  # Loading screen
+  div(
+    id = "loading-content",
+    div(class = "loading-icon", "📊"),
+    div(class = "loading-spinner"),
+    div(class = "loading-text", "Initializing The App"),
+    div(class = "loading-subtitle", "Preparing your donor retention calculator...")
   ),
   
-  titlePanel(
+  # Main app content (hidden initially)
+  hidden(
     div(
-      h1("📊 Nonprofit Donor Retention Calculator", style = "margin-bottom: 5px;"),
-      p("Analyze retention patterns, calculate lifetime value, and benchmark against industry standards", 
-        style = "color: #666; font-size: 1.2em; margin-top: 0;")
+      id = "app-content",
+  
+  # Header
+  div(
+    class = "text-center py-4 mb-4",
+    style = "background: #f8f9fa; border-radius: 15px; margin-bottom: 2rem; border-left: 4px solid #F9B397; border-right: 4px solid #F9B397;",
+    h1("Donor Retention Calculator", class = "display-4 fw-bold mb-2"),
+    p("Analyze retention patterns, calculate lifetime value, and benchmark performance", 
+      class = "lead mb-0 text-muted")
+  ),
+  
+  # Sample data card
+  card(
+    class = "mb-4",
+    card_header(
+      h4("Try Sample Data", class = "mb-0")
+    ),
+    card_body(
+      p("Explore with realistic nonprofit data (500 donors, 5 years of history). Upload your own CSV for personalized insights."),
+      div(
+        class = "d-flex align-items-center gap-3",
+        actionButton("load_sample", "Load Sample Data", 
+                    class = "btn-outline-primary btn-lg"),
+        span("or upload your data below", class = "text-muted fst-italic")
+      )
     )
   ),
   
-  div(class = "sample-data-box",
-    h4("🚀 Try with Sample Data", style = "margin-top: 0; color: white;"),
-    p("Explore realistic nonprofit data (500 donors, 5 years of history). Upload your own CSV for personalized insights.", 
-      style = "margin-bottom: 15px;"),
-    div(style = "text-align: center;",
-      actionButton("load_sample", "Load Sample Data", 
-                   style = "background: white; color: #333; font-weight: bold; padding: 10px 20px; border: none; border-radius: 5px; margin-right: 15px;"),
-      span("Or upload your data below ↓", style = "color: white; font-style: italic; font-size: 1.1em;")
-    )
-  ),
-  
-  sidebarLayout(
-    sidebarPanel(
-      h4("📁 Upload Your Data"),
-      fileInput("file", "Choose CSV File",
-                accept = c(".csv"),
-                placeholder = "donor_data.csv"),
+  # Main layout
+  layout_sidebar(
+    fillable = TRUE,
+    
+    # Sidebar
+    sidebar = sidebar(
+      title = "Data Upload & Settings",
+      width = 300,
       
-      div(class = "info-box",
-        h5("📋 Required CSV Format:", style = "margin-top: 0;"),
-        tags$ul(
-          tags$li(strong("donor_id:"), " Unique identifier"),
-          tags$li(strong("gift_date:"), " Date (YYYY-MM-DD)"),
-          tags$li(strong("amount:"), " Gift amount (numeric)")
-        ),
-        p(strong("Example:"), style = "margin-bottom: 5px;"),
-        tags$code("donor_id,gift_date,amount\n123,2023-01-15,100.00")
+      # File upload
+      card(
+        card_header("Upload Your Data"),
+        card_body(
+          fileInput("file", "Choose CSV File",
+                   accept = c(".csv"),
+                   placeholder = "donor_data.csv"),
+          
+          div(
+            class = "alert alert-info small",
+            icon("info-circle", class = "me-2"),
+            strong("Privacy Note: "), 
+            "This tool processes data locally in your browser. However, avoid uploading files with sensitive personal information (names, addresses, emails). Use anonymized donor IDs only."
+          ),
+          
+          hr(),
+          
+          h6("Required CSV Format:", class = "fw-bold"),
+          tags$ul(
+            class = "list-unstyled small",
+            tags$li(tags$strong("donor_id:"), " Unique identifier"),
+            tags$li(tags$strong("gift_date:"), " Date (YYYY-MM-DD)"),
+            tags$li(tags$strong("amount:"), " Gift amount (numeric)")
+          ),
+          
+          tags$code("donor_id,gift_date,amount\n123,2023-01-15,100.00", 
+                   class = "small text-muted")
+        )
       ),
       
+      # Analysis options
       conditionalPanel(
         condition = "output.data_loaded",
         br(),
-        h4("⚙️ Analysis Options"),
-        sliderInput("min_gift", "Minimum Gift Amount ($):",
-                   min = 0, max = 1000, value = 0, step = 25),
-        
-        checkboxInput("exclude_current_year", 
-                     "Exclude current year from retention calculations", 
-                     value = TRUE),
-        
-        br(),
-        div(class = "info-box",
-          h5("💡 Pro Tip:", style = "margin-top: 0;"),
-          p("Excluding the current year gives more accurate retention rates since the year isn't complete yet.")
+        card(
+          card_header("Analysis Options"),
+          card_body(
+            sliderInput("min_gift", "Minimum Gift Amount ($):",
+                       min = 0, max = 1000, value = 0, step = 25),
+            
+            checkboxInput("exclude_current_year", 
+                         "Exclude current year from calculations", 
+                         value = TRUE),
+            
+            tags$small("Excluding current year provides more accurate retention rates.", 
+                      class = "text-muted fst-italic")
+          )
         )
       )
     ),
     
-    mainPanel(
-      conditionalPanel(
-        condition = "!output.data_loaded",
-        div(style = "text-align: center; padding: 60px 20px; color: #666;",
-          h2("👆 Load sample data or upload your CSV to begin"),
-          p("Get instant insights into donor retention patterns, lifetime value projections, and industry benchmarks.", 
-            style = "font-size: 1.2em;"),
-          hr(),
-          h4("What You'll Discover:"),
-          div(style = "text-align: left; max-width: 500px; margin: 0 auto;",
-            tags$ul(
-              tags$li("Your organization's retention rate vs industry benchmarks"),
-              tags$li("Lifetime value projections for different retention scenarios"),
-              tags$li("Cohort analysis showing which acquisition years performed best"),
-              tags$li("Donor segmentation revealing your most valuable supporters")
+    # Main content area
+    conditionalPanel(
+      condition = "!output.data_loaded",
+      div(
+        class = "text-center py-5",
+        style = "min-height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center;",
+        icon("chart-line", class = "display-1 text-muted mb-4"),
+        h2("Get Started", class = "mb-3"),
+        p("Load sample data or upload your CSV to begin analysis", class = "lead mb-4"),
+        hr(class = "w-50 mx-auto mb-4"),
+        h5("What You'll Discover:", class = "mb-4"),
+        div(
+          class = "row g-3 mt-3 justify-content-center",
+          style = "max-width: 600px;",
+          div(class = "col-md-6 text-center",
+            div(class = "d-flex flex-column align-items-center",
+              icon("percentage", class = "text-muted mb-2", style = "font-size: 1.5rem;"),
+              span("Retention rates vs industry benchmarks", class = "small")
+            )
+          ),
+          div(class = "col-md-6 text-center",
+            div(class = "d-flex flex-column align-items-center",
+              icon("dollar-sign", class = "text-muted mb-2", style = "font-size: 1.5rem;"),
+              span("Lifetime value projections", class = "small")
+            )
+          ),
+          div(class = "col-md-6 text-center",
+            div(class = "d-flex flex-column align-items-center",
+              icon("users", class = "text-muted mb-2", style = "font-size: 1.5rem;"),
+              span("Cohort analysis by acquisition year", class = "small")
+            )
+          ),
+          div(class = "col-md-6 text-center",
+            div(class = "d-flex flex-column align-items-center",
+              icon("chart-pie", class = "text-muted mb-2", style = "font-size: 1.5rem;"),
+              span("Donor segmentation insights", class = "small")
+            )
+          )
+        )
+      )
+    ),
+    
+    # Results when data is loaded
+    conditionalPanel(
+      condition = "output.data_loaded",
+      
+      # Key metrics cards
+      div(
+        class = "row g-3 mb-4",
+        div(
+          class = "col-md-4",
+          value_box(
+            title = "Overall Retention Rate",
+            value = textOutput("overall_retention"),
+            showcase = icon("chart-line"),
+            theme = "primary",
+            p(textOutput("benchmark_comparison"), class = "mt-2")
+          )
+        ),
+        div(
+          class = "col-md-4",
+          value_box(
+            title = "Total Donors",
+            value = textOutput("total_donors"),
+            showcase = icon("users"),
+            theme = "info"
+          )
+        ),
+        div(
+          class = "col-md-4",
+          value_box(
+            title = "Average Annual Gift",
+            value = textOutput("avg_gift"),
+            showcase = icon("dollar-sign"),
+            theme = "success"
+          )
+        )
+      ),
+      
+      # Industry benchmarks card
+      card(
+        class = "mb-4",
+        card_header(
+          h5("Industry Benchmarks", class = "mb-0")
+        ),
+        card_body(
+          div(
+            class = "row",
+            div(
+              class = "col-md-3 text-center",
+              h6("Excellent", class = "text-success"),
+              p(">70%", class = "fw-bold"),
+              tags$small("Top 10%")
+            ),
+            div(
+              class = "col-md-3 text-center",
+              h6("Good", class = "text-info"),
+              p("50-70%", class = "fw-bold"),
+              tags$small("Above average")
+            ),
+            div(
+              class = "col-md-3 text-center",
+              h6("Average", class = "text-warning"),
+              p("35-50%", class = "fw-bold"),
+              tags$small("Industry standard")
+            ),
+            div(
+              class = "col-md-3 text-center",
+              h6("Needs Work", class = "text-danger"),
+              p("<35%", class = "fw-bold"),
+              tags$small("Below average")
             )
           )
         )
       ),
       
-      conditionalPanel(
-        condition = "output.data_loaded",
-        
-        # Key Metrics Row
-        h3("📈 Key Metrics"),
-        fluidRow(
-          column(4,
-            div(class = "metric-box",
-              h3(textOutput("overall_retention"), class = "metric-value"),
-              p("Overall Retention Rate", class = "metric-label")
-            )
-          ),
-          column(4,
-            div(class = "metric-box",
-              h3(textOutput("total_donors"), class = "metric-value"),
-              p("Total Donors Analyzed", class = "metric-label")
-            )
-          ),
-          column(4,
-            div(class = "metric-box",
-              h3(textOutput("avg_gift"), class = "metric-value"),
-              p("Average Annual Gift", class = "metric-label")
-            )
+      # Analysis tabs
+      navset_card_tab(
+        height = "600px",
+        nav_panel(
+          "Lifetime Value",
+          icon = icon("dollar-sign"),
+          p("See how improving retention rates impacts donor lifetime value:"),
+          reactableOutput("ltv_reactable"),
+          br(),
+          div(
+            class = "alert alert-info",
+            h6("Key Insight", class = "alert-heading"),
+            p("Small improvements in retention create massive LTV increases. A 10% retention improvement can boost LTV by 25-40%.", 
+              class = "mb-0")
           )
         ),
         
-        br(),
-        
-        # Benchmark Section
-        div(class = "benchmark-box",
-          h4("🎯 Industry Benchmarks", style = "margin-top: 0;"),
-          p(strong("Your retention rate: "), textOutput("benchmark_comparison", inline = TRUE)),
-          tags$ul(
-            tags$li(strong("Excellent:"), " >70% (Top 10% of nonprofits)"),
-            tags$li(strong("Good:"), " 50-70% (Above average)"),
-            tags$li(strong("Average:"), " 35-50% (Industry standard)"),
-            tags$li(strong("Needs Improvement:"), " <35% (Below average)")
+        nav_panel(
+          "Cohort Analysis", 
+          icon = icon("users"),
+          p("Track retention performance by donor acquisition year:", class = "mb-4"),
+          div(
+            h5("Retention Trends by Cohort", class = "mb-3"),
+            p("Each sparkline shows the retention rate progression from Year 2 through Year 5.", 
+              class = "text-muted small mb-3"),
+            reactableOutput("cohort_reactable"),
+            class = "mb-5"
+          ),
+          div(
+            h5("Detailed Cohort Data", class = "mb-3"),
+            reactableOutput("cohort_table")
           )
         ),
         
-        # Tabbed Analysis
-        tabsetPanel(
-          tabPanel("💰 Lifetime Value", 
-            br(),
-            h4("Lifetime Value Projections"),
-            p("See how improving retention rates impacts donor lifetime value:"),
-            DT::dataTableOutput("ltv_table"),
-            br(),
-            div(class = "info-box",
-              h5("💡 Key Insight:", style = "margin-top: 0;"),
-              p("Small improvements in retention rates create massive increases in lifetime value. 
-                A 10% retention improvement can increase LTV by 25-40%.")
-            )
-          ),
-          
-          tabPanel("📊 Cohort Analysis",
-            br(),
-            h4("Retention by Acquisition Year"),
-            p("Track how well you retain donors based on when they first gave:"),
-            DT::dataTableOutput("cohort_table"),
-            br(),
-            plotlyOutput("cohort_plot", height = "400px")
-          ),
-          
-          tabPanel("👥 Donor Segments",
-            br(),
-            h4("Donor Segmentation Analysis"),
-            plotlyOutput("segment_plot", height = "400px"),
-            br(),
-            DT::dataTableOutput("segment_table")
+        nav_panel(
+          "Donor Segments",
+          icon = icon("chart-pie"),
+          p("Understand your donor base composition and value concentration:", class = "mb-4"),
+          div(
+            h5("Detailed Segment Breakdown", class = "mb-3"),
+            reactableOutput("segment_table")
           )
         )
       )
     )
   ),
   
-  # CTA Section
+  # CTA footer
   conditionalPanel(
     condition = "output.data_loaded",
-    div(class = "cta-box",
-      h3("🎯 Want Automated Retention Tracking?", style = "margin-top: 0; color: white;"),
-      p("Stop doing this analysis manually every quarter. Get custom dashboards that automatically track retention, predict churn risk, and identify major gift prospects.", 
-        style = "font-size: 1.1em;"),
-      a(href = "https://www.dalyanalytics.com/contact", target = "_blank", class = "cta-button",
-        "Schedule Free Consultation →")
+    br(),
+    card(
+      style = "background: linear-gradient(135deg, rgba(44, 62, 80, 0.95), rgba(52, 73, 94, 0.95)); color: white;",
+      card_body(
+        class = "text-center py-4",
+        h4("Want Automated Retention Tracking?", class = "text-white mb-3"),
+        p("Stop doing this analysis manually. Get custom dashboards with predictive analytics, churn risk modeling, and automated insights.", 
+          class = "lead text-white-50 mb-4"),
+        a(href = "https://www.dalyanalytics.com/contact", 
+          target = "_blank", 
+          class = "btn btn-lg",
+          style = "background: linear-gradient(135deg, #aecbed, #F9B397); color: #2c3e50; font-weight: 600;",
+          "Schedule Free Consultation")
+      )
     )
   ),
   
+  # Footer
   br(),
-  div(style = "text-align: center; color: #666; padding: 20px;",
-    p("Built with ❤️ for nonprofits | ", 
-      a(href = "https://www.dalyanalytics.com", target = "_blank", "Daly Analytics", style = "color: #007bff;"),
-      " | Open source on ",
-      a(href = "https://github.com", target = "_blank", "GitHub", style = "color: #007bff;"))
+  div(
+    class = "text-center text-muted py-3",
+    p("Built with ❤️ for nonprofits | ",
+      a(href = "https://www.dalyanalytics.com", target = "_blank", "Daly Analytics"),
+      " | ",
+      a(href = "https://github.com", target = "_blank", "Open Source"))
   )
+    ) # Close hidden app-content div
+  ) # Close hidden div
 )
 
 # Server
 server <- function(input, output, session) {
+  
+  # Simulate loading time and hide loading screen
+  observe({
+    # Simulate initialization time
+    Sys.sleep(1.5)
+    
+    # Hide loading screen and show app
+    hide(id = "loading-content", anim = TRUE, animType = "fade")
+    show("app-content")
+  })
   
   # Reactive values
   values <- reactiveValues(
@@ -394,8 +566,8 @@ server <- function(input, output, session) {
                      max = max(sample_data$gifts$amount),
                      value = 0)
     
-    showNotification("Sample data loaded! Explore the analysis below.", 
-                    type = "message", duration = 5)
+    showNotification("Sample data loaded successfully!", 
+                    type = "message", duration = 3)
   })
   
   # File upload
@@ -409,7 +581,7 @@ server <- function(input, output, session) {
       required_cols <- c("donor_id", "gift_date", "amount")
       if(!all(required_cols %in% names(df))) {
         showNotification("Error: CSV must contain columns: donor_id, gift_date, amount", 
-                        type = "error", duration = 10)
+                        type = "error", duration = 8)
         return()
       }
       
@@ -422,7 +594,7 @@ server <- function(input, output, session) {
       df <- df[!is.na(df$gift_date) & !is.na(df$amount) & df$amount > 0, ]
       
       if(nrow(df) == 0) {
-        showNotification("Error: No valid data found in CSV", type = "error", duration = 10)
+        showNotification("Error: No valid data found in CSV", type = "error", duration = 8)
         return()
       }
       
@@ -434,11 +606,11 @@ server <- function(input, output, session) {
                        value = 0)
       
       showNotification(paste("Success! Loaded", nrow(df), "gift records."), 
-                      type = "message", duration = 5)
+                      type = "message", duration = 3)
       
     }, error = function(e) {
       showNotification(paste("Error reading file:", e$message), 
-                      type = "error", duration = 10)
+                      type = "error", duration = 8)
     })
   })
   
@@ -486,174 +658,572 @@ server <- function(input, output, session) {
     req(values$metrics)
     rate <- values$metrics$overall_retention$retention_rate
     
-    if(rate >= 70) "Excellent! 🌟"
-    else if(rate >= 50) "Good! 👍"
-    else if(rate >= 35) "Average 📊"
-    else "Needs Improvement 📈"
+    if(rate >= 70) "Excellent performance!"
+    else if(rate >= 50) "Good performance"
+    else if(rate >= 35) "Average performance"
+    else "Room for improvement"
   })
   
-  # Output: LTV table
-  output$ltv_table <- DT::renderDataTable({
+  # Output: LTV reactable
+  output$ltv_reactable <- renderReactable({
     req(values$metrics)
+    
+    # Ensure we have valid metrics
+    if(is.null(values$metrics$overall_retention) || is.null(values$metrics$avg_annual_gift)) {
+      return(NULL)
+    }
     
     retention_rate <- values$metrics$overall_retention$retention_rate / 100
     avg_gift <- values$metrics$avg_annual_gift
     
+    # Ensure numeric values
+    if(!is.numeric(retention_rate) || !is.numeric(avg_gift) || is.na(retention_rate) || is.na(avg_gift)) {
+      return(NULL)
+    }
+    
+    # Calculate year-by-year LTV for each scenario
+    current_ret <- retention_rate
+    improved_10 <- min(1, retention_rate + 0.1)
+    improved_20 <- min(1, retention_rate + 0.2)
+    best_practice <- 0.7
+    
     scenarios <- data.frame(
       Scenario = c("Current Retention", "Improved by 10%", "Improved by 20%", "Best Practice (70%)"),
-      `Retention Rate` = c(
-        paste0(round(retention_rate * 100, 1), "%"),
-        paste0(round(min(100, (retention_rate + 0.1) * 100), 1), "%"),
-        paste0(round(min(100, (retention_rate + 0.2) * 100), 1), "%"),
-        "70.0%"
+      retention_rate_num = c(
+        retention_rate * 100,
+        min(100, (retention_rate + 0.1) * 100),
+        min(100, (retention_rate + 0.2) * 100),
+        70.0
       ),
-      `5-Year LTV` = c(
-        paste0("$", format(round(avg_gift * (1 + retention_rate^1 + retention_rate^2 + retention_rate^3 + retention_rate^4), 0), big.mark = ",")),
-        paste0("$", format(round(avg_gift * (1 + min(1, retention_rate + 0.1)^1 + min(1, retention_rate + 0.1)^2 + min(1, retention_rate + 0.1)^3 + min(1, retention_rate + 0.1)^4), 0), big.mark = ",")),
-        paste0("$", format(round(avg_gift * (1 + min(1, retention_rate + 0.2)^1 + min(1, retention_rate + 0.2)^2 + min(1, retention_rate + 0.2)^3 + min(1, retention_rate + 0.2)^4), 0), big.mark = ",")),
-        paste0("$", format(round(avg_gift * (1 + 0.7^1 + 0.7^2 + 0.7^3 + 0.7^4), 0), big.mark = ","))
+      ltv_value = c(
+        avg_gift * (1 + current_ret^1 + current_ret^2 + current_ret^3 + current_ret^4),
+        avg_gift * (1 + improved_10^1 + improved_10^2 + improved_10^3 + improved_10^4),
+        avg_gift * (1 + improved_20^1 + improved_20^2 + improved_20^3 + improved_20^4),
+        avg_gift * (1 + best_practice^1 + best_practice^2 + best_practice^3 + best_practice^4)
       ),
-      check.names = FALSE
+      # Calculate cumulative LTV for each year for sparklines
+      year1 = rep(avg_gift, 4),
+      year2 = c(
+        avg_gift * (1 + current_ret^1),
+        avg_gift * (1 + improved_10^1),
+        avg_gift * (1 + improved_20^1),
+        avg_gift * (1 + best_practice^1)
+      ),
+      year3 = c(
+        avg_gift * (1 + current_ret^1 + current_ret^2),
+        avg_gift * (1 + improved_10^1 + improved_10^2),
+        avg_gift * (1 + improved_20^1 + improved_20^2),
+        avg_gift * (1 + best_practice^1 + best_practice^2)
+      ),
+      year4 = c(
+        avg_gift * (1 + current_ret^1 + current_ret^2 + current_ret^3),
+        avg_gift * (1 + improved_10^1 + improved_10^2 + improved_10^3),
+        avg_gift * (1 + improved_20^1 + improved_20^2 + improved_20^3),
+        avg_gift * (1 + best_practice^1 + best_practice^2 + best_practice^3)
+      ),
+      year5 = c(
+        avg_gift * (1 + current_ret^1 + current_ret^2 + current_ret^3 + current_ret^4),
+        avg_gift * (1 + improved_10^1 + improved_10^2 + improved_10^3 + improved_10^4),
+        avg_gift * (1 + improved_20^1 + improved_20^2 + improved_20^3 + improved_20^4),
+        avg_gift * (1 + best_practice^1 + best_practice^2 + best_practice^3 + best_practice^4)
+      ),
+      ltv_trend = "sparkline_placeholder",
+      stringsAsFactors = FALSE
     )
     
-    DT::datatable(scenarios, 
-                  options = list(dom = 't', pageLength = 10, scrollX = TRUE),
-                  rownames = FALSE) %>%
-      DT::formatStyle(columns = 1:3, fontSize = '14px')
-    
-  }, server = FALSE)
+    reactable(
+      scenarios,
+      pagination = FALSE,
+      striped = TRUE,
+      bordered = TRUE,
+      highlight = TRUE,
+      columns = list(
+        Scenario = colDef(
+          width = 180,
+          style = list(fontWeight = "600")
+        ),
+        retention_rate_num = colDef(
+          name = "Retention Rate",
+          width = 120,
+          format = colFormat(suffix = "%", digits = 1),
+          style = function(value) {
+            if(is.na(value)) return(list())
+            if (value >= 70) list(color = "#28a745", fontWeight = "600")
+            else if (value >= 50) list(color = "#ffc107", fontWeight = "600")
+            else if (value >= 35) list(color = "#fd7e14", fontWeight = "600")
+            else list(color = "#dc3545", fontWeight = "600")
+          }
+        ),
+        ltv_value = colDef(
+          name = "5-Year LTV",
+          width = 120,
+          format = colFormat(prefix = "$", separators = TRUE, digits = 0),
+          style = function(value) {
+            if(is.na(value)) return(list())
+            list(fontWeight = "600", color = "#2c3e50")
+          }
+        ),
+        ltv_trend = colDef(
+          name = "LTV Growth",
+          width = 200,
+          cell = function(value, index) {
+            # Get the LTV values for this row
+            row_data <- scenarios[index, ]
+            ltv_values <- c(
+              as.numeric(row_data$year1),
+              as.numeric(row_data$year2),
+              as.numeric(row_data$year3),
+              as.numeric(row_data$year4),
+              as.numeric(row_data$year5)
+            )
+            
+            # Remove any NA values
+            ltv_values <- ltv_values[!is.na(ltv_values)]
+            
+            if (length(ltv_values) >= 2) {
+              # Color based on scenario
+              line_color <- if(index == 1) {
+                "#6c757d"  # Current - gray
+              } else if(index == 2) {
+                "#ffc107"  # 10% improvement - yellow
+              } else if(index == 3) {
+                "#fd7e14"  # 20% improvement - orange
+              } else {
+                "#28a745"  # Best practice - green
+              }
+              
+              sparkline(
+                values = ltv_values,
+                type = "line",
+                lineColor = line_color,
+                fillColor = FALSE,
+                spotColor = line_color,
+                minSpotColor = line_color,
+                maxSpotColor = line_color,
+                spotRadius = 3,
+                lineWidth = 3,
+                width = 180,
+                height = 40,
+                chartRangeMin = min(ltv_values) * 0.95,
+                chartRangeMax = max(ltv_values) * 1.05
+              )
+            } else {
+              span("No data", style = "color: #6c757d; font-style: italic;")
+            }
+          }
+        ),
+        # Hide the year columns
+        year1 = colDef(show = FALSE),
+        year2 = colDef(show = FALSE),
+        year3 = colDef(show = FALSE),
+        year4 = colDef(show = FALSE),
+        year5 = colDef(show = FALSE)
+      ),
+      theme = reactableTheme(
+        borderColor = "#e9ecef",
+        stripedColor = "#f8f9fa",
+        highlightColor = "#f5f5f5",
+        cellPadding = "12px 16px",
+        style = list(
+          fontFamily = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontSize = "15px"
+        ),
+        headerStyle = list(
+          background = "#f8f9fa",
+          color = "#495057",
+          fontWeight = "600",
+          borderBottom = "2px solid #dee2e6"
+        )
+      )
+    )
+  })
   
   # Output: Cohort table
-  output$cohort_table <- DT::renderDataTable({
+  output$cohort_table <- renderReactable({
     req(values$metrics)
     
+    # Ensure we have valid cohort data
+    if(is.null(values$metrics$cohort_analysis) || nrow(values$metrics$cohort_analysis) == 0) {
+      return(NULL)
+    }
+    
     cohort_data <- values$metrics$cohort_analysis %>%
+      select(first_gift_year, total_donors, year_2_rate, year_3_rate, year_4_rate, year_5_rate) %>%
+      # Ensure all rate columns are numeric
+      mutate(
+        across(contains("rate"), ~as.numeric(.x)),
+        total_donors = as.numeric(total_donors),
+        first_gift_year = as.numeric(first_gift_year)
+      ) %>%
+      # Remove any rows with invalid data
+      filter(!is.na(first_gift_year) & !is.na(total_donors)) %>%
+      # Rename for display
       select(`First Gift Year` = first_gift_year,
              `New Donors` = total_donors,
              `Year 2 Rate` = year_2_rate,
              `Year 3 Rate` = year_3_rate,
              `Year 4 Rate` = year_4_rate,
-             `Year 5 Rate` = year_5_rate) %>%
-      mutate(across(contains("Rate"), ~ paste0(.x, "%")))
+             `Year 5 Rate` = year_5_rate)
     
-    DT::datatable(cohort_data, 
-                  options = list(pageLength = 10, scrollX = TRUE),
-                  rownames = FALSE) %>%
-      DT::formatStyle(columns = 1:6, fontSize = '14px')
+    # Return NULL if no valid data
+    if(nrow(cohort_data) == 0) {
+      return(NULL)
+    }
     
-  }, server = FALSE)
-  
-  # Output: Cohort plot
-  output$cohort_plot <- renderPlotly({
-    req(values$metrics)
-    
-    if(nrow(values$metrics$cohort_analysis) == 0) return(NULL)
-    
-    cohort_long <- values$metrics$cohort_analysis %>%
-      select(first_gift_year, year_2_rate, year_3_rate, year_4_rate, year_5_rate) %>%
-      tidyr::pivot_longer(cols = contains("rate"), 
-                         names_to = "retention_year", 
-                         values_to = "rate") %>%
-      mutate(retention_year = case_when(
-        retention_year == "year_2_rate" ~ "Year 2",
-        retention_year == "year_3_rate" ~ "Year 3", 
-        retention_year == "year_4_rate" ~ "Year 4",
-        retention_year == "year_5_rate" ~ "Year 5"
-      ))
-    
-    p <- plot_ly(cohort_long, 
-                x = ~factor(first_gift_year), 
-                y = ~rate, 
-                color = ~retention_year, 
-                type = 'bar') %>%
-      layout(title = "Retention Rates by Acquisition Cohort",
-             xaxis = list(title = "First Gift Year"),
-             yaxis = list(title = "Retention Rate (%)"),
-             barmode = 'group',
-             hovermode = 'x unified')
-    
-    p
-  })
-  
-  # Output: Segment plot and table
-  output$segment_plot <- renderPlotly({
-    req(values$metrics)
-    
-    # Create donor segments
-    segments <- values$metrics$donor_summary %>%
-      mutate(
-        segment = case_when(
-          years_active == 1 & total_amount < 100 ~ "One-time Small",
-          years_active == 1 & total_amount >= 100 ~ "One-time Large", 
-          years_active %in% 2:3 ~ "Occasional",
-          years_active >= 4 & total_amount/years_active < 200 ~ "Loyal Small",
-          years_active >= 4 & total_amount/years_active >= 200 ~ "Major Donor"
+    reactable(
+      cohort_data,
+      pagination = FALSE,
+      striped = TRUE,
+      bordered = TRUE,
+      highlight = TRUE,
+      defaultSorted = "First Gift Year",
+      columns = list(
+        `First Gift Year` = colDef(
+          width = 120,
+          style = list(fontWeight = "600")
+        ),
+        `New Donors` = colDef(
+          width = 100,
+          format = colFormat(separators = TRUE)
+        ),
+        `Year 2 Rate` = colDef(
+          width = 100,
+          format = colFormat(suffix = "%", digits = 1),
+          style = function(value) {
+            if(is.na(value)) return(list())
+            if (value >= 60) list(color = "#28a745")
+            else if (value >= 40) list(color = "#ffc107")
+            else list(color = "#dc3545")
+          }
+        ),
+        `Year 3 Rate` = colDef(
+          width = 100,
+          format = colFormat(suffix = "%", digits = 1),
+          style = function(value) {
+            if(is.na(value)) return(list())
+            if (value >= 40) list(color = "#28a745")
+            else if (value >= 25) list(color = "#ffc107")
+            else list(color = "#dc3545")
+          }
+        ),
+        `Year 4 Rate` = colDef(
+          width = 100,
+          format = colFormat(suffix = "%", digits = 1),
+          style = function(value) {
+            if(is.na(value)) return(list())
+            if (value >= 30) list(color = "#28a745")
+            else if (value >= 15) list(color = "#ffc107")
+            else list(color = "#dc3545")
+          }
+        ),
+        `Year 5 Rate` = colDef(
+          width = 100,
+          format = colFormat(suffix = "%", digits = 1),
+          style = function(value) {
+            if(is.na(value)) return(list())
+            if (value >= 25) list(color = "#28a745")
+            else if (value >= 10) list(color = "#ffc107")
+            else list(color = "#dc3545")
+          }
         )
-      ) %>%
-      group_by(segment) %>%
-      summarise(
-        count = n(),
-        avg_annual_gift = mean(total_amount/years_active),
-        total_value = sum(total_amount),
-        .groups = 'drop'
-      ) %>%
-      mutate(pct_donors = round(count/sum(count)*100, 1),
-             pct_value = round(total_value/sum(total_value)*100, 1))
-    
-    if(nrow(segments) == 0) return(NULL)
-    
-    p <- plot_ly(segments, 
-                x = ~pct_donors, 
-                y = ~pct_value, 
-                size = ~count, 
-                color = ~segment,
-                type = 'scatter',
-                mode = 'markers',
-                text = ~paste("Segment:", segment, "<br>Donors:", count, "<br>% of Base:", pct_donors, "%<br>% of Revenue:", pct_value, "%"),
-                hovertemplate = "%{text}<extra></extra>") %>%
-      layout(title = "Donor Segments: Base vs Revenue Concentration",
-             xaxis = list(title = "% of Donor Base"),
-             yaxis = list(title = "% of Total Revenue"))
-    
-    p
+      ),
+      theme = reactableTheme(
+        borderColor = "#e9ecef",
+        stripedColor = "#f8f9fa",
+        highlightColor = "#f5f5f5",
+        cellPadding = "8px 12px",
+        style = list(
+          fontFamily = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontSize = "14px"
+        ),
+        headerStyle = list(
+          background = "#f8f9fa",
+          color = "#495057",
+          fontWeight = "600",
+          borderBottom = "2px solid #dee2e6"
+        )
+      )
+    )
   })
   
-  output$segment_table <- DT::renderDataTable({
+  # Output: Cohort reactable with sparklines
+  output$cohort_reactable <- renderReactable({
     req(values$metrics)
     
+    # Keep original data for sparkline calculation
+    original_cohort <- values$metrics$cohort_analysis %>%
+      filter(total_donors >= 5)  # Only show cohorts with meaningful sample sizes
+    
+    cohort_data <- original_cohort %>%
+      mutate(
+        trend_direction = case_when(
+          year_5_rate > year_2_rate ~ "Improving",
+          year_5_rate < year_2_rate ~ "Declining",
+          TRUE ~ "Stable"
+        ),
+        # Add placeholder column for sparklines
+        `Retention Pattern` = "sparkline_placeholder"
+      ) %>%
+      select(
+        `First Gift Year` = first_gift_year,
+        `New Donors` = total_donors,
+        `Latest Rate` = year_5_rate,
+        `Trend` = trend_direction,
+        `Retention Pattern`
+      )
+    
+    reactable(
+      cohort_data,
+      pagination = FALSE,
+      striped = TRUE,
+      bordered = TRUE,
+      highlight = TRUE,
+      defaultSorted = "First Gift Year",
+      columns = list(
+        `First Gift Year` = colDef(
+          width = 120,
+          style = list(fontWeight = "600")
+        ),
+        `New Donors` = colDef(
+          width = 100,
+          format = colFormat(separators = TRUE)
+        ),
+        `Latest Rate` = colDef(
+          width = 100,
+          format = colFormat(suffix = "%", digits = 1),
+          style = function(value) {
+            if (is.na(value)) return(list())
+            if (value >= 50) list(color = "#28a745", fontWeight = "600")
+            else if (value >= 35) list(color = "#ffc107", fontWeight = "600") 
+            else list(color = "#dc3545", fontWeight = "600")
+          }
+        ),
+        `Trend` = colDef(
+          width = 100,
+          style = function(value) {
+            if (is.na(value)) return(list())
+            color <- case_when(
+              value == "Improving" ~ "#28a745",
+              value == "Declining" ~ "#dc3545",
+              TRUE ~ "#6c757d"
+            )
+            list(color = color, fontWeight = "600")
+          }
+        ),
+        `Retention Pattern` = colDef(
+          width = 200,
+          cell = function(value, index) {
+            # Get the retention values from original data
+            row_data <- original_cohort[index, ]
+            retention_values <- c(
+              as.numeric(row_data$year_2_rate),
+              as.numeric(row_data$year_3_rate),
+              as.numeric(row_data$year_4_rate),
+              as.numeric(row_data$year_5_rate)
+            )
+            
+            # Remove any NA values
+            retention_values <- retention_values[!is.na(retention_values)]
+            
+            if (length(retention_values) >= 2) {
+              sparkline(
+                values = retention_values,
+                type = "line",
+                lineColor = "#F9B397",
+                fillColor = FALSE,
+                spotColor = "#D68A93",
+                minSpotColor = "#dc3545",
+                maxSpotColor = "#28a745",
+                spotRadius = 3,
+                lineWidth = 2,
+                width = 180,
+                height = 40
+              )
+            } else {
+              span("Insufficient data", style = "color: #6c757d; font-style: italic;")
+            }
+          }
+        )
+      ),
+      theme = reactableTheme(
+        borderColor = "#e9ecef",
+        stripedColor = "#f8f9fa",
+        highlightColor = "#f5f5f5",
+        cellPadding = "8px 12px",
+        style = list(
+          fontFamily = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontSize = "14px"
+        ),
+        headerStyle = list(
+          background = "#f8f9fa",
+          color = "#495057",
+          fontWeight = "600",
+          borderBottom = "2px solid #dee2e6"
+        )
+      )
+    )
+  })
+  
+  output$segment_table <- renderReactable({
+    req(values$metrics)
+    
+    # Ensure we have valid donor summary data
+    if(is.null(values$metrics$donor_summary) || nrow(values$metrics$donor_summary) == 0) {
+      return(NULL)
+    }
+    
     segments <- values$metrics$donor_summary %>%
+      # Ensure numeric columns
+      mutate(
+        years_active = as.numeric(years_active),
+        total_amount = as.numeric(total_amount)
+      ) %>%
+      # Remove invalid rows
+      filter(!is.na(years_active) & !is.na(total_amount) & total_amount > 0) %>%
+      # Create segments
       mutate(
         segment = case_when(
           years_active == 1 & total_amount < 100 ~ "One-time Small",
           years_active == 1 & total_amount >= 100 ~ "One-time Large", 
           years_active %in% 2:3 ~ "Occasional",
           years_active >= 4 & total_amount/years_active < 200 ~ "Loyal Small",
-          years_active >= 4 & total_amount/years_active >= 200 ~ "Major Donor"
+          years_active >= 4 & total_amount/years_active >= 200 ~ "Major Donor",
+          TRUE ~ "Other"
         )
       ) %>%
       group_by(segment) %>%
       summarise(
         donors = n(),
-        avg_annual = round(mean(total_amount/years_active), 0),
-        total_value = round(sum(total_amount), 0),
-        pct_donors = round(n()/nrow(values$metrics$donor_summary)*100, 1),
-        pct_value = round(sum(total_amount)/sum(values$metrics$donor_summary$total_amount)*100, 1),
+        avg_annual = round(mean(total_amount/years_active, na.rm = TRUE), 0),
+        total_value = round(sum(total_amount, na.rm = TRUE), 0),
         .groups = 'drop'
       ) %>%
+      # Calculate percentages safely
+      mutate(
+        pct_donors = round(donors/sum(donors, na.rm = TRUE)*100, 1),
+        pct_value = round(total_value/sum(total_value, na.rm = TRUE)*100, 1),
+        # Add sparkline visual column
+        trend_visual = "sparkline_placeholder"
+      ) %>%
+      # Ensure no NA values in final data
+      filter(!is.na(donors) & !is.na(avg_annual) & !is.na(total_value)) %>%
       select(`Donor Segment` = segment,
              `Count` = donors,
              `Avg Annual Gift` = avg_annual,
              `Total Value` = total_value,
              `% of Donors` = pct_donors,
-             `% of Revenue` = pct_value)
+             `% of Revenue` = pct_value,
+             `Donor vs Revenue` = trend_visual)
     
-    DT::datatable(segments, 
-                  options = list(pageLength = 10, scrollX = TRUE),
-                  rownames = FALSE) %>%
-      DT::formatCurrency(c("Avg Annual Gift", "Total Value"), "$") %>%
-      DT::formatString(c("% of Donors", "% of Revenue"), "%")
+    # Return NULL if no valid segments
+    if(nrow(segments) == 0) {
+      return(NULL)
+    }
     
-  }, server = FALSE)
+    reactable(
+      segments,
+      pagination = FALSE,
+      striped = TRUE,
+      bordered = TRUE,
+      highlight = TRUE,
+      defaultSorted = "% of Revenue",
+      defaultSortOrder = "desc",
+      columns = list(
+        `Donor Segment` = colDef(
+          width = 130,
+          style = list(fontWeight = "600")
+        ),
+        `Count` = colDef(
+          width = 70,
+          format = colFormat(separators = TRUE)
+        ),
+        `Avg Annual Gift` = colDef(
+          width = 110,
+          format = colFormat(prefix = "$", separators = TRUE, digits = 0)
+        ),
+        `Total Value` = colDef(
+          width = 100,
+          format = colFormat(prefix = "$", separators = TRUE, digits = 0),
+          style = list(fontWeight = "600")
+        ),
+        `% of Donors` = colDef(
+          width = 90,
+          format = colFormat(suffix = "%", digits = 1),
+          style = function(value) {
+            if(is.na(value)) return(list())
+            if (value >= 50) list(color = "#dc3545", fontWeight = "600")
+            else if (value >= 20) list(color = "#ffc107", fontWeight = "600")
+            else list(color = "#28a745", fontWeight = "600")
+          }
+        ),
+        `% of Revenue` = colDef(
+          width = 90,
+          format = colFormat(suffix = "%", digits = 1),
+          style = function(value) {
+            if(is.na(value)) return(list())
+            if (value >= 40) list(color = "#28a745", fontWeight = "600")
+            else if (value >= 20) list(color = "#ffc107", fontWeight = "600")
+            else list(color = "#dc3545", fontWeight = "600")
+          }
+        ),
+        `Donor vs Revenue` = colDef(
+          width = 180,
+          cell = function(value, index) {
+            # Get the balance data for this row
+            row_data <- segments[index, ]
+            donor_pct <- as.numeric(row_data$`% of Donors`)
+            revenue_pct <- as.numeric(row_data$`% of Revenue`)
+            
+            if(!is.na(donor_pct) && !is.na(revenue_pct)) {
+              # Create a simple bar chart showing donor % vs revenue %
+              balance_values <- c(donor_pct, revenue_pct)
+              
+              # Color based on efficiency (revenue per donor)
+              efficiency <- revenue_pct / donor_pct
+              bar_color <- if(efficiency > 2) {
+                "#28a745"  # High efficiency - green
+              } else if(efficiency > 1) {
+                "#ffc107"  # Medium efficiency - yellow
+              } else {
+                "#dc3545"  # Low efficiency - red
+              }
+              
+              sparkline(
+                values = balance_values,
+                type = "bar",
+                barColor = bar_color,
+                width = 160,
+                height = 30,
+                chartRangeMin = 0,
+                tooltipFormat = paste0(
+                  "<span style='color: {{color}}'>{{offset:names}}: {{value}}%</span>"
+                ),
+                tooltipValueLookups = list(names = c("Donors", "Revenue"))
+              )
+            } else {
+              span("No data", style = "color: #6c757d; font-style: italic;")
+            }
+          }
+        )
+      ),
+      theme = reactableTheme(
+        borderColor = "#e9ecef",
+        stripedColor = "#f8f9fa",
+        highlightColor = "#f5f5f5",
+        cellPadding = "8px 12px",
+        style = list(
+          fontFamily = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontSize = "14px"
+        ),
+        headerStyle = list(
+          background = "#f8f9fa",
+          color = "#495057",
+          fontWeight = "600",
+          borderBottom = "2px solid #dee2e6"
+        )
+      )
+    )
+  })
 }
 
 # Run the app
