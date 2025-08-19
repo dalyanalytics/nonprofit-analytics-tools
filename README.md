@@ -74,7 +74,7 @@ MIT License - Use these tools freely for your nonprofit!
 
 - **Website**: [dalyanalytics.com](https://www.dalyanalytics.com)
 - **LinkedIn**: [Connect with me](https://www.linkedin.com/in/jasminemdaly/)
-- **Email**: [jasmine@dalyanalytics.com]
+- **Email**: jasmine@dalyanalytics.com
 
 ---
 
