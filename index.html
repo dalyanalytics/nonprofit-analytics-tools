@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Nonprofit Analytics Tools | Daly Analytics</title>
+    <meta name="description" content="Free analytics tools built specifically for nonprofits. Calculate donor retention, track grants, and plan fundraising campaigns with data-driven insights.">
+    <meta name="keywords" content="nonprofit analytics, donor retention, grant tracking, fundraising tools, nonprofit CRM, data analysis">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Free Nonprofit Analytics Tools | Daly Analytics">
+    <meta property="og:description" content="Replace expensive subscriptions with free tools built specifically for nonprofits.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourusername.github.io/nonprofit-analytics-tools/">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891);
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            background: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891);
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.4em;
+            color: #666;
+            margin-bottom: 25px;
+            font-weight: 300;
+        }
+        
+        .header .tagline {
+            font-size: 1.1em;
+            color: #888;
+            font-style: italic;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 35px;
+            margin-bottom: 50px;
+        }
+        
+        .tool-card {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 35px;
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 15px;
+            z-index: -1;
+        }
+        
+        .tool-card:nth-child(1)::before {
+            background: linear-gradient(135deg, rgba(174, 203, 237, 0.4) 0%, rgba(255, 255, 255, 0.5) 100%);
+        }
+        
+        .tool-card:nth-child(2)::before {
+            background: linear-gradient(135deg, rgba(249, 179, 151, 0.4) 0%, rgba(255, 255, 255, 0.5) 100%);
+        }
+        
+        .tool-card:nth-child(3)::before {
+            background: linear-gradient(135deg, rgba(214, 138, 147, 0.4) 0%, rgba(255, 255, 255, 0.5) 100%);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            border-color: rgba(174, 203, 237, 0.6);
+            background: rgba(255, 255, 255, 0.35);
+        }
+        
+        .tool-card > * {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .tool-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .tool-title {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+        
+        .tool-description {
+            color: #555;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .tool-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .status-live {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-soon {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .tool-button {
+            background: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891);
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(249, 179, 151, 0.3);
+        }
+        
+        .tool-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(249, 179, 151, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .tool-button.disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .tool-button.disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .features-section {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .features-section h3 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.8em;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .feature-description {
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .cta-section {
+            background: rgba(44, 62, 80, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 15px;
+            padding: 50px 40px;
+            text-align: center;
+            margin-top: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .cta-section > * {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .cta-section h3 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .cta-section p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #aecbed 0%, #F9B397 100%);
+            color: #2c3e50;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(174, 203, 237, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(174, 203, 237, 0.4);
+            color: #2c3e50;
+            text-decoration: none;
+        }
+        
+        .footer {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            padding: 30px 20px;
+            margin-top: 20px;
+        }
+        
+        .footer a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
+            color: white;
+        }
+        
+        .github-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 25px;
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .github-link:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .main-content {
+                padding: 30px 25px;
+            }
+            
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .header .subtitle {
+                font-size: 1.2em;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .tool-card {
+                padding: 25px;
+            }
+            
+            .cta-section {
+                padding: 35px 25px;
+            }
+            
+            .cta-section h3 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="header">
+                <h1>Nonprofit Analytics Tools</h1>
+                <p class="subtitle">Free, open-source tools built specifically for nonprofits</p>
+                <p class="tagline">Replace expensive subscriptions with custom solutions that actually understand your data</p>
+            </div>
+            
+            <div class="features-section">
+                <h3>Why These Tools Exist</h3>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <span class="feature-icon">💸</span>
+                        <div class="feature-title">Stop Overpaying</div>
+                        <div class="feature-description">Why pay $900/month for Tableau when you need simple donor reports?</div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🎯</span>
+                        <div class="feature-title">Built for Nonprofits</div>
+                        <div class="feature-description">Designed by someone who understands nonprofit data challenges</div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📊</span>
+                        <div class="feature-title">Real Insights</div>
+                        <div class="feature-description">Turn your data into actionable insights, not just pretty charts</div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🔓</span>
+                        <div class="feature-title">Open Source</div>
+                        <div class="feature-description">No vendor lock-in, no monthly fees, complete transparency</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <span class="tool-icon">📊</span>
+                    <div class="tool-status status-live">✅ Live</div>
+                    <h3 class="tool-title">Donor Retention Calculator</h3>
+                    <p class="tool-description">
+                        Analyze donor retention rates by cohort, calculate lifetime value projections, 
+                        and benchmark against industry standards. Upload your data or explore with our sample dataset.
+                    </p>
+                    <ul style="margin-bottom: 25px; color: #555;">
+                        <li>✓ Cohort analysis by acquisition year</li>
+                        <li>✓ Lifetime value scenarios</li>
+                        <li>✓ Industry benchmark comparisons</li>
+                        <li>✓ Donor segmentation insights</li>
+                    </ul>
+                    <a href="./donor-retention-calculator/" class="tool-button">Launch Calculator →</a>
+                </div>
+                
+                <div class="tool-card">
+                    <span class="tool-icon">📅</span>
+                    <div class="tool-status status-soon">🚧 Coming Soon</div>
+                    <h3 class="tool-title">Grant Deadline Tracker</h3>
+                    <p class="tool-description">
+                        Never miss a grant deadline again. Track opportunities, set intelligent reminders, 
+                        and analyze your success rates across different funders.
+                    </p>
+                    <ul style="margin-bottom: 25px; color: #555;">
+                        <li>✓ Deadline alerts and reminders</li>
+                        <li>✓ Application progress tracking</li>
+                        <li>✓ Success rate analysis</li>
+                        <li>✓ Funder relationship mapping</li>
+                    </ul>
+                    <a href="#" class="tool-button disabled">Coming Soon</a>
+                </div>
+                
+                <div class="tool-card">
+                    <span class="tool-icon">🎯</span>
+                    <div class="tool-status status-soon">🚧 Coming Soon</div>
+                    <h3 class="tool-title">Fundraising Goal Planner</h3>
+                    <p class="tool-description">
+                        Plan your campaigns with data-driven goal setting. Model different scenarios, 
+                        optimize channel mix, and forecast results with confidence.
+                    </p>
+                    <ul style="margin-bottom: 25px; color: #555;">
+                        <li>✓ Scenario modeling & forecasting</li>
+                        <li>✓ Channel mix optimization</li>
+                        <li>✓ ROI projections</li>
+                        <li>✓ Campaign timeline planning</li>
+                    </ul>
+                    <a href="#" class="tool-button disabled">Coming Soon</a>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <h3>🎯 Need Custom Analytics Solutions?</h3>
+                <p>
+                    These tools showcase capabilities, but every nonprofit is unique. 
+                    Stop paying for generic software that doesn't understand your data challenges.
+                </p>
+                <p>
+                    <strong>Daly Analytics</strong> builds highly customized analytics solutions using <strong>R, Python, Machine Learning, and AI</strong>:
+                </p>
+                <div style="text-align: left; max-width: 600px; margin: 20px auto;">
+                    <ul style="color: rgba(255,255,255,0.9); font-size: 1.1em; line-height: 1.8;">
+                        <li><strong>Survey Analysis & Research:</strong> Advanced statistical modeling, sentiment analysis, predictive insights</li>
+                        <li><strong>Member & Donor Engagement:</strong> Churn prediction, segmentation models, personalization engines</li>
+                        <li><strong>Data Management & Automation:</strong> ETL pipelines, automated reporting, real-time dashboards</li>
+                        <li><strong>AI-Powered Insights:</strong> Natural language processing, recommendation systems, anomaly detection</li>
+                    </ul>
+                </div>
+                <a href="https://www.dalyanalytics.com/contact" target="_blank" class="cta-button">
+                    Schedule Free Consultation →
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Built with ❤️ for the nonprofit community by 
+                <a href="https://www.dalyanalytics.com" target="_blank">Daly Analytics</a>
+            </p>
+            <a href="https://github.com/yourusername/nonprofit-analytics-tools" target="_blank" class="github-link">
+                📂 View Source Code on GitHub
+            </a>
+            <p style="margin-top: 15px; font-size: 0.9em; opacity: 0.7;">
+                MIT License • Use these tools freely for your nonprofit
+            </p>
+        </div>
+    </div>
+</body>
+</html>
