@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Style Guide | Nonprofit Analytics Tools</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <style>
+        .demo-section {
+            padding: var(--spacing-2xl) 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .demo-section:last-child {
+            border-bottom: none;
+        }
+        .code-snippet {
+            background: var(--bg-dark);
+            color: #e2e8f0;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius);
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            overflow-x: auto;
+            margin: var(--spacing-md) 0;
+        }
+        .component-grid {
+            display: grid;
+            gap: var(--spacing-lg);
+            margin: var(--spacing-xl) 0;
+        }
+        .color-swatch {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--border-radius);
+            border: 2px solid var(--border-color);
+            display: inline-block;
+            margin-right: var(--spacing-md);
+            vertical-align: middle;
+        }
+        .spacing-demo {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: var(--spacing-sm);
+            margin: var(--spacing-xs) 0;
+            border-radius: var(--border-radius-sm);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-container">
+                <a href="./" class="navbar-brand">
+                    <span class="text-gradient">← Back to Tools</span>
+                </a>
+                <ul class="navbar-menu">
+                    <li><a href="#colors" class="navbar-link">Colors</a></li>
+                    <li><a href="#typography" class="navbar-link">Typography</a></li>
+                    <li><a href="#buttons" class="navbar-link">Buttons</a></li>
+                    <li><a href="#components" class="navbar-link">Components</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-pattern text-white">
+        <div class="container">
+            <div class="section text-center">
+                <h1 class="text-white">Nonprofit Analytics Style Guide</h1>
+                <p class="text-xl" style="opacity: 0.95;">
+                    Design system components and patterns for consistent tools
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="padding: var(--spacing-2xl) var(--spacing-lg);">
+        
+        <section id="colors" class="demo-section">
+            <h2>Color System</h2>
+            <p class="text-secondary mb-xl">Our color palette uses CSS custom properties for consistency and theming.</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-xl">
+                <div>
+                    <h3>Primary Colors</h3>
+                    <div class="mb-md">
+                        <span class="color-swatch" style="background: var(--primary-color);"></span>
+                        <span class="font-mono">--primary-color: #D68A93</span>
+                    </div>
+                    <div class="mb-md">
+                        <span class="color-swatch" style="background: var(--secondary-color);"></span>
+                        <span class="font-mono">--secondary-color: #AD92B1</span>
+                    </div>
+                    <div class="mb-md">
+                        <span class="color-swatch" style="background: var(--accent-color);"></span>
+                        <span class="font-mono">--accent-color: #F9B397</span>
+                    </div>
+                </div>
+                <div>
+                    <h3>Semantic Colors</h3>
+                    <div class="mb-md">
+                        <span class="color-swatch" style="background: var(--success-color);"></span>
+                        <span class="font-mono">--success-color: #10b981</span>
+                    </div>
+                    <div class="mb-md">
+                        <span class="color-swatch" style="background: var(--warning-color);"></span>
+                        <span class="font-mono">--warning-color: #f59e0b</span>
+                    </div>
+                    <div class="mb-md">
+                        <span class="color-swatch" style="background: var(--danger-color);"></span>
+                        <span class="font-mono">--danger-color: #ef4444</span>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="mt-xl">Gradients</h3>
+            <div class="grid grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-md">
+                <div class="card p-lg text-center text-white" style="background: var(--primary-gradient);">
+                    <strong>Primary Gradient</strong><br>
+                    <code style="color: rgba(255,255,255,0.9);">var(--primary-gradient)</code>
+                </div>
+                <div class="card p-lg text-center text-white" style="background: var(--secondary-gradient);">
+                    <strong>Secondary Gradient</strong><br>
+                    <code style="color: rgba(255,255,255,0.9);">var(--secondary-gradient)</code>
+                </div>
+            </div>
+        </section>
+
+        <section id="typography" class="demo-section">
+            <h2>Typography</h2>
+            <p class="text-secondary mb-xl">Consistent typography scale using system fonts for optimal performance.</p>
+            
+            <div class="component-grid">
+                <div>
+                    <h1>Heading 1 - Large Display</h1>
+                    <code class="code-snippet">&lt;h1&gt;Heading 1 - Large Display&lt;/h1&gt;</code>
+                </div>
+                
+                <div>
+                    <h2>Heading 2 - Section Title</h2>
+                    <code class="code-snippet">&lt;h2&gt;Heading 2 - Section Title&lt;/h2&gt;</code>
+                </div>
+                
+                <div>
+                    <h3>Heading 3 - Subsection</h3>
+                    <code class="code-snippet">&lt;h3&gt;Heading 3 - Subsection&lt;/h3&gt;</code>
+                </div>
+                
+                <div>
+                    <p class="text-lg">Large text for hero sections and important callouts that need extra emphasis.</p>
+                    <code class="code-snippet">&lt;p class="text-lg"&gt;Large text for emphasis&lt;/p&gt;</code>
+                </div>
+                
+                <div>
+                    <p>Regular body text with optimal line height for readability in long form content.</p>
+                    <code class="code-snippet">&lt;p&gt;Regular body text&lt;/p&gt;</code>
+                </div>
+                
+                <div>
+                    <p class="text-sm text-muted">Small text for metadata, captions, and secondary information.</p>
+                    <code class="code-snippet">&lt;p class="text-sm text-muted"&gt;Small text&lt;/p&gt;</code>
+                </div>
+                
+                <div>
+                    <h2 class="text-gradient">Gradient Text Effect</h2>
+                    <code class="code-snippet">&lt;h2 class="text-gradient"&gt;Gradient Text&lt;/h2&gt;</code>
+                </div>
+            </div>
+        </section>
+
+        <section id="buttons" class="demo-section">
+            <h2>Buttons</h2>
+            <p class="text-secondary mb-xl">Consistent button styles with hover effects and proper accessibility.</p>
+            
+            <div class="component-grid">
+                <div>
+                    <h3>Button Variants</h3>
+                    <div class="btn-group mb-lg">
+                        <button class="btn btn-primary">Primary</button>
+                        <button class="btn btn-secondary">Secondary</button>
+                        <button class="btn btn-outline">Outline</button>
+                        <button class="btn btn-ghost">Ghost</button>
+                    </div>
+                    <code class="code-snippet">&lt;button class="btn btn-primary"&gt;Primary&lt;/button&gt;
+&lt;button class="btn btn-secondary"&gt;Secondary&lt;/button&gt;
+&lt;button class="btn btn-outline"&gt;Outline&lt;/button&gt;
+&lt;button class="btn btn-ghost"&gt;Ghost&lt;/button&gt;</code>
+                </div>
+                
+                <div>
+                    <h3>Button Sizes</h3>
+                    <div class="btn-group mb-lg flex-col items-start">
+                        <button class="btn btn-primary btn-sm">Small Button</button>
+                        <button class="btn btn-primary">Regular Button</button>
+                        <button class="btn btn-primary btn-lg">Large Button</button>
+                    </div>
+                    <code class="code-snippet">&lt;button class="btn btn-primary btn-sm"&gt;Small&lt;/button&gt;
+&lt;button class="btn btn-primary"&gt;Regular&lt;/button&gt;
+&lt;button class="btn btn-primary btn-lg"&gt;Large&lt;/button&gt;</code>
+                </div>
+                
+                <div>
+                    <h3>Full Width Button</h3>
+                    <button class="btn btn-primary w-full mb-lg">Full Width Button</button>
+                    <code class="code-snippet">&lt;button class="btn btn-primary w-full"&gt;Full Width&lt;/button&gt;</code>
+                </div>
+            </div>
+        </section>
+
+        <section id="components" class="demo-section">
+            <h2>Components</h2>
+            <p class="text-secondary mb-xl">Reusable UI components for consistent layouts.</p>
+            
+            <div class="component-grid">
+                <div>
+                    <h3>Cards</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-lg mb-lg">
+                        <div class="card card-gradient">
+                            <div class="card-header">
+                                <h4>Basic Card</h4>
+                            </div>
+                            <div class="card-body">
+                                <p>Standard card with header and body sections.</p>
+                            </div>
+                        </div>
+                        <div class="card card-glass">
+                            <div class="card-body">
+                                <h4>Glass Card</h4>
+                                <p>Frosted glass effect with backdrop blur.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <code class="code-snippet">&lt;div class="card card-gradient"&gt;
+    &lt;div class="card-header"&gt;&lt;h4&gt;Basic Card&lt;/h4&gt;&lt;/div&gt;
+    &lt;div class="card-body"&gt;&lt;p&gt;Content&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+                
+                <div>
+                    <h3>Badges</h3>
+                    <div class="mb-lg flex gap-md flex-wrap">
+                        <span class="badge badge-primary">Primary</span>
+                        <span class="badge badge-success">Success</span>
+                        <span class="badge badge-warning">Warning</span>
+                        <span class="badge badge-danger">Danger</span>
+                        <span class="badge badge-info">Info</span>
+                    </div>
+                    <code class="code-snippet">&lt;span class="badge badge-success"&gt;Success&lt;/span&gt;
+&lt;span class="badge badge-warning"&gt;Warning&lt;/span&gt;</code>
+                </div>
+                
+                <div>
+                    <h3>Feature Icons</h3>
+                    <div class="flex gap-lg mb-lg">
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-icon feature-icon-outline">📅</div>
+                    </div>
+                    <code class="code-snippet">&lt;div class="feature-icon"&gt;📊&lt;/div&gt;
+&lt;div class="feature-icon feature-icon-outline"&gt;📅&lt;/div&gt;</code>
+                </div>
+                
+                <div>
+                    <h3>Lists</h3>
+                    <ul class="list-feature mb-lg">
+                        <li>Feature with checkmark</li>
+                        <li>Another great feature</li>
+                        <li>Third amazing feature</li>
+                    </ul>
+                    <code class="code-snippet">&lt;ul class="list-feature"&gt;
+    &lt;li&gt;Feature with checkmark&lt;/li&gt;
+    &lt;li&gt;Another great feature&lt;/li&gt;
+&lt;/ul&gt;</code>
+                </div>
+                
+                <div>
+                    <h3>Forms</h3>
+                    <div class="card p-lg mb-lg">
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-input" placeholder="Enter your email">
+                            <div class="form-helper">We'll never share your email with anyone else.</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-textarea" placeholder="Enter your message"></textarea>
+                        </div>
+                        <button class="btn btn-primary">Submit</button>
+                    </div>
+                    <code class="code-snippet">&lt;div class="form-group"&gt;
+    &lt;label class="form-label"&gt;Email Address&lt;/label&gt;
+    &lt;input type="email" class="form-input" placeholder="Enter email"&gt;
+    &lt;div class="form-helper"&gt;Helper text&lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+                
+                <div>
+                    <h3>Alerts</h3>
+                    <div class="alert alert-success mb-sm">
+                        ✅ Success! Your changes have been saved.
+                    </div>
+                    <div class="alert alert-warning mb-sm">
+                        ⚠️ Warning! Please check your input.
+                    </div>
+                    <div class="alert alert-danger mb-lg">
+                        ❌ Error! Something went wrong.
+                    </div>
+                    <code class="code-snippet">&lt;div class="alert alert-success"&gt;
+    ✅ Success! Your changes have been saved.
+&lt;/div&gt;</code>
+                </div>
+                
+                <div>
+                    <h3>Progress Bar</h3>
+                    <div class="progress mb-lg">
+                        <div class="progress-bar" style="width: 75%"></div>
+                    </div>
+                    <code class="code-snippet">&lt;div class="progress"&gt;
+    &lt;div class="progress-bar" style="width: 75%"&gt;&lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+                
+                <div>
+                    <h3>Stats Cards</h3>
+                    <div class="grid grid-cols-3 md:grid-cols-3 sm:grid-cols-1 gap-lg mb-lg">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="stat-value">$2.4M</div>
+                                <div class="stat-label">Total Raised</div>
+                            </div>
+                        </div>
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="stat-value">85%</div>
+                                <div class="stat-label">Retention Rate</div>
+                            </div>
+                        </div>
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="stat-value">1,247</div>
+                                <div class="stat-label">Active Donors</div>
+                            </div>
+                        </div>
+                    </div>
+                    <code class="code-snippet">&lt;div class="stat-card"&gt;
+    &lt;div class="stat-value"&gt;$2.4M&lt;/div&gt;
+    &lt;div class="stat-label"&gt;Total Raised&lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+            </div>
+        </section>
+
+        <section id="grid" class="demo-section">
+            <h2>Grid System</h2>
+            <p class="text-secondary mb-xl">Responsive grid system with breakpoint controls.</p>
+            
+            <div class="component-grid">
+                <div>
+                    <h3>Basic Grid</h3>
+                    <div class="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-md mb-lg">
+                        <div class="card p-md text-center bg-primary-gradient text-white">1</div>
+                        <div class="card p-md text-center bg-primary-gradient text-white">2</div>
+                        <div class="card p-md text-center bg-primary-gradient text-white">3</div>
+                    </div>
+                    <code class="code-snippet">&lt;div class="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-md"&gt;
+    &lt;div&gt;Column 1&lt;/div&gt;
+    &lt;div&gt;Column 2&lt;/div&gt;
+    &lt;div&gt;Column 3&lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+            </div>
+        </section>
+
+        <section id="utilities" class="demo-section">
+            <h2>Utility Classes</h2>
+            <p class="text-secondary mb-xl">Helper classes for common styling needs.</p>
+            
+            <div class="component-grid">
+                <div>
+                    <h3>Spacing</h3>
+                    <div class="spacing-demo mb-xs">mb-xs (margin-bottom: 0.25rem)</div>
+                    <div class="spacing-demo mb-sm">mb-sm (margin-bottom: 0.5rem)</div>
+                    <div class="spacing-demo mb-md">mb-md (margin-bottom: 1rem)</div>
+                    <div class="spacing-demo mb-lg">mb-lg (margin-bottom: 1.5rem)</div>
+                    <div class="spacing-demo mb-xl">mb-xl (margin-bottom: 2rem)</div>
+                    <code class="code-snippet">/* Margin & Padding */
+.m-auto, .mx-auto, .my-auto
+.mt-xs, .mt-sm, .mt-md, .mt-lg, .mt-xl
+.mb-xs, .mb-sm, .mb-md, .mb-lg, .mb-xl
+.p-xs, .p-sm, .p-md, .p-lg, .p-xl</code>
+                </div>
+                
+                <div>
+                    <h3>Text Alignment</h3>
+                    <p class="text-left mb-sm">Left aligned text</p>
+                    <p class="text-center mb-sm">Center aligned text</p>
+                    <p class="text-right mb-lg">Right aligned text</p>
+                    <code class="code-snippet">&lt;p class="text-left"&gt;Left aligned&lt;/p&gt;
+&lt;p class="text-center"&gt;Center aligned&lt;/p&gt;
+&lt;p class="text-right"&gt;Right aligned&lt;/p&gt;</code>
+                </div>
+                
+                <div>
+                    <h3>Flexbox Utilities</h3>
+                    <div class="flex justify-center items-center gap-md mb-lg" style="height: 80px; background: var(--bg-tertiary); border-radius: var(--border-radius);">
+                        <div class="badge badge-primary">Centered</div>
+                        <div class="badge badge-success">Content</div>
+                    </div>
+                    <code class="code-snippet">&lt;div class="flex justify-center items-center gap-md"&gt;
+    &lt;div&gt;Item 1&lt;/div&gt;
+    &lt;div&gt;Item 2&lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Usage Guidelines</h2>
+            <div class="grid grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-xl">
+                <div class="card card-glass p-xl">
+                    <h3>✅ Do</h3>
+                    <ul class="list-feature">
+                        <li>Use CSS variables for colors</li>
+                        <li>Follow responsive grid patterns</li>
+                        <li>Use semantic color classes</li>
+                        <li>Include proper hover states</li>
+                        <li>Test on mobile devices</li>
+                    </ul>
+                </div>
+                <div class="card card-glass p-xl">
+                    <h3>❌ Don't</h3>
+                    <ul class="list-unstyled text-danger">
+                        <li>• Override CSS variables without reason</li>
+                        <li>• Use fixed pixel widths</li>
+                        <li>• Mix different button styles</li>
+                        <li>• Forget accessibility attributes</li>
+                        <li>• Use excessive animations</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="text-center">
+                <p>© 2024 Nonprofit Analytics Tools. Built with modern CSS and love for the nonprofit community.</p>
+                <a href="./" class="btn btn-ghost btn-sm mt-md">← Back to Tools</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
