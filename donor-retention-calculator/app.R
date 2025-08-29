@@ -191,11 +191,19 @@ h1, h2, h3, h4, h5, h6, .display-font {
   margin-bottom: 1rem;
 }
 
-/* Navbar styling - professional dark blue */
+/* Navbar styling - animated gradient */
 .navbar {
-  background-color: #2c3e50 !important;
+  background: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891) !important;
+  background-size: 200% 100%;
+  animation: gradient 15s ease infinite;
   border-radius: 0;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .navbar-brand {
@@ -208,7 +216,7 @@ h1, h2, h3, h4, h5, h6, .display-font {
 }
 
 .navbar-nav .nav-link {
-  color: rgba(255,255,255,0.8) !important;
+  color: white !important;
   font-weight: 500;
   transition: all 0.2s ease;
 }
@@ -317,7 +325,7 @@ h1, h2, h3, h4, h5, h6, .display-font {
   color: white;
 }
 
-/* Value boxes - Dark blue gradient theme */
+/* Value boxes - Dark theme for better readability */
 .value-box {
   background: white;
   border-radius: 12px;
@@ -326,44 +334,36 @@ h1, h2, h3, h4, h5, h6, .display-font {
   border-top: 4px solid #2c3e50;
 }
 
-/* Primary value box - Darkest blue */
-.bslib-value-box.bg-primary,
-.value-box.bg-primary {
-  border-top: 4px solid #1a252f !important;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+/* Override bslib value box backgrounds with dark blue gradient */
+.bslib-value-box {
+  background: #2c3e50 !important;
+  color: white !important;
+  border: none !important;
 }
 
-.bslib-value-box.bg-primary .value-box-showcase,
-.value-box.bg-primary .value-box-showcase {
-  color: #1a252f !important;
+/* Primary value box - Darkest blue */
+.bslib-value-box.bg-primary {
+  background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%) !important;
 }
 
 /* Info value box - Medium blue */
-.bslib-value-box.bg-info,
-.value-box.bg-info {
-  border-top: 4px solid #2c3e50 !important;
-  background: linear-gradient(135deg, #f9fafb 0%, #ecf0f1 100%) !important;
+.bslib-value-box.bg-info {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
 }
 
-.bslib-value-box.bg-info .value-box-showcase,
-.value-box.bg-info .value-box-showcase {
-  color: #2c3e50 !important;
+/* Success value box - Lighter blue */
+.bslib-value-box.bg-success {
+  background: linear-gradient(135deg, #34495e 0%, #3e4f66 100%) !important;
 }
 
-/* Success value box - Lightest blue */
-.bslib-value-box.bg-success,
-.value-box.bg-success {
-  border-top: 4px solid #34495e !important;
-  background: linear-gradient(135deg, #fbfcfc 0%, #f0f3f4 100%) !important;
+/* White text for all value box elements */
+.bslib-value-box .value-box-showcase {
+  color: rgba(255, 255, 255, 0.8) !important;
 }
 
-.bslib-value-box.bg-success .value-box-showcase,
-.value-box.bg-success .value-box-showcase {
-  color: #34495e !important;
-}
-
+.bslib-value-box .value-box-title,
 .value-box-title {
-  color: #7f8c8d;
+  color: rgba(255, 255, 255, 0.9) !important;
   font-size: 0.9rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -371,11 +371,16 @@ h1, h2, h3, h4, h5, h6, .display-font {
   margin-bottom: 0.5rem;
 }
 
+.bslib-value-box .value-box-value,
 .value-box-value {
-  color: #2c3e50;
+  color: white !important;
   font-size: 2rem;
   font-weight: 700;
   font-family: serif;
+}
+
+.bslib-value-box p {
+  color: rgba(255, 255, 255, 0.8) !important;
 }
 
 /* Professional tables */
@@ -789,7 +794,7 @@ ui <- tagList(
               "Schedule Free Consultation",
               href = "https://www.dalyanalytics.com/contact",
               class = "btn btn-lg mb-2",
-              style = "background: linear-gradient(135deg, #aecbed, #F9B397); color: #2c3e50; font-weight: 600; width: 100%;",
+              style = "background: linear-gradient(135deg, #aecbed, #F9B397, #D68A93); color: #2c3e50; font-weight: 600; width: 100%;",
               target = "_blank"
             ),
 
@@ -815,14 +820,14 @@ ui <- tagList(
         style = "color: rgba(255,255,255,0.6);",
         p(
           class = "mb-0",
-          "© 2025 Daly Analytics. This free tool was built to demonstrate our expertise in donor analytics. ",
+          "© 2025 Daly Analytics LLC. This free tool was built to demonstrate our expertise in nonprofit analytics. ",
           tags$a(
             "Contact us",
             href = "https://www.dalyanalytics.com/contact",
-            style = "color: #bdc3c7;",
+            style = "color: #d68a93;",
             target = "_blank"
           ),
-          " to build automated retention tracking for your organization."
+          " to build custom solutions for your organization."
         )
       )
     )

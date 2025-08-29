@@ -32,7 +32,7 @@ html, body {
 
 body {
   color: #2c3e50;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   line-height: 1.6;
   display: flex;
   flex-direction: column;
@@ -58,9 +58,17 @@ h1, h2, h3, h4, h5, h6, .display-font {
 
 /* Navbar styling */
 .navbar {
-  background-color: #2c3e50 !important;
+  background: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891) !important;
+  background-size: 200% 100%;
+  animation: gradient 15s ease infinite;
   border-radius: 0;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .navbar-brand {
@@ -73,7 +81,7 @@ h1, h2, h3, h4, h5, h6, .display-font {
 }
 
 .navbar-nav .nav-link {
-  color: rgba(255,255,255,0.8) !important;
+  color: white !important;
   font-weight: 500;
   transition: all 0.2s ease;
 }
@@ -104,7 +112,7 @@ h1, h2, h3, h4, h5, h6, .display-font {
 }
 
 .card-header {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-bottom: 2px solid #d68a93;
   font-weight: 600;
   font-size: 1.1rem;
@@ -114,8 +122,8 @@ h1, h2, h3, h4, h5, h6, .display-font {
 
 /* Sidebar styling */
 .bslib-sidebar-layout > .sidebar {
-  background: #f8f9fa;
-  border-right: 1px solid #dee2e6;
+  background: #fafafa;
+  border-right: 1px solid #e9ecef;
   padding: 1.5rem;
 }
 
@@ -191,8 +199,36 @@ h1, h2, h3, h4, h5, h6, .display-font {
   border-top: 4px solid #d68a93;
 }
 
+/* Override bslib value box for outlined style */
+.bslib-value-box {
+  background: white !important;
+  border: 2px solid #dee2e6 !important;
+  color: #2c3e50 !important;
+}
+
+.bslib-value-box.bg-success {
+  background: white !important;
+  border: 2px solid #27ae60 !important;
+}
+
+.bslib-value-box.bg-primary {
+  background: white !important;
+  border: 2px solid #e74c3c !important;
+}
+
+.bslib-value-box.bg-warning {
+  background: white !important;
+  border: 2px solid #f39c12 !important;
+}
+
+.bslib-value-box.bg-info {
+  background: white !important;
+  border: 2px solid #f1c40f !important;
+}
+
+.bslib-value-box .value-box-title,
 .value-box-title {
-  color: #7f8c8d;
+  color: #6c757d !important;
   font-size: 0.9rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -200,11 +236,32 @@ h1, h2, h3, h4, h5, h6, .display-font {
   margin-bottom: 0.5rem;
 }
 
+.bslib-value-box .value-box-value,
 .value-box-value {
-  color: #2c3e50;
+  color: #2c3e50 !important;
   font-size: 2rem;
   font-weight: 700;
   font-family: serif;
+}
+
+.bslib-value-box.bg-success .value-box-showcase {
+  color: #27ae60 !important;
+}
+
+.bslib-value-box.bg-primary .value-box-showcase {
+  color: #e74c3c !important;
+}
+
+.bslib-value-box.bg-warning .value-box-showcase {
+  color: #f39c12 !important;
+}
+
+.bslib-value-box.bg-info .value-box-showcase {
+  color: #f1c40f !important;
+}
+
+.bslib-value-box p {
+  color: #6c757d !important;
 }
 
 /* Professional tables */
@@ -213,14 +270,14 @@ h1, h2, h3, h4, h5, h6, .display-font {
 }
 
 .table thead th {
-  background: #f8f9fa;
+  background: #fafafa;
   color: #2c3e50;
   font-weight: 600;
   text-transform: uppercase;
   font-size: 0.85rem;
   letter-spacing: 0.05em;
   padding: 1rem;
-  border-bottom: 2px solid #dee2e6;
+  border-bottom: 2px solid #e9ecef;
 }
 
 /* Status badges */
@@ -249,7 +306,7 @@ h1, h2, h3, h4, h5, h6, .display-font {
 
 /* Preview sections */
 .preview-section {
-  background: #f8f9fa;
+  background: #fafafa;
   border-left: 4px solid #d68a93;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
@@ -263,11 +320,11 @@ h1, h2, h3, h4, h5, h6, .display-font {
 
 /* File upload area */
 .file-upload-area {
-  border: 2px dashed #dee2e6;
+  border: 2px dashed #e9ecef;
   border-radius: 8px;
   padding: 2rem;
   text-align: center;
-  background: #f8f9fa;
+  background: #fafafa;
   transition: all 0.3s ease;
 }
 
@@ -285,7 +342,7 @@ h1, h2, h3, h4, h5, h6, .display-font {
 
 /* Executive summary box */
 .executive-summary {
-  background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
   border-left: 4px solid #d68a93;
   padding: 2rem;
   margin: 2rem 0;
@@ -387,13 +444,19 @@ h1, h2, h3, h4, h5, h6, .display-font {
 }
 
 .draggable-row:hover {
-  background-color: #f8f9fa !important;
+  background-color: #fafafa !important;
 }
 
 .drag-handle {
   color: #7f8c8d;
   cursor: grab;
   margin-right: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+  user-select: none;
 }
 
 .drag-handle:hover {
@@ -402,6 +465,28 @@ h1, h2, h3, h4, h5, h6, .display-font {
 
 .drag-handle:active {
   cursor: grabbing;
+  color: #2c3e50;
+}
+
+/* Make sure table cells are properly positioned for drag and drop */
+.dataTable tbody td {
+  position: relative;
+}
+
+/* First column with reorder handle */
+.dataTable tbody td.reorder {
+  cursor: move !important;
+}
+
+/* Highlight row being dragged */
+table.dataTable.dt-rowReorder-moving {
+  opacity: 0.8;
+  background-color: #f8f9fa !important;
+}
+
+/* Ensure the table doesn't jump during reorder */
+table.dataTable {
+  table-layout: fixed;
 }
 "
 
@@ -560,7 +645,7 @@ ui <- tagList(
       
       # Right content area
       div(
-        navset_card_underline(
+        navset_card_pill(
           nav_panel(
             "Executive Summary",
             icon = icon("chart-line"),
@@ -859,7 +944,7 @@ ui <- tagList(
               "Schedule Free Consultation",
               href = "https://www.dalyanalytics.com/contact",
               class = "btn btn-lg mb-2",
-              style = "background: linear-gradient(135deg, #aecbed, #F9B397); color: #2c3e50; font-weight: 600; width: 100%;",
+              style = "background: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891); color: #2c3e50; font-weight: 600; width: 100%;",
               target = "_blank"
             ),
             tags$a(
@@ -883,7 +968,7 @@ ui <- tagList(
         style = "color: rgba(255,255,255,0.6);",
         p(
           class = "mb-0",
-          "© 2025 Daly Analytics. This free tool was built to demonstrate our expertise in nonprofit analytics. ",
+          "© 2025 Daly Analytics LLC. This free tool was built to demonstrate our expertise in nonprofit analytics. ",
           tags$a(
             "Contact us",
             href = "https://www.dalyanalytics.com/contact",
@@ -928,7 +1013,7 @@ server <- function(input, output, session) {
         xaxis = list(title = ""),
         yaxis = list(title = "Amount ($)", tickformat = "$,.0f"),
         barmode = "group",
-        plot_bgcolor = "#f8f9fa",
+        plot_bgcolor = "#ffffff",
         paper_bgcolor = "white",
         font = list(family = "sans-serif"),
         margin = list(t = 50)
@@ -961,17 +1046,17 @@ server <- function(input, output, session) {
       )
   })
   
-  # Agenda preview with proper drag and drop callbacks
+  # Agenda preview with RowReorder - simplified approach matching the working example
   output$agenda_preview <- renderDT({
     datatable(
       agenda_items(),
+      colnames = c("Item #" = 1),
+      extensions = 'RowReorder',
       options = list(
+        rowReorder = TRUE,
+        order = list(c(0, 'asc')),
         pageLength = 15,
-        dom = 'tp',
-        rowReorder = list(
-          dataSrc = 0,
-          selector = 'tr'
-        ),
+        dom = 't',
         columnDefs = list(
           list(width = '10%', targets = 0),
           list(width = '40%', targets = 1),
@@ -980,30 +1065,14 @@ server <- function(input, output, session) {
           list(width = '15%', targets = 4)
         ),
         scrollY = "400px",
-        scrollCollapse = TRUE,
-        # Add callback to capture row reordering
-        initComplete = DT::JS(
-          "function(settings, json) {",
-          "  var table = this.api();",
-          "  table.on('row-reorder', function (e, diff, edit) {",
-          "    var newOrder = [];",
-          "    table.rows().every(function(rowIdx, tableLoop, rowLoop) {",
-          "      newOrder.push(rowIdx);",
-          "    });",
-          "    Shiny.setInputValue('agenda_reorder_indices', newOrder, {priority: 'event'});",
-          "  });",
-          "}"
-        )
+        scrollCollapse = TRUE
       ),
       rownames = FALSE,
-      colnames = c("Item #", "Topic", "Presenter", "Time", "Materials"),
       class = "display compact row-border hover",
       selection = "none",
-      editable = TRUE,
-      extensions = 'RowReorder',
-      escape = FALSE
+      editable = TRUE
     )
-  })
+  }, server = FALSE)
   
   # Handle agenda table edits
   observeEvent(input$agenda_preview_cell_edit, {
@@ -1019,24 +1088,31 @@ server <- function(input, output, session) {
     agenda_items(current_data)
   })
   
-  # Handle row reordering with simple approach
-  observeEvent(input$agenda_reorder_indices, {
-    if (!is.null(input$agenda_reorder_indices)) {
-      current_data <- agenda_items()
-      new_order <- input$agenda_reorder_indices + 1  # Convert from 0-based to 1-based
+  # Capture the reordered state for HTML generation
+  observeEvent(input$agenda_preview_rows_all, {
+    req(input$agenda_preview_rows_all)
+    
+    current_data <- agenda_items()
+    displayed_order <- input$agenda_preview_rows_all
+    
+    # Only reorder if the order has actually changed and lengths match
+    if (length(displayed_order) == nrow(current_data)) {
+      original_order <- seq_len(nrow(current_data))
       
-      if (length(new_order) == nrow(current_data)) {
-        # Reorder the data according to the new indices
-        reordered_data <- current_data[new_order, ]
+      # Check if order has changed
+      if (!identical(displayed_order, original_order)) {
+        cat("Reordering data based on display order:", paste(displayed_order, collapse = ", "), "\n")
         
-        # Update item numbers to be sequential
-        reordered_data$item_no <- 1:nrow(reordered_data)
+        # Reorder the data according to the displayed order
+        reordered_data <- current_data[displayed_order, ]
         
-        # Update reactive value
+        # Update item numbers to maintain sequence
+        reordered_data$item_no <- seq_len(nrow(reordered_data))
+        
+        cat("New topic order:", paste(reordered_data$topic, collapse = " | "), "\n")
+        
+        # Update the reactive value
         agenda_items(reordered_data)
-        
-        # Debug output
-        cat("Reordered agenda items. New order:", paste(new_order, collapse = ", "), "\n")
       }
     }
   })
