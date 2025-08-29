@@ -28,7 +28,7 @@ jobs:
           
       - name: Install R dependencies
         run: |
-          install.packages(c("shinylive", "shiny", "bslib", "DT", "plotly", "dplyr", "lubridate", "reactable", "sparkline", "shinyjs"))
+          install.packages(c("shinylive", "shiny", "bslib", "DT", "plotly", "dplyr", "tidyr", "lubridate", "reactable", "sparkline", "shinyjs"))
         shell: Rscript {0}
         
       - name: Export Shinylive apps
@@ -51,9 +51,24 @@ jobs:
             shinylive::export("fundraising-goal-planner", "docs", subdir = "fundraising-goal-planner")
           }
           
-          # Copy landing page
+          # Export fundraising planner (when ready)
+          if(dir.exists("board-packet-generator")) {
+            shinylive::export("board-packet-generator", "docs", subdir = "board-packet-generator")
+          }
+
+          # Copy landing page and assets
           if(file.exists("index.html")) {
             file.copy("index.html", "docs/index.html")
+          }
+          
+          # Copy assets directory
+          if(dir.exists("assets")) {
+            file.copy("assets", "docs", recursive = TRUE)
+          }
+          
+          # Copy style guide if it exists
+          if(file.exists("style-guide.html")) {
+            file.copy("style-guide.html", "docs/style-guide.html")
           }
         shell: Rscript {0}
         

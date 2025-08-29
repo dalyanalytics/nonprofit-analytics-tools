@@ -15,6 +15,13 @@ Stop paying expensive monthly subscriptions for generic software. These tools ar
 - Benchmark against industry standards
 - Upload your data or try sample dataset
 
+### [📄 Board Packet Generator](https://dalyanalytics.github.io/nonprofit-analytics-tools/board-packet-generator/)
+- Create professional board meeting materials
+- Executive summary with KPIs and financial charts
+- Editable agenda with drag-and-drop reordering
+- Generate comprehensive HTML reports
+- Include minutes, financial reports, and committee updates
+
 ### [📅 Grant Deadline Tracker](https://dalyanalytics.github.io/nonprofit-analytics-tools/grant-deadline-tracker/) *(Coming Soon)*
 - Never miss grant deadlines
 - Track application progress
