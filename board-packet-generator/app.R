@@ -204,7 +204,7 @@ h1, h2, h3, h4, h5, h6, .display-font {
   color: #2c3e50;
   font-size: 2rem;
   font-weight: 700;
-  font-family: 'Merriweather', serif;
+  font-family: serif;
 }
 
 /* Professional tables */
@@ -311,7 +311,7 @@ h1, h2, h3, h4, h5, h6, .display-font {
   font-size: 2.5rem;
   font-weight: 700;
   color: #2c3e50;
-  font-family: 'Merriweather', serif;
+  font-family: serif;
 }
 
 .metric-label {
@@ -924,13 +924,13 @@ server <- function(input, output, session) {
       hovertemplate = "%{x}<br>%{text}<extra></extra>"
     ) %>%
       layout(
-        title = list(text = "YTD Financial Performance", font = list(family = "Merriweather")),
+        title = list(text = "YTD Financial Performance", font = list(family = "serif")),
         xaxis = list(title = ""),
         yaxis = list(title = "Amount ($)", tickformat = "$,.0f"),
         barmode = "group",
         plot_bgcolor = "#f8f9fa",
         paper_bgcolor = "white",
-        font = list(family = "Inter"),
+        font = list(family = "sans-serif"),
         margin = list(t = 50)
       )
     

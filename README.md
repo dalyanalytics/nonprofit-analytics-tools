@@ -1,6 +1,6 @@
 # 🚀 Nonprofit Analytics Tools
 
-[![Deploy Tools](https://github.com/[your-username]/nonprofit-analytics-tools/actions/workflows/deploy-tools.yml/badge.svg)](https://github.com/[your-username]/nonprofit-analytics-tools/actions/workflows/deploy-tools.yml)
+[![Deploy Tools](https://github.com/dalyanalytics/nonprofit-analytics-tools/actions/workflows/deploy-tools.yaml/badge.svg)](https://github.com/dalyanalytics/nonprofit-analytics-tools/actions/workflows/deploy-tools.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Free, open-source analytics tools built specifically for nonprofits.**

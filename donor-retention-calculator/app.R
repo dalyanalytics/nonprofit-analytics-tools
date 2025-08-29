@@ -175,7 +175,7 @@ loading_css <- "
   justify-content: center;
   align-items: center;
   color: white;
-  font-family: 'Inter', sans-serif;
+  font-family: sans-serif;
 }
 
 @keyframes gradientShift {
@@ -823,7 +823,7 @@ server <- function(input, output, session) {
         highlightColor = "#f5f5f5",
         cellPadding = "12px 16px",
         style = list(
-          fontFamily = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           fontSize = "15px"
         ),
         headerStyle = list(
@@ -931,7 +931,7 @@ server <- function(input, output, session) {
         highlightColor = "#f5f5f5",
         cellPadding = "8px 12px",
         style = list(
-          fontFamily = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           fontSize = "14px"
         ),
         headerStyle = list(
@@ -1049,7 +1049,7 @@ server <- function(input, output, session) {
         highlightColor = "#f5f5f5",
         cellPadding = "8px 12px",
         style = list(
-          fontFamily = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           fontSize = "14px"
         ),
         headerStyle = list(
@@ -1210,7 +1210,7 @@ server <- function(input, output, session) {
         highlightColor = "#f5f5f5",
         cellPadding = "8px 12px",
         style = list(
-          fontFamily = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           fontSize = "14px"
         ),
         headerStyle = list(
