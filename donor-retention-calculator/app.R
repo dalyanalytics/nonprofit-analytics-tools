@@ -156,11 +156,252 @@ custom_theme <- bs_theme(
   font_scale = 1.1
 )
 
-# Loading screen CSS
-loading_css <- "
+# Professional CSS styling to match board packet generator
+professional_css <- "
+/* Global styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: #2c3e50;
+  background-color: #f8f9fa;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1 0 auto;
+}
+
+footer {
+  flex-shrink: 0;
+  margin-top: auto !important;
+}
+
+/* Headers styling */
+h1, h2, h3, h4, h5, h6, .display-font {
+  color: #2c3e50;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+/* Navbar styling - professional dark blue */
+.navbar {
+  background-color: #2c3e50 !important;
+  border-radius: 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+  color: white !important;
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-nav .nav-link {
+  color: rgba(255,255,255,0.8) !important;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: white !important;
+  background-color: rgba(255,255,255,0.1);
+}
+
+.navbar-nav .nav-link.active {
+  color: white !important;
+  background-color: rgba(255,255,255,0.15);
+}
+
+/* Card styling */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  background: white;
+  overflow: hidden;
+}
+
+.card:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 2px solid #2c3e50;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #2c3e50;
+  padding: 1rem 1.5rem;
+}
+
+/* Sidebar styling */
+.bslib-sidebar-layout > .sidebar {
+  background: #f8f9fa;
+  border-right: 1px solid #dee2e6;
+  padding: 1.5rem;
+}
+
+/* Professional form controls */
+.form-control, .form-select {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #2c3e50;
+  box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.15);
+  outline: none;
+}
+
+/* Professional buttons */
+.btn {
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  text-transform: none;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.btn-primary {
+  background: #2c3e50;
+  border-color: #2c3e50;
+  color: white;
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
+}
+
+.btn-primary:hover {
+  background: #34495e;
+  border-color: #34495e;
+  box-shadow: 0 6px 20px rgba(44, 62, 80, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: #34495e;
+  border-color: #34495e;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #2c3e50;
+  border-color: #2c3e50;
+}
+
+.btn-outline-primary {
+  color: #2c3e50;
+  border-color: #2c3e50;
+  background: transparent;
+}
+
+.btn-outline-primary:hover {
+  background: #2c3e50;
+  border-color: #2c3e50;
+  color: white;
+}
+
+/* Value boxes - Dark blue gradient theme */
+.value-box {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+  border-top: 4px solid #2c3e50;
+}
+
+/* Primary value box - Darkest blue */
+.bslib-value-box.bg-primary,
+.value-box.bg-primary {
+  border-top: 4px solid #1a252f !important;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+}
+
+.bslib-value-box.bg-primary .value-box-showcase,
+.value-box.bg-primary .value-box-showcase {
+  color: #1a252f !important;
+}
+
+/* Info value box - Medium blue */
+.bslib-value-box.bg-info,
+.value-box.bg-info {
+  border-top: 4px solid #2c3e50 !important;
+  background: linear-gradient(135deg, #f9fafb 0%, #ecf0f1 100%) !important;
+}
+
+.bslib-value-box.bg-info .value-box-showcase,
+.value-box.bg-info .value-box-showcase {
+  color: #2c3e50 !important;
+}
+
+/* Success value box - Lightest blue */
+.bslib-value-box.bg-success,
+.value-box.bg-success {
+  border-top: 4px solid #34495e !important;
+  background: linear-gradient(135deg, #fbfcfc 0%, #f0f3f4 100%) !important;
+}
+
+.bslib-value-box.bg-success .value-box-showcase,
+.value-box.bg-success .value-box-showcase {
+  color: #34495e !important;
+}
+
+.value-box-title {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.value-box-value {
+  color: #2c3e50;
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: serif;
+}
+
+/* Professional tables */
+.dataTable {
+  font-size: 0.95rem;
+}
+
+.table thead th {
+  background: #f8f9fa;
+  color: #2c3e50;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  padding: 0.75rem;
+  border-bottom: 2px solid #2c3e50;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(44, 62, 80, 0.05);
+}
+
+/* Loading screen overlay */
 #loading-content {
   position: fixed;
-  background: linear-gradient(135deg, rgba(249, 179, 151, 0.95), rgba(214, 138, 147, 0.95), rgba(173, 146, 177, 0.95), rgba(176, 120, 145, 0.95));
+  background: linear-gradient(135deg, rgba(44, 62, 80, 0.95), rgba(52, 73, 94, 0.95));
   background-size: 200% 200%;
   animation: gradientShift 8s ease infinite;
   z-index: 9999;
@@ -234,34 +475,21 @@ loading_css <- "
 "
 
 # UI
-ui <- page_fluid(
-  theme = custom_theme,
-  title = "Donor Retention Calculator",
-  useShinyjs(),
-  tags$head(tags$style(HTML(loading_css))),
+ui <- tagList(
+  tags$head(tags$style(HTML(professional_css))),
   
-  # Loading screen
+  # Main app content
   div(
-    id = "loading-content",
-    div(class = "loading-icon", "📊"),
-    div(class = "loading-spinner"),
-    div(class = "loading-text", "Initializing The App"),
-    div(class = "loading-subtitle", "Preparing your donor retention calculator...")
-  ),
+      div(
+        class = "main-content",
+        page_navbar(
+          title = div(icon("chart-line"), "Donor Retention Calculator"),
+          theme = custom_theme,
   
-  # Main app content (hidden initially)
-  hidden(
-    div(
-      id = "app-content",
+          nav_panel(
+            title = "Analysis Dashboard",
+            icon = icon("chart-line"),
   
-  # Header
-  div(
-    class = "text-center py-4 mb-4",
-    style = "background: #f8f9fa; border-radius: 15px; margin-bottom: 2rem; border-left: 4px solid #F9B397; border-right: 4px solid #F9B397;",
-    h1("Donor Retention Calculator", class = "display-4 fw-bold mb-2"),
-    p("Analyze retention patterns, calculate lifetime value, and benchmark performance", 
-      class = "lead mb-0 text-muted")
-  ),
   
   # Sample data card
   card(
@@ -504,50 +732,110 @@ ui <- page_fluid(
   ),
   
   # CTA footer
-  conditionalPanel(
-    condition = "output.data_loaded",
-    br(),
-    card(
-      style = "background: linear-gradient(135deg, rgba(44, 62, 80, 0.95), rgba(52, 73, 94, 0.95)); color: white;",
-      card_body(
-        class = "text-center py-4",
-        h4("Want Automated Retention Tracking?", class = "text-white mb-3"),
-        p("Stop doing this analysis manually. Get custom dashboards with predictive analytics, churn risk modeling, and automated insights.", 
-          class = "lead text-white-50 mb-4"),
-        a(href = "https://www.dalyanalytics.com/contact", 
-          target = "_blank", 
-          class = "btn btn-lg",
-          style = "background: linear-gradient(135deg, #aecbed, #F9B397); color: #2c3e50; font-weight: 600;",
-          "Schedule Free Consultation")
+  # conditionalPanel(
+  #   condition = "output.data_loaded",
+  #   br(),
+  #   card(
+  #     style = "background: linear-gradient(135deg, rgba(44, 62, 80, 0.95), rgba(52, 73, 94, 0.95)); color: white;",
+  #     card_body(
+  #       class = "text-center py-4",
+  #       h4("Want Automated Retention Tracking?", class = "text-white mb-3"),
+  #       p("Stop doing this analysis manually. Get custom dashboards with predictive analytics, churn risk modeling, and automated insights.", 
+  #         class = "lead text-white-50 mb-4"),
+  #       a(href = "https://www.dalyanalytics.com/contact", 
+  #         target = "_blank", 
+  #         class = "btn btn-lg",
+  #         style = "background: linear-gradient(135deg, #aecbed, #F9B397); color: #2c3e50; font-weight: 600;",
+  #         "Schedule Free Consultation")
+  #     )
+  #   )
+  # ),
+  
+  # Add footer at the very bottom
+  tags$footer(
+    class = "footer mt-5 py-4",
+    style = "background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white;",
+    div(
+      class = "container",
+      div(
+        class = "row align-items-center",
+        div(
+          class = "col-md-8",
+          h5("Need More Custom Analytics Tools?", style = "color: white; margin-bottom: 1rem;"),
+          p(
+            style = "color: rgba(255,255,255,0.9); margin-bottom: 1rem;",
+            "This donor retention calculator demonstrates the power of automated analytics. ",
+            "Daly Analytics specializes in creating custom dashboards that eliminate manual work and provide deeper insights."
+          ),
+          div(
+            class = "mb-3",
+            tags$ul(
+              class = "list-unstyled",
+              style = "color: rgba(255,255,255,0.8);",
+              tags$li(icon("check"), " Real-time donor retention tracking"),
+              tags$li(icon("check"), " Predictive churn risk modeling"),
+              tags$li(icon("check"), " Automated monthly retention reports"),
+              tags$li(icon("check"), " Donor segmentation & targeting"),
+              tags$li(icon("check"), " Integration with your CRM/database")
+            )
+          )
+        ),
+        div(
+          class = "col-md-4 text-center",
+          div(
+            style = "background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px;",
+            h6("Ready to Get Started?", style = "color: white; margin-bottom: 1rem;"),
+            tags$a(
+              "Schedule Free Consultation",
+              href = "https://www.dalyanalytics.com/contact",
+              class = "btn btn-lg mb-2",
+              style = "background: linear-gradient(135deg, #aecbed, #F9B397); color: #2c3e50; font-weight: 600; width: 100%;",
+              target = "_blank"
+            ),
+
+            
+            tags$a(
+              "View Our Portfolio",
+              href = "https://www.dalyanalytics.com",
+              class = "btn btn-outline-light",
+              style = "width: 100%;",
+              target = "_blank"
+            ),
+            div(
+              class = "mt-3",
+              style = "color: rgba(255,255,255,0.7); font-size: 0.9rem;",
+              icon("envelope"), " jasmine@dalyanalytics.com"
+            )
+          )
+        )
+      ),
+      hr(style = "border-color: rgba(255,255,255,0.2); margin: 2rem 0;"),
+      div(
+        class = "text-center",
+        style = "color: rgba(255,255,255,0.6);",
+        p(
+          class = "mb-0",
+          "© 2025 Daly Analytics. This free tool was built to demonstrate our expertise in donor analytics. ",
+          tags$a(
+            "Contact us",
+            href = "https://www.dalyanalytics.com/contact",
+            style = "color: #bdc3c7;",
+            target = "_blank"
+          ),
+          " to build automated retention tracking for your organization."
+        )
       )
     )
-  ),
-  
-  # Footer
-  br(),
-  div(
-    class = "text-center text-muted py-3",
-    p("Built with ❤️ for nonprofits | ",
-      a(href = "https://www.dalyanalytics.com", target = "_blank", "Daly Analytics"),
-      " | ",
-      a(href = "https://github.com", target = "_blank", "Open Source"))
   )
-    ) # Close hidden app-content div
-  ) # Close hidden div
+          ) # Close nav_panel
+        ) # Close page_navbar
+      ) # Close main-content div
+  ) # Close main div
 )
 
 # Server
 server <- function(input, output, session) {
   
-  # Simulate loading time and hide loading screen
-  observe({
-    # Simulate initialization time
-    Sys.sleep(1.5)
-    
-    # Hide loading screen and show app
-    hide(id = "loading-content", anim = TRUE, animType = "fade")
-    show("app-content")
-  })
   
   # Reactive values
   values <- reactiveValues(

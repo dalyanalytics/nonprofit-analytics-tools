@@ -858,8 +858,8 @@ ui <- tagList(
             tags$a(
               "Schedule Free Consultation",
               href = "https://www.dalyanalytics.com/contact",
-              class = "btn btn-light btn-lg mb-2",
-              style = "width: 100%; font-weight: 600;",
+              class = "btn btn-lg mb-2",
+              style = "background: linear-gradient(135deg, #aecbed, #F9B397); color: #2c3e50; font-weight: 600; width: 100%;",
               target = "_blank"
             ),
             tags$a(
