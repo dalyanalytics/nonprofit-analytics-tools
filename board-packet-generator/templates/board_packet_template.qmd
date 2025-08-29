@@ -1,0 +1,266 @@
+---
+title: "{{meeting_title}}"
+subtitle: "{{meeting_date}}"
+author: "{{organization_name}}"
+date: today
+format: 
+  html:
+    theme: [default, board-packet-styles.scss]
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    smooth-scroll: true
+    css: board-packet-styles.css
+  pdf:
+    documentclass: report
+    papersize: letter
+    margin-left: 1in
+    margin-right: 1in
+    margin-top: 1in
+    margin-bottom: 1in
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    colorlinks: true
+    linkcolor: "#d68a93"
+  docx:
+    reference-doc: board-packet-reference.docx
+    toc: true
+    toc-depth: 3
+    number-sections: true
+---
+
+# Meeting Information {.unnumbered}
+
+::: {.meeting-info}
+**Date:** {{meeting_date}}  
+**Time:** {{meeting_time}}  
+**Location:** {{meeting_location}}  
+**Duration:** {{meeting_duration}}  
+{{#if meeting_notes}}
+**Notes:** {{meeting_notes}}
+{{/if}}
+:::
+
+{{#if include_cover}}
+\newpage
+{{/if}}
+
+{{#if include_agenda}}
+# Meeting Agenda
+
+::: {.agenda-table}
+```{r}
+#| echo: false
+#| warning: false
+library(knitr)
+library(kableExtra)
+
+agenda_data <- data.frame(
+  `Item` = c({{agenda_items}}),
+  `Topic` = c({{agenda_topics}}),
+  `Presenter` = c({{agenda_presenters}}),
+  `Time` = c({{agenda_times}}),
+  `Materials` = c({{agenda_materials}})
+)
+
+if (knitr::is_html_output()) {
+  kable(agenda_data, format = "html", escape = FALSE) %>%
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                  full_width = TRUE,
+                  position = "left") %>%
+    row_spec(0, bold = TRUE, background = "#2c3e50", color = "white")
+} else if (knitr::is_latex_output()) {
+  kable(agenda_data, format = "latex", booktabs = TRUE, escape = FALSE) %>%
+    kable_styling(latex_options = c("striped", "scale_down"))
+} else {
+  kable(agenda_data, format = "pipe")
+}
+```
+:::
+{{/if}}
+
+{{#if include_minutes}}
+# Previous Meeting Minutes
+
+{{minutes_content}}
+{{/if}}
+
+{{#if include_ed_report}}
+# Executive Director's Report
+
+{{ed_report_content}}
+{{/if}}
+
+{{#if include_financials}}
+# Financial Report
+
+## Year-to-Date Performance
+
+::: {.financial-summary}
+```{r}
+#| echo: false
+#| warning: false
+#| fig.width: 10
+#| fig.height: 6
+
+library(ggplot2)
+library(scales)
+
+# Create financial comparison chart
+financial_data <- data.frame(
+  Category = rep(c("Revenue", "Expenses"), each = 3),
+  Type = factor(rep(c("Actual", "Budget", "Prior Year"), 2),
+                levels = c("Actual", "Budget", "Prior Year")),
+  Amount = c({{revenue_actual}}, {{revenue_budget}}, {{revenue_prior}},
+             {{expense_actual}}, {{expense_budget}}, {{expense_prior}})
+)
+
+ggplot(financial_data, aes(x = Category, y = Amount, fill = Type)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  scale_fill_manual(values = c("#d68a93", "#34495e", "#7f8c8d")) +
+  scale_y_continuous(labels = dollar_format()) +
+  labs(title = "Financial Performance Comparison",
+       x = "", y = "Amount ($)", fill = "Period") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    legend.position = "bottom",
+    text = element_text(family = "sans")
+  )
+```
+:::
+
+## Financial Summary Table
+
+::: {.financial-table}
+```{r}
+#| echo: false
+#| warning: false
+
+financial_summary <- data.frame(
+  Category = c({{financial_categories}}),
+  `YTD Actual` = c({{ytd_actual}}),
+  `YTD Budget` = c({{ytd_budget}}),
+  `Variance` = c({{variance}}),
+  `Variance %` = c({{variance_pct}}),
+  `Prior Year` = c({{prior_year}})
+)
+
+# Format currency columns
+currency_cols <- c("YTD Actual", "YTD Budget", "Variance", "Prior Year")
+financial_summary[currency_cols] <- lapply(financial_summary[currency_cols], 
+                                          function(x) paste0("$", format(x, big.mark = ",")))
+
+# Format percentage column
+financial_summary$`Variance %` <- paste0(financial_summary$`Variance %`, "%")
+
+if (knitr::is_html_output()) {
+  kable(financial_summary, format = "html", escape = FALSE) %>%
+    kable_styling(bootstrap_options = c("striped", "hover"),
+                  full_width = TRUE) %>%
+    row_spec(0, bold = TRUE, background = "#2c3e50", color = "white") %>%
+    row_spec(which(financial_summary$Category == "Net Income"), 
+             bold = TRUE, background = "#f8f9fa")
+} else if (knitr::is_latex_output()) {
+  kable(financial_summary, format = "latex", booktabs = TRUE, escape = FALSE) %>%
+    kable_styling(latex_options = "striped")
+} else {
+  kable(financial_summary, format = "pipe")
+}
+```
+:::
+{{/if}}
+
+{{#if include_kpi}}
+# Key Performance Indicators
+
+::: {.kpi-dashboard}
+```{r}
+#| echo: false
+#| warning: false
+#| fig.width: 12
+#| fig.height: 8
+
+library(gridExtra)
+
+# Create KPI visualizations
+kpi_data <- data.frame(
+  metric = c({{kpi_metrics}}),
+  current = c({{kpi_current}}),
+  target = c({{kpi_target}}),
+  trend = c({{kpi_trends}})
+)
+
+# Create individual KPI plots
+create_kpi_gauge <- function(metric, current, target, trend) {
+  # Simple bar chart showing current vs target
+  df <- data.frame(
+    category = c("Current", "Target"),
+    value = c(current, target)
+  )
+  
+  p <- ggplot(df, aes(x = category, y = value, fill = category)) +
+    geom_bar(stat = "identity", width = 0.5) +
+    geom_text(aes(label = value), vjust = -0.5, size = 5, fontface = "bold") +
+    scale_fill_manual(values = c("#d68a93", "#7f8c8d")) +
+    labs(title = metric, x = "", y = "") +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+      legend.position = "none",
+      axis.text.y = element_blank(),
+      axis.ticks = element_blank(),
+      panel.grid = element_blank()
+    )
+  
+  return(p)
+}
+
+# Create plots for each KPI
+plots <- list()
+for(i in 1:nrow(kpi_data)) {
+  plots[[i]] <- create_kpi_gauge(
+    kpi_data$metric[i], 
+    kpi_data$current[i], 
+    kpi_data$target[i],
+    kpi_data$trend[i]
+  )
+}
+
+# Arrange plots in a grid
+grid.arrange(grobs = plots, ncol = 2)
+```
+:::
+{{/if}}
+
+{{#if include_committees}}
+# Committee Reports
+
+{{committee_reports}}
+{{/if}}
+
+{{#if include_strategy}}
+# Strategic Plan Update
+
+{{strategy_content}}
+{{/if}}
+
+{{#if include_development}}
+# Development Report
+
+{{development_content}}
+{{/if}}
+
+{{#if include_appendix}}
+# Appendices
+
+{{appendix_content}}
+{{/if}}
+
+---
+
+::: {.footer-note}
+*This board packet was generated on {{generation_date}} using the Board Packet Generator tool.*
+:::

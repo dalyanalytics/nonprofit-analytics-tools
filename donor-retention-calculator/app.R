@@ -153,8 +153,6 @@ custom_theme <- bs_theme(
   info = theme_colors$info,
   warning = theme_colors$warning,
   danger = theme_colors$danger,
-  base_font = font_google("Inter"),
-  heading_font = font_google("Inter", wght = 600),
   font_scale = 1.1
 )
 
