@@ -497,7 +497,8 @@ professional_theme <- bs_theme(
   secondary = corporate_colors$secondary,
   success = corporate_colors$success,
   warning = corporate_colors$warning,
-  danger = corporate_colors$danger
+  danger = corporate_colors$danger,
+  bootswatch = NULL  # Explicitly set to NULL to avoid loading extra dependencies
 )
 
 # Sample data

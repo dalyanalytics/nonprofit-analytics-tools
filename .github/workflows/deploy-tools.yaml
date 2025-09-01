@@ -28,7 +28,7 @@ jobs:
           
       - name: Install R dependencies
         run: |
-          install.packages(c("shinylive", "shiny", "bslib", "DT", "plotly", "dplyr", "tidyr", "lubridate", "reactable", "sparkline", "shinyjs"))
+          install.packages(c("shinylive", "shiny", "bslib", "DT", "plotly", "dplyr", "tidyr", "lubridate", "reactable", "sparkline", "shinyjs", "ggplot2", "scales"))
         shell: Rscript {0}
         
       - name: Export Shinylive apps
