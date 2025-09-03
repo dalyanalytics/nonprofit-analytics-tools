@@ -231,6 +231,48 @@ h1, h2, h3, h4, h5, h6, .display-font {
   background-color: rgba(255,255,255,0.15);
 }
 
+/* Fix for bslib page_navbar active state */
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link,
+.navbar .nav-link.active,
+.navbar .navbar-nav .active > .nav-link {
+  background-color: rgba(255,255,255,0.2) !important;
+  color: white !important;
+}
+
+/* Override Bootstrap's default nav styling */
+.nav-link {
+  color: rgba(255,255,255,0.9) !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.nav-link:hover {
+  background-color: rgba(255,255,255,0.1) !important;
+  color: white !important;
+}
+
+/* Remove any borders from nav items */
+.nav-item,
+.nav-link,
+.nav-pills .nav-link {
+  border: none !important;
+}
+
+/* Ensure the navbar background stays consistent */
+.navbar-nav {
+  background: transparent !important;
+}
+
+/* Right-align the Analysis Dashboard nav item */
+.navbar-nav {
+  width: 100%;
+}
+
+.navbar-nav .nav-item:last-child {
+  margin-left: auto !important;
+}
+
 /* Card styling */
 .card {
   border: none;
@@ -488,8 +530,9 @@ ui <- tagList(
       div(
         class = "main-content",
         page_navbar(
-          title = div(icon("chart-line"), "Donor Retention Calculator"),
+          title = div(icon("calculator"), "Donor Retention Calculator"),
           theme = custom_theme,
+          id = "main_navbar",
   
           nav_panel(
             title = "Analysis Dashboard",
