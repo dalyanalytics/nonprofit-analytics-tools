@@ -101,13 +101,13 @@ h1, h2, h3, h4, h5, h6, .display-font {
 .nav-pills .show > .nav-link,
 .navbar .nav-link.active,
 .navbar .navbar-nav .active > .nav-link {
-  background-color: rgba(255,255,255,0.2) !important;
+  background-color: #2c3e50 !important;
   color: white !important;
 }
 
 /* Override Bootstrap's default nav styling */
 .nav-link {
-  color: rgba(255,255,255,0.9) !important;
+  color: #2c3e50 !important;
   border-radius: 8px !important;
   transition: all 0.2s ease !important;
 }
