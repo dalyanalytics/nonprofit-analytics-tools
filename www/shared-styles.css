@@ -163,27 +163,79 @@ h1, h2, h3, h4, h5, h6, .display-font {
   border: none !important;
 }
 
-/* Specific styling for navset_card_pill tabs (NOT navbar) */
-.bslib-navs-card-tab .nav-pills .nav-link,
+/* Specific styling for navset_card_pill tabs - target the exact bslib classes */
+.bslib-card .nav-pills .nav-link,
+.bslib-navs-card .nav-pills .nav-link,
 .nav-pills .nav-link {
   color: #2c3e50 !important;
   background: transparent !important;
-  border: 1px solid #2c3e50 !important;
-  border-radius: 8px !important;
+  border: none !important;
+  border-radius: 20px !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0.5rem 1rem !important;
 }
 
-.bslib-navs-card-tab .nav-pills .nav-link:hover,
+.bslib-card .nav-pills .nav-link:hover,
+.bslib-navs-card .nav-pills .nav-link:hover,
 .nav-pills .nav-link:hover {
   color: white !important;
   background: #2c3e50 !important;
-  border: 1px solid #2c3e50 !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-.bslib-navs-card-tab .nav-pills .nav-link.active,
+.bslib-card .nav-pills .nav-link.active,
+.bslib-navs-card .nav-pills .nav-link.active,
 .nav-pills .nav-link.active {
   color: white !important;
   background: #2c3e50 !important;
-  border: 1px solid #2c3e50 !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Force override any Bootstrap pill borders */
+.nav-pills .nav-link,
+.nav-pills .nav-link:not(.active) {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Remove focus outlines from all nav elements */
+.nav-link:focus,
+.nav-link:focus-visible,
+.nav-pills .nav-link:focus,
+.nav-pills .nav-link:focus-visible,
+.bslib-navs-card-tab .nav-pills .nav-link:focus,
+.bslib-navs-card-tab .nav-pills .nav-link:focus-visible,
+.nav-link:active,
+.nav-pills .nav-link:active,
+.bslib-navs-card-tab .nav-pills .nav-link:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+}
+
+/* Remove Bootstrap's default focus ring */
+.nav-pills .nav-link.active:focus,
+.nav-pills .nav-link.active:focus-visible {
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
+}
+
+/* Force remove any button focus styles */
+button:focus,
+button:focus-visible,
+.btn:focus,
+.btn:focus-visible {
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 /* Override to ensure navbar stays with glass morphism */
