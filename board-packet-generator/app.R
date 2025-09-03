@@ -21,8 +21,12 @@ corporate_colors <- list(
   muted = "#7f8c8d"
 )
 
-# Use shared CSS file
-addResourcePath("www", "../www")
+# Use shared CSS file - handle both local and shinylive paths
+if (file.exists("../www")) {
+  addResourcePath("www", "../www")
+} else if (file.exists("www")) {
+  addResourcePath("www", "www")
+}
 
 # Custom theme
 professional_theme <- bs_theme(
@@ -290,11 +294,11 @@ ui <- fluidPage(
                 p(class = "metric-value", textOutput("page_estimate", inline = TRUE), " pages estimated")
               ),
               
-              downloadButton(
+              actionButton(
                 "generate_packet",
-                "Generate HTML Report",
+                "Generate Board Packet",
                 class = "btn btn-primary btn-lg w-100 mb-3",
-                icon = icon("download")
+                icon = icon("file-text")
               ),
               
               actionButton(
@@ -550,34 +554,46 @@ server <- function(input, output, session) {
     as.character(base_pages)
   })
   
-  # Generate board packet download
-  output$generate_packet <- downloadHandler(
-    filename = function() {
-      paste0("Board_Packet_", format(input$meeting_date, "%Y%m%d"), ".html")
-    },
-    content = function(file) {
-      # Generate HTML report
-      html_content <- generate_board_packet_html(
-        meeting_title = input$meeting_title,
-        meeting_date = input$meeting_date,
-        meeting_time = input$meeting_time,
-        meeting_location = input$meeting_location,
-        components = input$components,
-        agenda_data = agenda_items(),
-        financial_data = values$financial_data,
-        include_watermark = input$include_watermark,
-        include_toc = input$include_toc
+  # Generate board packet (Shinylive-compatible)
+  observeEvent(input$generate_packet, {
+    # Generate HTML report
+    html_content <- generate_board_packet_html(
+      meeting_title = input$meeting_title,
+      meeting_date = input$meeting_date,
+      meeting_time = input$meeting_time,
+      meeting_location = input$meeting_location,
+      components = input$components,
+      agenda_data = agenda_items(),
+      financial_data = values$financial_data,
+      include_watermark = input$include_watermark,
+      include_toc = input$include_toc
+    )
+    
+    # Show generated HTML in a modal (Shinylive-compatible)
+    showModal(modalDialog(
+      title = "Board Packet Generated",
+      size = "xl",
+      div(
+        style = "max-height: 500px; overflow-y: auto; border: 1px solid #ddd; padding: 1rem;",
+        HTML(html_content)
+      ),
+      footer = tagList(
+        p(class = "text-muted", 
+          "Copy the content above or use your browser's print function to save as PDF."),
+        modalButton("Close")
       )
-      
-      writeLines(html_content, file)
-      
-      # Show completion notification
-      showNotification("Board packet generated successfully!", type = "message", duration = 5)
-      
-      # Update step 3 to completed
+    ))
+    
+    # Show completion notification
+    showNotification("Board packet generated successfully!", type = "message", duration = 5)
+    
+    # Update step 3 to completed
+    tryCatch({
       shinyjs::runjs("$('#step3').addClass('completed').removeClass('active');")
-    }
-  )
+    }, error = function(e) {
+      # Silently handle if shinyjs fails
+    })
+  })
   
   # Email preview modal
   observeEvent(input$email_preview, {

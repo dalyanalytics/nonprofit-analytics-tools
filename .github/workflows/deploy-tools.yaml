@@ -66,6 +66,16 @@ jobs:
             file.copy("assets", "docs", recursive = TRUE)
           }
           
+          # Copy shared www directory to each app for Shinylive
+          if(dir.exists("www")) {
+            if(dir.exists("docs/donor-retention-calculator")) {
+              file.copy("www", "docs/donor-retention-calculator", recursive = TRUE)
+            }
+            if(dir.exists("docs/board-packet-generator")) {
+              file.copy("www", "docs/board-packet-generator", recursive = TRUE)
+            }
+          }
+          
           # Copy style guide if it exists
           if(file.exists("style-guide.html")) {
             file.copy("style-guide.html", "docs/style-guide.html")
