@@ -113,7 +113,7 @@ h1, h2, h3, h4, h5, h6, .display-font {
 }
 
 .nav-link:hover {
-  background-color: rgba(255,255,255,0.1) !important;
+  background-color: #34495e !important;
   color: white !important;
 }
 
