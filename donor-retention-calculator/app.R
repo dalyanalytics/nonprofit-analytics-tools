@@ -99,15 +99,407 @@ calculate_retention_metrics <- function(gifts_data) {
   ))
 }
 
-# Use shared CSS
-addResourcePath("www", "../www")
+# Use shared CSS - removed for Shinylive compatibility
+# addResourcePath("www", "../www")
 
 # UI  
 ui <- fluidPage(
   theme = bs_theme(version = 5),
   
   tags$head(
-    tags$link(rel="stylesheet", type="text/css", href="www/shared-styles.css")
+    # Inline CSS since external stylesheets don't work in Shinylive
+    tags$style(HTML('
+      /* Shared CSS for Nonprofit Analytics Tools
+       * This file provides consistent styling across all tools
+       */
+
+      /* Global styles */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      body {
+        color: #2c3e50;
+        background-color: #ffffff;
+        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      :root {
+        --primary-gradient: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891);
+        --primary-pink: #d68a93;
+        --primary-peach: #f9b397;
+        --primary-purple: #ad92b1;
+        --primary-mauve: #b07891;
+      }
+
+      .main-content {
+        flex: 1 0 auto;
+      }
+
+      /* Footer styling - full width edge-to-edge */
+      footer, .footer {
+        flex-shrink: 0;
+        margin-top: auto !important;
+        position: relative;
+        width: 100vw !important;
+        max-width: none !important;
+        margin-left: calc(50% - 50vw) !important;
+        margin-right: calc(50% - 50vw) !important;
+        margin-bottom: 0 !important;
+        padding: 2rem 0 !important;
+        background: #0f172a;
+        color: white;
+      }
+
+      /* Ensure footer content has proper padding and is centered */
+      footer .container, .footer .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        width: 100%;
+      }
+
+      /* Ensure the body and all containers allow full width footer */
+      .container-fluid, .bslib-page-wrapper, .bslib-sidebar-layout {
+        overflow-x: visible !important;
+      }
+
+      /* Make sure no parent containers constrain the footer */
+      * {
+        box-sizing: border-box;
+      }
+
+      /* Specific fix for Shiny apps */
+      #shiny-notification-panel {
+        z-index: 10000;
+      }
+
+      /* Headers styling */
+      h1, h2, h3, h4, h5, h6, .display-font {
+        color: #2c3e50;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+      }
+
+      /* Card styling */
+      .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        background: white;
+        overflow: hidden;
+      }
+
+      .card:hover {
+        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+      }
+
+      /* Professional form controls */
+      .form-control, .form-select {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+      }
+
+      .form-control:focus, .form-select:focus {
+        border-color: #d68a93;
+        box-shadow: 0 0 0 0.2rem rgba(214, 138, 147, 0.15);
+        outline: none;
+      }
+
+      /* Professional buttons */
+      .btn {
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        text-transform: none;
+        font-size: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .btn-primary {
+        background: #d68a93;
+        border-color: #d68a93;
+        color: white;
+        box-shadow: 0 4px 12px rgba(214, 138, 147, 0.3);
+      }
+
+      .btn-primary:hover {
+        background: #c17882;
+        border-color: #c17882;
+        box-shadow: 0 6px 20px rgba(214, 138, 147, 0.4);
+        transform: translateY(-1px);
+      }
+
+      /* Hero section for guided experience */
+      .hero-section {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        padding: 3rem 2rem;
+        margin-bottom: 2rem;
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+      }
+
+      @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      /* Guided steps navigation */
+      .step-item {
+        display: flex;
+        align-items: center;
+        color: #bdc3c7;
+        font-weight: 500;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+      }
+
+      .step-item.active {
+        color: #d68a93;
+        background: rgba(214, 138, 147, 0.15);
+        font-weight: 600;
+      }
+
+      .step-item.completed {
+        color: #27ae60;
+        background: rgba(39, 174, 96, 0.15);
+        font-weight: 600;
+      }
+
+      /* Executive summary callouts */
+      .insight-callout {
+        background: linear-gradient(135deg, rgba(214, 138, 147, 0.08) 0%, rgba(173, 146, 177, 0.05) 100%);
+        border-left: 4px solid #d68a93;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .insight-callout h4 {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+      }
+
+      .insight-callout p {
+        color: #34495e;
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      /* Professional metric displays */
+      .metric-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .metric-display {
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        position: relative;
+        transition: all 0.2s ease;
+      }
+
+      .metric-display:hover {
+        border-color: #d68a93;
+        box-shadow: 0 4px 16px rgba(214, 138, 147, 0.1);
+      }
+
+      .metric-number {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-family: "SF Pro Display", -apple-system, sans-serif;
+      }
+
+      .metric-label {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 500;
+      }
+
+      /* Progressive disclosure sections */
+      .disclosure-section {
+        margin: 2rem 0;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        overflow: hidden;
+        background: white;
+      }
+
+      .disclosure-header {
+        background: #f8f9fa;
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.2s ease;
+      }
+
+      .disclosure-header:hover {
+        background: #e9ecef;
+      }
+
+      .disclosure-title {
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+      }
+
+      .disclosure-icon {
+        color: #7f8c8d;
+        transition: transform 0.2s ease;
+      }
+
+      .disclosure-section.expanded .disclosure-icon {
+        transform: rotate(180deg);
+      }
+
+      .disclosure-content {
+        padding: 1.5rem;
+        border-top: 1px solid #e9ecef;
+        display: none;
+      }
+
+      .disclosure-section.expanded .disclosure-content {
+        display: block;
+      }
+
+      /* Benchmark visualization */
+      .benchmark-comparison {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+
+      .benchmark-label {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+        margin-bottom: 0.5rem;
+      }
+
+      .benchmark-bar {
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .benchmark-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #d68a93 0%, #ad92b1 100%);
+        border-radius: 4px;
+        transition: width 0.8s ease;
+      }
+
+      .benchmark-marker {
+        position: absolute;
+        top: -2px;
+        width: 2px;
+        height: 12px;
+        background: #34495e;
+        border-radius: 1px;
+      }
+
+      /* Subtle branding */
+      .powered-by {
+        font-size: 0.8rem;
+        color: #95a5a6;
+        text-align: right;
+        margin-top: 1rem;
+      }
+
+      .powered-by a {
+        color: #d68a93;
+        text-decoration: none;
+      }
+
+      .powered-by a:hover {
+        text-decoration: underline;
+      }
+
+      .w-100 { width: 100%; }
+
+      /* Alert styles */
+      .alert {
+        border-radius: 8px;
+        border: none;
+      }
+
+      .alert-info {
+        background-color: #e3f2fd;
+        color: #1565c0;
+      }
+
+      /* Professional tables */
+      .dataTable {
+        font-size: 0.95rem;
+      }
+
+      .table thead th {
+        background: #f8f9fa;
+        color: #2c3e50;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.05em;
+        padding: 0.75rem;
+        border-bottom: 2px solid #2c3e50;
+      }
+
+      .table tbody td {
+        color: #2c3e50;
+        padding: 0.75rem;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      .table tbody tr:hover {
+        background-color: rgba(44, 62, 80, 0.05);
+      }
+
+      /* DataTables specific styling */
+      .dataTable tbody td {
+        color: #2c3e50 !important;
+      }
+
+      .dataTable tbody tr:hover td {
+        color: #2c3e50 !important;
+      }
+    '))
   ),
   
   useShinyjs(),
@@ -573,4 +965,5 @@ server <- function(input, output, session) {
   })
 }
 
-shinyApp(ui = ui, server = server)
+# For Shinylive compatibility - app object must be defined
+app <- shinyApp(ui = ui, server = server)

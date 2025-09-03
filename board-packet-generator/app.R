@@ -21,12 +21,8 @@ corporate_colors <- list(
   muted = "#7f8c8d"
 )
 
-# Use shared CSS file - handle both local and shinylive paths
-if (file.exists("../www")) {
-  addResourcePath("www", "../www")
-} else if (file.exists("www")) {
-  addResourcePath("www", "www")
-}
+# Use shared CSS - removed for Shinylive compatibility
+# addResourcePath("www", "../www")
 
 # Custom theme
 professional_theme <- bs_theme(
@@ -87,7 +83,839 @@ ui <- fluidPage(
   theme = professional_theme,
   
   tags$head(
-    tags$link(rel="stylesheet", type="text/css", href="www/shared-styles.css")
+    # Inline CSS since external stylesheets don't work in Shinylive
+    tags$style(HTML('
+      /* Shared CSS for Nonprofit Analytics Tools
+       * This file provides consistent styling across all tools
+       */
+
+      /* Global styles */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      body {
+        color: #2c3e50;
+        background-color: #ffffff;
+        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      :root {
+        --primary-gradient: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891);
+        --primary-pink: #d68a93;
+        --primary-peach: #f9b397;
+        --primary-purple: #ad92b1;
+        --primary-mauve: #b07891;
+      }
+
+      .main-content {
+        flex: 1 0 auto;
+      }
+
+      /* Footer styling - full width edge-to-edge */
+      footer, .footer {
+        flex-shrink: 0;
+        margin-top: auto !important;
+        position: relative;
+        width: 100vw !important;
+        max-width: none !important;
+        margin-left: calc(50% - 50vw) !important;
+        margin-right: calc(50% - 50vw) !important;
+        margin-bottom: 0 !important;
+        padding: 2rem 0 !important;
+        background: #0f172a;
+        color: white;
+      }
+
+      /* Ensure footer content has proper padding and is centered */
+      footer .container, .footer .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        width: 100%;
+      }
+
+      /* Ensure the body and all containers allow full width footer */
+      .container-fluid, .bslib-page-wrapper, .bslib-sidebar-layout {
+        overflow-x: visible !important;
+      }
+
+      /* Make sure no parent containers constrain the footer */
+      * {
+        box-sizing: border-box;
+      }
+
+      /* Specific fix for Shiny apps */
+      #shiny-notification-panel {
+        z-index: 10000;
+      }
+
+      /* Headers styling */
+      h1, h2, h3, h4, h5, h6, .display-font {
+        color: #2c3e50;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+      }
+
+      /* Card styling */
+      .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        background: white;
+        overflow: hidden;
+      }
+
+      .card:hover {
+        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+      }
+
+      .card-header {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        border-bottom: 2px solid #d68a93;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #2c3e50;
+        padding: 1rem 1.5rem;
+      }
+
+      /* Sidebar styling */
+      .bslib-sidebar-layout > .sidebar {
+        background: #f8f9fa;
+        border-right: 1px solid #dee2e6;
+        padding: 1.5rem;
+      }
+
+      /* Professional form controls */
+      .form-control, .form-select {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+      }
+
+      .form-control:focus, .form-select:focus {
+        border-color: #d68a93;
+        box-shadow: 0 0 0 0.2rem rgba(214, 138, 147, 0.15);
+        outline: none;
+      }
+
+      /* Professional buttons */
+      .btn {
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        text-transform: none;
+        font-size: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .btn-primary {
+        background: #d68a93;
+        border-color: #d68a93;
+        color: white;
+        box-shadow: 0 4px 12px rgba(214, 138, 147, 0.3);
+      }
+
+      .btn-primary:hover {
+        background: #c17882;
+        border-color: #c17882;
+        box-shadow: 0 6px 20px rgba(214, 138, 147, 0.4);
+        transform: translateY(-1px);
+      }
+
+      .btn-secondary {
+        background: #34495e;
+        border-color: #34495e;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #2c3e50;
+        border-color: #2c3e50;
+      }
+
+      .btn-outline-primary {
+        color: #d68a93;
+        border-color: #d68a93;
+        background: transparent;
+      }
+
+      .btn-outline-primary:hover {
+        background: #d68a93;
+        border-color: #d68a93;
+        color: white;
+      }
+
+      /* Value boxes - Outlined style with brand colors */
+      .value-box {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        padding: 1.5rem;
+        border-top: 4px solid #d68a93;
+      }
+
+      /* Override bslib value box for outlined style */
+      .bslib-value-box {
+        background: white !important;
+        border: 2px solid #dee2e6 !important;
+        color: #2c3e50 !important;
+      }
+
+      /* Brand color borders for different value box types */
+      .bslib-value-box.bg-primary {
+        background: white !important;
+        border: 2px solid #e74c3c !important;
+      }
+
+      .bslib-value-box.bg-info {
+        background: white !important;
+        border: 2px solid #f1c40f !important;
+      }
+
+      .bslib-value-box.bg-warning {
+        background: white !important;
+        border: 2px solid #f39c12 !important;
+      }
+
+      .bslib-value-box.bg-success {
+        background: white !important;
+        border: 2px solid #27ae60 !important;
+      }
+
+      /* Value box text styling */
+      .bslib-value-box .value-box-title,
+      .value-box-title {
+        color: #6c757d !important;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+      }
+
+      .bslib-value-box .value-box-value,
+      .value-box-value {
+        color: #2c3e50 !important;
+        font-size: 2rem;
+        font-weight: 700;
+        font-family: serif;
+      }
+
+      /* Showcase icons with brand colors */
+      .bslib-value-box.bg-primary .value-box-showcase {
+        color: #e74c3c !important;
+      }
+
+      .bslib-value-box.bg-info .value-box-showcase {
+        color: #f1c40f !important;
+      }
+
+      .bslib-value-box.bg-warning .value-box-showcase {
+        color: #f39c12 !important;
+      }
+
+      .bslib-value-box.bg-success .value-box-showcase {
+        color: #27ae60 !important;
+      }
+
+      .bslib-value-box p {
+        color: #6c757d !important;
+      }
+
+      /* Professional tables */
+      .dataTable {
+        font-size: 0.95rem;
+      }
+
+      .table thead th {
+        background: #f8f9fa;
+        color: #2c3e50;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.05em;
+        padding: 0.75rem;
+        border-bottom: 2px solid #2c3e50;
+      }
+
+      .table tbody td {
+        color: #2c3e50;
+        padding: 0.75rem;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      .table tbody tr:hover {
+        background-color: rgba(44, 62, 80, 0.05);
+      }
+
+      /* DataTables specific styling */
+      .dataTable tbody td {
+        color: #2c3e50 !important;
+      }
+
+      .dataTable tbody tr:hover td {
+        color: #2c3e50 !important;
+      }
+
+      /* Loading screen overlay */
+      #loading-content {
+        position: fixed;
+        background: linear-gradient(135deg, rgba(44, 62, 80, 0.95), rgba(52, 73, 94, 0.95));
+        background-size: 200% 200%;
+        animation: gradientShift 8s ease infinite;
+        z-index: 9999;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-family: sans-serif;
+      }
+
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+        margin-bottom: 30px;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      .loading-text {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+
+      .loading-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        text-align: center;
+        max-width: 400px;
+        line-height: 1.4;
+      }
+
+      .loading-icon {
+        font-size: 4rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-10px);
+        }
+        60% {
+          transform: translateY(-5px);
+        }
+      }
+
+      /* Professional Portfolio Layout Styles */
+
+      /* Hero section for guided experience */
+      .hero-section {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        padding: 3rem 2rem;
+        margin-bottom: 2rem;
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        letter-spacing: -0.02em;
+      }
+
+      .hero-subtitle {
+        font-size: 1.2rem;
+        color: #7f8c8d;
+        margin-bottom: 0;
+        font-weight: 400;
+      }
+
+      /* Guided steps navigation */
+      .steps-nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+        gap: 1rem;
+      }
+
+      .step-item {
+        display: flex;
+        align-items: center;
+        color: #bdc3c7;
+        font-weight: 500;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .step-item.active {
+        color: #d68a93;
+        background: rgba(214, 138, 147, 0.15);
+        font-weight: 600;
+      }
+
+      .step-item.completed {
+        color: #27ae60;
+        background: rgba(39, 174, 96, 0.15);
+        font-weight: 600;
+      }
+
+      .step-item.completed::after {
+        content: " ✓";
+        margin-left: 0.5rem;
+      }
+
+      .step-arrow {
+        margin: 0 0.5rem;
+        color: #bdc3c7;
+        font-weight: bold;
+      }
+
+      /* Executive summary callouts */
+      .insight-callout {
+        background: linear-gradient(135deg, rgba(214, 138, 147, 0.08) 0%, rgba(173, 146, 177, 0.05) 100%);
+        border-left: 4px solid #d68a93;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .insight-callout h4 {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+      }
+
+      .insight-callout p {
+        color: #34495e;
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      /* Professional metric displays */
+      .metric-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .metric-display {
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        position: relative;
+        transition: all 0.2s ease;
+      }
+
+      .metric-display:hover {
+        border-color: #d68a93;
+        box-shadow: 0 4px 16px rgba(214, 138, 147, 0.1);
+      }
+
+      .metric-number {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-family: "SF Pro Display", -apple-system, sans-serif;
+      }
+
+      .metric-label {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 500;
+      }
+
+      .metric-trend {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 0.8rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 12px;
+      }
+
+      .trend-up {
+        background: rgba(39, 174, 96, 0.1);
+        color: #27ae60;
+      }
+
+      .trend-down {
+        background: rgba(231, 76, 60, 0.1);
+        color: #e74c3c;
+      }
+
+      /* Progressive disclosure sections */
+      .disclosure-section {
+        margin: 2rem 0;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        overflow: hidden;
+        background: white;
+      }
+
+      .disclosure-header {
+        background: #f8f9fa;
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.2s ease;
+      }
+
+      .disclosure-header:hover {
+        background: #e9ecef;
+      }
+
+      .disclosure-title {
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+      }
+
+      .disclosure-icon {
+        color: #7f8c8d;
+        transition: transform 0.2s ease;
+      }
+
+      .disclosure-section.expanded .disclosure-icon {
+        transform: rotate(180deg);
+      }
+
+      .disclosure-content {
+        padding: 1.5rem;
+        border-top: 1px solid #e9ecef;
+        display: none;
+      }
+
+      .disclosure-section.expanded .disclosure-content {
+        display: block;
+      }
+
+      /* Expertise showcase elements */
+      .expertise-badge {
+        display: inline-block;
+        background: rgba(214, 138, 147, 0.1);
+        color: #d68a93;
+        padding: 0.3rem 0.8rem;
+        border-radius: 16px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin: 0.2rem;
+      }
+
+      .benchmark-comparison {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+
+      .benchmark-label {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+        margin-bottom: 0.5rem;
+      }
+
+      .benchmark-bar {
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .benchmark-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #d68a93 0%, #ad92b1 100%);
+        border-radius: 4px;
+        transition: width 0.8s ease;
+      }
+
+      .benchmark-marker {
+        position: absolute;
+        top: -2px;
+        width: 2px;
+        height: 12px;
+        background: #34495e;
+        border-radius: 1px;
+      }
+
+      /* Subtle branding */
+      .powered-by {
+        font-size: 0.8rem;
+        color: #95a5a6;
+        text-align: right;
+        margin-top: 1rem;
+      }
+
+      .powered-by a {
+        color: #d68a93;
+        text-decoration: none;
+      }
+
+      .powered-by a:hover {
+        text-decoration: underline;
+      }
+
+      /* Specific styles for Board Packet Generator */
+
+      /* Status badges */
+      .badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        letter-spacing: 0.02em;
+      }
+
+      .badge-success {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .badge-warning {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      .badge-info {
+        background: #d1ecf1;
+        color: #0c5460;
+      }
+
+      /* Preview sections */
+      .preview-section {
+        background: #f8f9fa;
+        border-left: 4px solid #d68a93;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .preview-section h4 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+      }
+
+      /* File upload area */
+      .file-upload-area {
+        border: 2px dashed #e9ecef;
+        border-radius: 8px;
+        padding: 2rem;
+        text-align: center;
+        background: #f8f9fa;
+        transition: all 0.3s ease;
+      }
+
+      .file-upload-area:hover {
+        border-color: #d68a93;
+        background: #fff;
+      }
+
+      /* Executive summary box */
+      .executive-summary {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        border-left: 4px solid #d68a93;
+        padding: 2rem;
+        margin: 2rem 0;
+        border-radius: 0 12px 12px 0;
+      }
+
+      /* Metric cards */
+      .metric-card {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-align: center;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+      }
+
+      .metric-card:hover {
+        border-color: #d68a93;
+        box-shadow: 0 4px 12px rgba(214, 138, 147, 0.15);
+      }
+
+      .metric-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        font-family: serif;
+      }
+
+      .metric-label {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 0.5rem;
+      }
+
+      /* Professional navigation tabs */
+      .nav-tabs {
+        border-bottom: 2px solid #e9ecef;
+        margin-bottom: 2rem;
+      }
+
+      .nav-tabs .nav-link {
+        color: #7f8c8d;
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s ease;
+      }
+
+      .nav-tabs .nav-link:hover {
+        color: #2c3e50;
+        border-bottom-color: #e9ecef;
+      }
+
+      .nav-tabs .nav-link.active {
+        color: #d68a93;
+        background: transparent;
+        border: none;
+        border-bottom: 3px solid #d68a93;
+      }
+
+      /* Drag and drop styles */
+      .dt-rowReorder-moving {
+        background-color: #d68a93 !important;
+        opacity: 0.8;
+      }
+
+      .dt-rowReorder-drop-marker {
+        border: 2px solid #d68a93 !important;
+      }
+
+      .draggable-row {
+        cursor: move;
+        transition: background-color 0.2s ease;
+      }
+
+      .draggable-row:hover {
+        background-color: #f8f9fa !important;
+      }
+
+      .drag-handle {
+        color: #7f8c8d;
+        cursor: grab;
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        display: inline-block;
+        width: 20px;
+        text-align: center;
+        user-select: none;
+      }
+
+      .drag-handle:hover {
+        color: #d68a93;
+      }
+
+      .drag-handle:active {
+        cursor: grabbing;
+        color: #2c3e50;
+      }
+
+      /* Make sure table cells are properly positioned for drag and drop */
+      .dataTable tbody td {
+        position: relative;
+      }
+
+      /* First column with reorder handle */
+      .dataTable tbody td.reorder {
+        cursor: move !important;
+      }
+
+      /* Highlight row being dragged */
+      table.dataTable.dt-rowReorder-moving {
+        opacity: 0.8;
+        background-color: #f8f9fa !important;
+      }
+
+      /* Ensure the table doesn not jump during reorder */
+      table.dataTable {
+        table-layout: fixed;
+      }
+
+      @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      .w-100 { width: 100%; }
+
+      /* Alert styles */
+      .alert {
+        border-radius: 8px;
+        border: none;
+      }
+
+      .alert-info {
+        background-color: #e3f2fd;
+        color: #1565c0;
+      }
+    '))
   ),
   
   useShinyjs(),
@@ -747,4 +1575,5 @@ generate_board_packet_html <- function(meeting_title, meeting_date, meeting_time
   return(html_content)
 }
 
-shinyApp(ui = ui, server = server)
+# For Shinylive compatibility - app object must be defined
+app <- shinyApp(ui = ui, server = server)
