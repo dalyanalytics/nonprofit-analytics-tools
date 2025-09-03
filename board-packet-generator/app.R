@@ -1,6 +1,6 @@
 # Board Packet Generator - Professional Portfolio Layout with Full Functionality
 library(shiny)
-library(plotly)
+# library(plotly) # Removed for Shinylive compatibility
 library(DT)
 library(dplyr)
 library(tidyr)
@@ -1027,11 +1027,14 @@ ui <- fluidPage(
           p(textOutput("executive_summary"))
         ),
         
-        # Financial Chart
+        # Financial Summary Table instead of chart
         div(
           style = "margin-top: 2rem;",
-          h5("Financial Performance"),
-          plotlyOutput("financial_overview", height = "300px")
+          h5("Financial Performance Summary"),
+          div(
+            class = "table-responsive",
+            tableOutput("financial_summary_table")
+          )
         )
       ),
       
@@ -1278,40 +1281,20 @@ server <- function(input, output, session) {
            "All key performance indicators trending positively for strategic growth initiatives.")
   })
   
-  # Financial overview plot
-  output$financial_overview <- renderPlotly({
+  # Financial summary table (replaced plotly chart for Shinylive compatibility)
+  output$financial_summary_table <- renderTable({
     comparison_data <- data.frame(
-      Category = rep(c("Revenue", "Expenses"), each = 3),
-      Type = rep(c("Actual", "Budget", "Prior Year"), 2),
-      Amount = c(875000, 850000, 825000, 752500, 731000, 709500)
+      Metric = c("Revenue", "Expenses", "Net Income"),
+      Actual = c("$875,000", "$752,500", "$122,500"),
+      Budget = c("$850,000", "$731,000", "$119,000"),
+      `Prior Year` = c("$825,000", "$709,500", "$115,500"),
+      `Variance %` = c("+2.9%", "-2.9%", "+2.9%"),
+      stringsAsFactors = FALSE
     )
-    
-    p <- plot_ly(
-      comparison_data,
-      x = ~Category,
-      y = ~Amount,
-      color = ~Type,
-      type = "bar",
-      colors = c("#d68a93", "#34495e", "#7f8c8d"),
-      text = ~paste0("$", format(Amount/1000, digits = 1), "K"),
-      textposition = "outside",
-      hovertemplate = "%{x}<br>$%{y:,.0f}<extra></extra>"
-    ) %>%
-      layout(
-        title = "",
-        xaxis = list(title = ""),
-        yaxis = list(title = "Amount ($)", tickformat = "$,.0f"),
-        barmode = "group",
-        plot_bgcolor = "rgba(0,0,0,0)",
-        paper_bgcolor = "rgba(0,0,0,0)",
-        font = list(family = "Arial", size = 12),
-        margin = list(l = 50, r = 50, t = 20, b = 50),
-        showlegend = TRUE,
-        legend = list(orientation = "h", y = -0.2)
-      )
-    
-    p
-  })
+    names(comparison_data)[4] <- "Prior Year"
+    names(comparison_data)[5] <- "Variance %"
+    comparison_data
+  }, striped = TRUE, hover = TRUE)
   
   # Agenda preview with editable cells
   output$agenda_preview <- renderDT({
