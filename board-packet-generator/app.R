@@ -1,9 +1,9 @@
 library(shiny)
-library(bslib)
 library(plotly)
 library(DT)
 library(dplyr)
 library(tidyr)
+library(bslib)
 
 # Professional corporate color scheme
 corporate_colors <- list(
@@ -490,15 +490,15 @@ table.dataTable {
 }
 "
 
-# Custom theme with natural fonts
+# Custom theme with natural fonts - using preset for Shinylive compatibility
 professional_theme <- bs_theme(
   version = 5,
+  preset = "bootstrap",
   primary = corporate_colors$primary,
   secondary = corporate_colors$secondary,
   success = corporate_colors$success,
   warning = corporate_colors$warning,
-  danger = corporate_colors$danger,
-  bootswatch = NULL  # Explicitly set to NULL to avoid loading extra dependencies
+  danger = corporate_colors$danger
 )
 
 # Sample data
