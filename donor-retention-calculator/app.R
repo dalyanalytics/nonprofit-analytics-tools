@@ -769,19 +769,19 @@ ui <- tagList(
           h5("Need More Custom Analytics Tools?", style = "color: white; margin-bottom: 1rem;"),
           p(
             style = "color: rgba(255,255,255,0.9); margin-bottom: 1rem;",
-            "This donor retention calculator demonstrates the power of automated analytics. ",
-            "Daly Analytics specializes in creating custom dashboards that eliminate manual work and provide deeper insights."
+            "This donor retention calculator demonstrates the power of custom-built nonprofit analytics solutions. ",
+            "Daly Analytics specializes in creating tailored tools that solve your organization's unique challenges."
           ),
           div(
             class = "mb-3",
             tags$ul(
               class = "list-unstyled",
               style = "color: rgba(255,255,255,0.8);",
-              tags$li(icon("check"), " Real-time donor retention tracking"),
-              tags$li(icon("check"), " Predictive churn risk modeling"),
-              tags$li(icon("check"), " Automated monthly retention reports"),
-              tags$li(icon("check"), " Donor segmentation & targeting"),
-              tags$li(icon("check"), " Integration with your CRM/database")
+              tags$li(icon("check"), " Custom donor dashboards with ML predictions"),
+              tags$li(icon("check"), " Automated grant reporting systems"),
+              tags$li(icon("check"), " Real-time fundraising campaign tracking"),
+              tags$li(icon("check"), " Board meeting analysis and insights"),
+              tags$li(icon("check"), " Integration with your existing CRM/database")
             )
           )
         ),
@@ -794,11 +794,9 @@ ui <- tagList(
               "Schedule Free Consultation",
               href = "https://www.dalyanalytics.com/contact",
               class = "btn btn-lg mb-2",
-              style = "background: linear-gradient(135deg, #aecbed, #F9B397, #D68A93); color: #2c3e50; font-weight: 600; width: 100%;",
+              style = "background: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891); color: #2c3e50; font-weight: 600; width: 100%;",
               target = "_blank"
             ),
-
-            
             tags$a(
               "View Our Portfolio",
               href = "https://www.dalyanalytics.com",
