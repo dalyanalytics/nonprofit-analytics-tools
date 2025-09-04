@@ -6,6 +6,44 @@ library(lubridate)
 library(DT)
 library(shinyjs)
 
+# Environment detection and conditional auth loading
+is_shinylive <- function() {
+  # Multiple checks for Shinylive/WebR environment
+  tryCatch({
+    # WebR runs on wasm32-unknown-emscripten platform
+    grepl("wasm", R.Version()$platform, ignore.case = TRUE) ||
+    # Shinylive doesn't have file system access in typical way
+    !file.exists("/") ||
+    # Check for WebR-specific environment variables
+    Sys.getenv("WEBR") == "1" ||
+    # Check if we're in a browser context (no real file system)
+    !capabilities("fifo")
+  }, error = function(e) {
+    # If checks fail, assume we're in Shinylive
+    TRUE
+  })
+}
+
+# Conditional auth0 loading
+if (!is_shinylive() && file.exists("_auth0.yml")) {
+  tryCatch({
+    library(auth0)
+    options(auth0_config_file = "_auth0.yml")
+    use_auth <- TRUE
+    cat("✓ Auth0 loaded successfully\n")
+  }, error = function(e) {
+    cat("⚠ Auth0 not available, running without authentication\n")
+    use_auth <- FALSE
+  })
+} else {
+  use_auth <- FALSE
+  if (is_shinylive()) {
+    cat("✓ Shinylive environment detected - running in public mode\n")
+  } else {
+    cat("⚠ No auth0 config found - running without authentication\n")
+  }
+}
+
 # Generate sample data
 set.seed(123)
 generate_sample_data <- function() {
@@ -965,5 +1003,11 @@ server <- function(input, output, session) {
   })
 }
 
-# For Shinylive compatibility - app object must be defined
-app <- shinyApp(ui = ui, server = server)
+# Conditional app creation based on environment
+if (use_auth) {
+  cat("🔒 Creating authenticated app with Auth0\n")
+  app <- auth0::shinyAppAuth0(ui, server)
+} else {
+  cat("🌐 Creating public app (no authentication)\n")
+  app <- shinyApp(ui = ui, server = server)
+}

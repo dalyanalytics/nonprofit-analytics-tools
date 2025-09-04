@@ -1,0 +1,93 @@
+name: Deploy to Shinyapps.io
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_name:
+        description: 'App to deploy (donor-retention-calculator or board-packet-generator)'
+        required: true
+        default: 'donor-retention-calculator'
+        type: choice
+        options:
+          - donor-retention-calculator
+          - board-packet-generator
+  push:
+    branches: [ main ]
+    paths:
+      - 'donor-retention-calculator/**'
+      - 'board-packet-generator/**'
+
+jobs:
+  deploy-shinyapps:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up R
+      uses: r-lib/actions/setup-r@v2
+      with:
+        r-version: '4.4.1'
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
+
+    - name: Install R dependencies
+      run: |
+        R -e "install.packages(c('rsconnect', 'shiny', 'bslib', 'dplyr', 'lubridate', 'DT', 'shinyjs', 'auth0', 'tidyr', 'plotly'))"
+
+    - name: Determine app to deploy
+      id: determine-app
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "app_name=${{ github.event.inputs.app_name }}" >> $GITHUB_OUTPUT
+        else
+          # Auto-determine based on changed files
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "donor-retention-calculator/"; then
+            echo "app_name=donor-retention-calculator" >> $GITHUB_OUTPUT
+          elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "board-packet-generator/"; then
+            echo "app_name=board-packet-generator" >> $GITHUB_OUTPUT
+          else
+            echo "app_name=donor-retention-calculator" >> $GITHUB_OUTPUT
+          fi
+        fi
+
+    - name: Set up Auth0 config
+      if: steps.determine-app.outputs.app_name == 'donor-retention-calculator'
+      run: |
+        cd ${{ steps.determine-app.outputs.app_name }}
+        
+        # Create _auth0.yml from template
+        cat > _auth0.yml << EOF
+        name: donor-retention-private
+        remote_url: 'https://${{ secrets.SHINYAPPS_ACCOUNT }}.shinyapps.io/donor-retention-private/'
+        auth0_config:
+          api_url: https://${{ secrets.AUTH0_DOMAIN }}
+          credentials:
+            key: ${{ secrets.AUTH0_CLIENT_ID }}
+            secret: ${{ secrets.AUTH0_CLIENT_SECRET }}
+        EOF
+
+    - name: Configure rsconnect
+      run: |
+        R -e "rsconnect::setAccountInfo(name='${{ secrets.SHINYAPPS_ACCOUNT }}', token='${{ secrets.SHINYAPPS_TOKEN }}', secret='${{ secrets.SHINYAPPS_SECRET }}')"
+
+    - name: Deploy to shinyapps.io
+      run: |
+        cd ${{ steps.determine-app.outputs.app_name }}
+        
+        if [ "${{ steps.determine-app.outputs.app_name }}" = "donor-retention-calculator" ]; then
+          APP_NAME="donor-retention-private"
+        else
+          APP_NAME="board-packet-private"
+        fi
+        
+        R -e "rsconnect::deployApp(appName='$APP_NAME', account='${{ secrets.SHINYAPPS_ACCOUNT }}', forceUpdate=TRUE)"
+
+    - name: Clean up sensitive files
+      if: always()
+      run: |
+        rm -f ${{ steps.determine-app.outputs.app_name }}/_auth0.yml
