@@ -51,3 +51,6 @@ rsconnect/
 # Auth0 configuration files (contain sensitive credentials)
 _auth0.yml
 */_auth0.yml
+
+# AI assistant
+CLAUDE.md

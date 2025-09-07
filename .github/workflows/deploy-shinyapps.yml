@@ -56,14 +56,19 @@ jobs:
         fi
 
     - name: Set up Auth0 config
-      if: steps.determine-app.outputs.app_name == 'donor-retention-calculator'
       run: |
         cd ${{ steps.determine-app.outputs.app_name }}
         
         # Create _auth0.yml from template
+        if [ "${{ steps.determine-app.outputs.app_name }}" == "donor-retention-calculator" ]; then
+          APP_NAME="donor-retention-private"
+        elif [ "${{ steps.determine-app.outputs.app_name }}" == "board-packet-generator" ]; then
+          APP_NAME="board-packet-private"
+        fi
+        
         cat > _auth0.yml << EOF
-        name: donor-retention-private
-        remote_url: 'https://${{ secrets.SHINYAPPS_ACCOUNT }}.shinyapps.io/donor-retention-private/'
+        name: $APP_NAME
+        remote_url: 'https://${{ secrets.SHINYAPPS_ACCOUNT }}.shinyapps.io/$APP_NAME/'
         auth0_config:
           api_url: https://${{ secrets.AUTH0_DOMAIN }}
           credentials:
