@@ -1001,6 +1001,12 @@ server <- function(input, output, session) {
       "Consider implementing donor welcome series and regular engagement touchpoints to improve retention rates."
     }
   })
+  
+  # Ensure segmentation outputs render even when hidden
+  outputOptions(output, "one_time_count", suspendWhenHidden = FALSE)
+  outputOptions(output, "repeat_count", suspendWhenHidden = FALSE)
+  outputOptions(output, "major_donor_count", suspendWhenHidden = FALSE)
+  outputOptions(output, "segment_insight", suspendWhenHidden = FALSE)
 }
 
 # Conditional app creation based on environment
