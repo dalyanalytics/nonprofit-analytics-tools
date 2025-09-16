@@ -548,7 +548,7 @@ ui <- fluidPage(
       style = "background: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891); background-size: 200% 100%; animation: gradient 15s ease infinite; color: white; text-align: center; padding: 3rem 2rem; margin-bottom: 2rem;",
       div(icon("calculator"), style = "font-size: 3rem; margin-bottom: 1rem;"),
       h1("Donor Retention Analysis", style = "color: white; font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;"),
-      p("Advanced analytics to understand donor behavior and maximize lifetime value", 
+      p("Transform donor data into meaningful relationships that fuel your mission", 
         style = "color: rgba(255,255,255,0.9); font-size: 1.2rem; margin-bottom: 0;")
     ),
     
