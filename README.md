@@ -9,13 +9,13 @@ Stop paying expensive monthly subscriptions for generic software. These tools ar
 
 ## 🎯 Available Tools
 
-### [📊 Donor Retention Calculator](https://dalyanalytics.github.io/nonprofit-analytics-tools/donor-retention-calculator/)
+### [📊 Donor Retention Calculator](https://dalyanalytics.shinyapps.io/donor-retention-calculator/)
 - Analyze donor retention rates by cohort
 - Calculate lifetime value projections
 - Benchmark against industry standards
 - Upload your data or try sample dataset
 
-### [📄 Board Packet Generator](https://dalyanalytics.github.io/nonprofit-analytics-tools/board-packet-generator/)
+### [📄 Board Packet Generator](https://dalyanalytics.shinyapps.io/board-packet-generator/)
 - Create professional board meeting materials
 - Executive summary with KPIs and financial charts
 - Editable agenda with drag-and-drop reordering
@@ -51,10 +51,11 @@ These tools solve real problems I've encountered in client work.
 ## 🛠 Technical Stack
 
 - **R/Shiny** for interactive applications
-- **Shinylive** for serverless deployment
-- **GitHub Pages** for complimentary hosting
+- **Shinyapps.io** for professional cloud hosting
+- **GitHub Actions** for automated deployment
 - **Plotly** for interactive visualizations
 - **DT** for data tables
+- **MapLibre GL** for interactive maps
 
 ## 📈 Want Custom Solutions?
 

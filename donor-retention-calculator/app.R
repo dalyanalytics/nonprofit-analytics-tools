@@ -24,25 +24,28 @@ is_shinylive <- function() {
   })
 }
 
-# Conditional auth0 loading
-if (!is_shinylive() && file.exists("_auth0.yml")) {
-  tryCatch({
-    library(auth0)
-    options(auth0_config_file = "_auth0.yml")
-    use_auth <- TRUE
-    cat("✓ Auth0 loaded successfully\n")
-  }, error = function(e) {
-    cat("⚠ Auth0 not available, running without authentication\n")
-    use_auth <- FALSE
-  })
-} else {
-  use_auth <- FALSE
-  if (is_shinylive()) {
-    cat("✓ Shinylive environment detected - running in public mode\n")
-  } else {
-    cat("⚠ No auth0 config found - running without authentication\n")
-  }
-}
+# Auth0 disabled - running as public app
+# Conditional auth0 loading (COMMENTED OUT - app is now fully public)
+# if (!is_shinylive() && file.exists("_auth0.yml")) {
+#   tryCatch({
+#     library(auth0)
+#     options(auth0_config_file = "_auth0.yml")
+#     use_auth <- TRUE
+#     cat("✓ Auth0 loaded successfully\n")
+#   }, error = function(e) {
+#     cat("⚠ Auth0 not available, running without authentication\n")
+#     use_auth <- FALSE
+#   })
+# } else {
+#   use_auth <- FALSE
+#   if (is_shinylive()) {
+#     cat("✓ Shinylive environment detected - running in public mode\n")
+#   } else {
+#     cat("⚠ No auth0 config found - running without authentication\n")
+#   }
+# }
+use_auth <- FALSE
+cat("🌐 Running as public app (Auth0 disabled)\n")
 
 # Generate sample data
 set.seed(123)

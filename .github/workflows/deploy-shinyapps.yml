@@ -59,27 +59,10 @@ jobs:
           fi
         fi
 
-    - name: Set up Auth0 config
-      if: steps.determine-app.outputs.app_name != 'grant-research-assistant'
-      run: |
-        cd ${{ steps.determine-app.outputs.app_name }}
-
-        # Create _auth0.yml from template (only for apps that use Auth0)
-        if [ "${{ steps.determine-app.outputs.app_name }}" == "donor-retention-calculator" ]; then
-          APP_NAME="donor-retention-private"
-        elif [ "${{ steps.determine-app.outputs.app_name }}" == "board-packet-generator" ]; then
-          APP_NAME="board-packet-private"
-        fi
-
-        cat > _auth0.yml << EOF
-        name: $APP_NAME
-        remote_url: 'https://${{ secrets.SHINYAPPS_ACCOUNT }}.shinyapps.io/$APP_NAME/'
-        auth0_config:
-          api_url: https://${{ secrets.AUTH0_DOMAIN }}
-          credentials:
-            key: ${{ secrets.AUTH0_CLIENT_ID }}
-            secret: ${{ secrets.AUTH0_CLIENT_SECRET }}
-        EOF
+    # Auth0 disabled - all apps are now public
+    # - name: Set up Auth0 config
+    #   run: |
+    #     echo "Auth0 authentication disabled - all apps deployed as public"
 
     - name: Configure rsconnect
       run: |
@@ -89,10 +72,11 @@ jobs:
       run: |
         cd ${{ steps.determine-app.outputs.app_name }}
 
+        # All apps deployed as public (no -private suffix)
         if [ "${{ steps.determine-app.outputs.app_name }}" = "donor-retention-calculator" ]; then
-          APP_NAME="donor-retention-private"
+          APP_NAME="donor-retention-calculator"
         elif [ "${{ steps.determine-app.outputs.app_name }}" = "board-packet-generator" ]; then
-          APP_NAME="board-packet-private"
+          APP_NAME="board-packet-generator"
         elif [ "${{ steps.determine-app.outputs.app_name }}" = "grant-research-assistant" ]; then
           APP_NAME="grant-research-assistant"
         fi
