@@ -22,7 +22,7 @@ Stop paying expensive monthly subscriptions for generic software. These tools ar
 - Generate comprehensive HTML reports
 - Include minutes, financial reports, and committee updates
 
-### [🔍 Grant Research Assistant](https://dalyanalytics.github.io/nonprofit-analytics-tools/grant-research-assistant/)
+### [🔍 Grant Research Assistant](https://dalyanalytics.shinyapps.io/grant-research-assistant/)
 - Discover New England foundations that fund organizations like yours
 - Interactive map with 15+ foundations across 6 states
 - Filter by state, asset size, and annual grantmaking
