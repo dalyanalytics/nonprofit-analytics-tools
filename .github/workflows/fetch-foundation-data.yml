@@ -1,0 +1,40 @@
+name: Fetch Foundation Data
+
+on:
+  schedule:
+    # Run weekly on Sundays at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  fetch-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.3.1'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+
+      - name: Install R packages
+        run: |
+          R -e 'install.packages(c("httr2", "jsonlite", "dplyr", "purrr", "scales", "tidygeocoder"), repos="https://cloud.r-project.org")'
+
+      - name: Fetch foundation data
+        run: |
+          Rscript grant-research-assistant/fetch_foundation_data.R
+
+      - name: Commit and push data
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add grant-research-assistant/data/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update foundation data [automated]" && git push)

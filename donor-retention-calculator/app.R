@@ -800,7 +800,7 @@ ui <- fluidPage(
             div(
               class = "mt-3",
               style = "color: rgba(255,255,255,0.7); font-size: 0.9rem;",
-              icon("envelope"), " jasmine@dalyanalytics.com"
+              icon("envelope"), " hello@dalyanalytics.com"
             )
           )
         )

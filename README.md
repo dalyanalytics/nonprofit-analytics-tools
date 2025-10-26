@@ -22,11 +22,12 @@ Stop paying expensive monthly subscriptions for generic software. These tools ar
 - Generate comprehensive HTML reports
 - Include minutes, financial reports, and committee updates
 
-### [📅 Grant Deadline Tracker](https://dalyanalytics.github.io/nonprofit-analytics-tools/grant-deadline-tracker/) *(Coming Soon)*
-- Never miss grant deadlines
-- Track application progress
-- Set intelligent reminders
-- Success rate analysis
+### [🔍 Grant Research Assistant](https://dalyanalytics.github.io/nonprofit-analytics-tools/grant-research-assistant/)
+- Discover New England foundations that fund organizations like yours
+- Interactive map with 15+ foundations across 6 states
+- Filter by state, asset size, and annual grantmaking
+- View foundation payout rates and grant amounts
+- Direct links to ProPublica to research grant recipients
 
 ### [🎯 Fundraising Goal Planner](https://dalyanalytics.github.io/nonprofit-analytics-tools/fundraising-goal-planner/) *(Coming Soon)*
 - Data-driven campaign planning
@@ -81,7 +82,7 @@ MIT License - Use these tools freely for your nonprofit!
 
 - **Website**: [dalyanalytics.com](https://www.dalyanalytics.com)
 - **LinkedIn**: [Connect with me](https://www.linkedin.com/in/jasminemdaly/)
-- **Email**: jasmine@dalyanalytics.com
+- **Email**: hello@dalyanalytics.com
 
 ---
 

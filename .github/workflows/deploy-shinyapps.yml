@@ -4,18 +4,20 @@ on:
   workflow_dispatch:
     inputs:
       app_name:
-        description: 'App to deploy (donor-retention-calculator or board-packet-generator)'
+        description: 'App to deploy'
         required: true
         default: 'donor-retention-calculator'
         type: choice
         options:
           - donor-retention-calculator
           - board-packet-generator
+          - grant-research-assistant
   push:
     branches: [ main ]
     paths:
       - 'donor-retention-calculator/**'
       - 'board-packet-generator/**'
+      - 'grant-research-assistant/**'
 
 jobs:
   deploy-shinyapps:
@@ -33,11 +35,11 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
+        sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libudunits2-dev libgdal-dev libgeos-dev libproj-dev
 
     - name: Install R dependencies
       run: |
-        R -e "install.packages(c('rsconnect', 'shiny', 'bslib', 'dplyr', 'lubridate', 'DT', 'shinyjs', 'auth0', 'tidyr', 'plotly'))"
+        R -e "install.packages(c('rsconnect', 'shiny', 'bslib', 'dplyr', 'lubridate', 'DT', 'shinyjs', 'tidyr', 'plotly', 'jsonlite', 'scales', 'mapgl', 'sf', 'httr2'))"
 
     - name: Determine app to deploy
       id: determine-app
@@ -50,22 +52,25 @@ jobs:
             echo "app_name=donor-retention-calculator" >> $GITHUB_OUTPUT
           elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "board-packet-generator/"; then
             echo "app_name=board-packet-generator" >> $GITHUB_OUTPUT
+          elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "grant-research-assistant/"; then
+            echo "app_name=grant-research-assistant" >> $GITHUB_OUTPUT
           else
             echo "app_name=donor-retention-calculator" >> $GITHUB_OUTPUT
           fi
         fi
 
     - name: Set up Auth0 config
+      if: steps.determine-app.outputs.app_name != 'grant-research-assistant'
       run: |
         cd ${{ steps.determine-app.outputs.app_name }}
-        
-        # Create _auth0.yml from template
+
+        # Create _auth0.yml from template (only for apps that use Auth0)
         if [ "${{ steps.determine-app.outputs.app_name }}" == "donor-retention-calculator" ]; then
           APP_NAME="donor-retention-private"
         elif [ "${{ steps.determine-app.outputs.app_name }}" == "board-packet-generator" ]; then
           APP_NAME="board-packet-private"
         fi
-        
+
         cat > _auth0.yml << EOF
         name: $APP_NAME
         remote_url: 'https://${{ secrets.SHINYAPPS_ACCOUNT }}.shinyapps.io/$APP_NAME/'
@@ -83,13 +88,15 @@ jobs:
     - name: Deploy to shinyapps.io
       run: |
         cd ${{ steps.determine-app.outputs.app_name }}
-        
+
         if [ "${{ steps.determine-app.outputs.app_name }}" = "donor-retention-calculator" ]; then
           APP_NAME="donor-retention-private"
-        else
+        elif [ "${{ steps.determine-app.outputs.app_name }}" = "board-packet-generator" ]; then
           APP_NAME="board-packet-private"
+        elif [ "${{ steps.determine-app.outputs.app_name }}" = "grant-research-assistant" ]; then
+          APP_NAME="grant-research-assistant"
         fi
-        
+
         R -e "rsconnect::deployApp(appName='$APP_NAME', account='${{ secrets.SHINYAPPS_ACCOUNT }}', forceUpdate=TRUE)"
 
     - name: Clean up sensitive files
