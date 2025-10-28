@@ -6,16 +6,11 @@ library(jsonlite)
 library(dplyr)
 library(DT)
 library(plotly)
-library(mapgl)
-library(sf)
+library(leaflet)
+# library(mapgl)  # Removed to avoid terra/sf dependency on shinyapps.io
+# library(sf)  # Removed to avoid terra dependency on shinyapps.io
 
-# Set Mapbox token (will use environment variable if available)
-if (Sys.getenv("MAPBOX_PUBLIC_TOKEN") == "") {
-  # Fallback: check for old variable name
-  if (Sys.getenv("MAPBOX_ACCESS_TOKEN") != "") {
-    Sys.setenv(MAPBOX_PUBLIC_TOKEN = Sys.getenv("MAPBOX_ACCESS_TOKEN"))
-  }
-}
+# Using Leaflet for mapping (no API tokens required)
 
 # Load foundation data
 load_foundation_data <- function() {
@@ -53,7 +48,7 @@ load_metadata <- function() {
     return(fromJSON(meta_file))
   } else {
     return(list(
-      last_updated = Sys.time(),
+      last_updated = format(Sys.Date(), "%B %Y"),
       states_included = c("CT", "MA", "ME", "NH", "RI", "VT"),
       total_foundations = nrow(foundations_data),
       data_source = "ProPublica Nonprofit Explorer API (Sample Data)"
@@ -363,7 +358,7 @@ ui <- fluidPage(
 
         # Map with overlay legend
         div(style = "position: relative;",
-          mapboxglOutput("foundation_map", height = "700px"),
+          leafletOutput("foundation_map", height = "700px"),
 
           # Compact legend overlay (top-left corner)
           div(style = "position: absolute; top: 10px; left: 10px; background: rgba(255, 255, 255, 0.95); border: 2px solid #e0e0e0; padding: 12px 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); max-width: 280px; font-size: 12px; z-index: 1000;",
@@ -807,7 +802,7 @@ server <- function(input, output, session) {
   })
 
   # Render map
-  output$foundation_map <- renderMapboxgl({
+  output$foundation_map <- renderLeaflet({
     data <- filtered_foundations()
 
     # Filter to only rows with valid coordinates
@@ -817,11 +812,9 @@ server <- function(input, output, session) {
     if (nrow(map_data) == 0) {
       # Return empty map if no geocoded data
       return(
-        mapboxgl(
-          style = mapbox_style("light"),
-          center = c(-71.5, 43.5),  # Center on New England
-          zoom = 6
-        )
+        leaflet() %>%
+          addTiles() %>%
+          setView(lng = -71.5, lat = 43.5, zoom = 6)  # Center on New England
       )
     }
 
@@ -935,44 +928,25 @@ server <- function(input, output, session) {
       return(html)
     })
 
-    # Convert to sf object for mapgl
-    map_sf <- st_as_sf(
-      map_data,
-      coords = c("longitude", "latitude"),
-      crs = 4326  # WGS84 coordinate system
-    )
-
-    # Create map
-    mapboxgl(
-      style = mapbox_style("light"),
-      center = c(
-        mean(map_data$longitude, na.rm = TRUE),
-        mean(map_data$latitude, na.rm = TRUE)
-      ),
-      zoom = 6,
-      pitch = 0,
-      bearing = 0
-    ) %>%
-      add_circle_layer(
-        id = "foundations",
-        source = map_sf,
-        circle_color = match_expr(
-          "color",
-          values = c("#27ae60", "#f1c40f", "#e74c3c", "#95a5a6"),
-          stops = c("#27ae60", "#f1c40f", "#e74c3c", "#95a5a6")
-        ),
-        circle_radius = interpolate(
-          column = "circle_size",
-          values = c(5, 20),
-          stops = c(5, 20)
-        ),
-        circle_opacity = 0.8,
-        circle_stroke_color = "#ffffff",
-        circle_stroke_width = 2,
-        popup = "popup_html"  # Changed from tooltip to popup for click interaction
+    # Create Leaflet map
+    leaflet(map_data) %>%
+      addTiles() %>%
+      setView(
+        lng = mean(map_data$longitude, na.rm = TRUE),
+        lat = mean(map_data$latitude, na.rm = TRUE),
+        zoom = 6
       ) %>%
-      add_navigation_control(position = "top-right") %>%
-      add_fullscreen_control(position = "top-right")
+      addCircleMarkers(
+        lng = ~longitude,
+        lat = ~latitude,
+        radius = ~circle_size,
+        color = "white",
+        weight = 2,
+        opacity = 1,
+        fillColor = ~color,
+        fillOpacity = 0.8,
+        popup = ~popup_html
+      )
   })
 }
 

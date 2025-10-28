@@ -55,7 +55,7 @@ These tools solve real problems I've encountered in client work.
 - **GitHub Actions** for automated deployment
 - **Plotly** for interactive visualizations
 - **DT** for data tables
-- **MapLibre GL** for interactive maps
+- **Leaflet** for interactive maps
 
 ## 📈 Want Custom Solutions?
 

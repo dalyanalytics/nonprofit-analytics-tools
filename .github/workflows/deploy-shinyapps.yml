@@ -39,7 +39,7 @@ jobs:
 
     - name: Install R dependencies
       run: |
-        R -e "install.packages(c('rsconnect', 'shiny', 'bslib', 'dplyr', 'lubridate', 'DT', 'shinyjs', 'tidyr', 'plotly', 'jsonlite', 'scales', 'mapgl', 'sf', 'httr2', 'tidygeocoder'))"
+        R -e "install.packages(c('rsconnect', 'shiny', 'bslib', 'dplyr', 'lubridate', 'DT', 'shinyjs', 'tidyr', 'plotly', 'jsonlite', 'scales', 'leaflet', 'httr2', 'tidygeocoder'))"
 
     - name: Determine app to deploy
       id: determine-app
