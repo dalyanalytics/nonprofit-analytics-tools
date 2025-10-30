@@ -1,0 +1,60 @@
+name: Deploy Landing Page to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'index.html'
+      - 'assets/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare deployment
+        run: |
+          # Create docs directory for GitHub Pages
+          mkdir -p docs
+
+          # Copy landing page
+          cp index.html docs/index.html
+
+          # Copy assets directory
+          if [ -d "assets" ]; then
+            cp -r assets docs/
+          fi
+
+          # Add .nojekyll to prevent Jekyll processing
+          touch docs/.nojekyll
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
