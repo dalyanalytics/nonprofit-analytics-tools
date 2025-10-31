@@ -35,10 +35,7 @@ ui <- fluidPage(
 
       h2 {
         text-align: center;
-        background: linear-gradient(135deg, #D68A93, #AD92B1);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #2c3e50;
         font-weight: 700;
         font-size: 2rem;
         margin-bottom: 0.3rem;
@@ -194,12 +191,45 @@ ui <- fluidPage(
         cursor: help;
       }
 
+      details summary {
+        background: linear-gradient(135deg, #D68A93, #AD92B1);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 15px rgba(214, 138, 147, 0.3);
+        transition: all 0.3s ease;
+        list-style: none;
+      }
+
+      details summary::-webkit-details-marker {
+        display: none;
+      }
+
+      details summary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(214, 138, 147, 0.4);
+      }
+
+      details summary::after {
+        content: ' \\\\25BC';
+        font-size: 0.8em;
+        margin-left: 0.5rem;
+      }
+
+      details[open] summary::after {
+        content: ' \\\\25B2';
+      }
+
       .explainer-box {
         background: linear-gradient(135deg, rgba(249, 179, 151, 0.1) 0%, rgba(214, 138, 147, 0.1) 100%);
         border: 2px solid #F9B397;
         border-radius: 12px;
-        padding: 1rem;
-        margin: 1rem 0;
+        padding: 1.5rem;
+        margin: 0 0 1.5rem 0;
       }
 
       .explainer-title {
@@ -283,10 +313,7 @@ ui <- fluidPage(
 
     # Monte Carlo Explainer (Collapsible)
     tags$details(
-      tags$summary(
-        style = "cursor: pointer; font-size: 1.5rem; font-weight: 600; color: #D68A93; margin-bottom: 1rem;",
-        "🎲 How This Tool Works: Monte Carlo Simulation"
-      ),
+      tags$summary("🎲 How This Tool Works: Monte Carlo Simulation"),
       div(class = "explainer-box",
         p("Unlike simple forecasts that show one possible outcome, this tool runs ", strong("1,000 different simulations"),
           " to account for real-world uncertainty in fundraising."),
@@ -317,58 +344,72 @@ ui <- fluidPage(
         # Current State Inputs
         div(class = "section-header", style = "font-size: 1.2rem; margin-top: 0;", "📊 Current State"),
 
-        numericInput("current_donors",
-                    "Total Donors",
-                    value = 500,
-                    min = 10,
-                    step = 10),
+        div(
+          numericInput("current_donors",
+                      HTML("Total Donors <span class='help-icon' title='Active donors who gave in the past year'>?</span>"),
+                      value = 500,
+                      min = 10,
+                      step = 10)
+        ),
 
-        sliderInput("current_retention",
-                   "Retention Rate",
-                   min = 20,
-                   max = 90,
-                   value = 45,
-                   step = 5,
-                   post = "%"),
+        div(
+          sliderInput("current_retention",
+                     HTML("Retention Rate <span class='help-icon' title='% of donors who give again next year (nonprofit avg: 45%)'>?</span>"),
+                     min = 20,
+                     max = 90,
+                     value = 45,
+                     step = 5,
+                     post = "%")
+        ),
 
-        numericInput("avg_gift",
-                    "Avg Gift ($)",
-                    value = 250,
-                    min = 10,
-                    step = 10),
+        div(
+          numericInput("avg_gift",
+                      HTML("Avg Gift ($) <span class='help-icon' title='Typical donation amount across all donors'>?</span>"),
+                      value = 250,
+                      min = 10,
+                      step = 10)
+        ),
 
-        sliderInput("baseline_acquisition",
-                   "New Donors/Year",
-                   min = 0,
-                   max = 500,
-                   value = 100,
-                   step = 10),
+        div(
+          sliderInput("baseline_acquisition",
+                     HTML("New Donors/Year <span class='help-icon' title='Number of new donors acquired annually'>?</span>"),
+                     min = 0,
+                     max = 500,
+                     value = 100,
+                     step = 10)
+        ),
 
-        sliderInput("forecast_years",
-                   "Forecast Years",
-                   min = 1,
-                   max = 5,
-                   value = 3,
-                   step = 1),
+        div(
+          sliderInput("forecast_years",
+                     HTML("Forecast Years <span class='help-icon' title='Campaign timeline for projections (1-5 years)'>?</span>"),
+                     min = 1,
+                     max = 5,
+                     value = 3,
+                     step = 1)
+        ),
 
         # Uncertainty Parameters
         div(class = "section-header", style = "font-size: 1.2rem; margin-top: 1rem;", "🎲 Variability"),
 
-        sliderInput("retention_variability",
-                   "Retention Variability",
-                   min = 0,
-                   max = 20,
-                   value = 5,
-                   step = 1,
-                   post = " pts"),
+        div(
+          sliderInput("retention_variability",
+                     HTML("Retention Variability <span class='help-icon' title='Year-to-year fluctuation in retention rate (±5 pts = 40-50% range)'>?</span>"),
+                     min = 0,
+                     max = 20,
+                     value = 5,
+                     step = 1,
+                     post = " pts")
+        ),
 
-        sliderInput("acquisition_variability",
-                   "Acquisition Variability",
-                   min = 0,
-                   max = 50,
-                   value = 15,
-                   step = 5,
-                   post = "%")
+        div(
+          sliderInput("acquisition_variability",
+                     HTML("Acquisition Variability <span class='help-icon' title='Unpredictability in new donor acquisition (15% = 85-115 donors if planning for 100)'>?</span>"),
+                     min = 0,
+                     max = 50,
+                     value = 15,
+                     step = 5,
+                     post = "%")
+        )
       ),
 
       # Main Panel with scenario tabs
@@ -676,28 +717,36 @@ server <- function(input, output, session) {
     data <- baseline_data()
     final_year <- data[nrow(data), ]
 
-    tagList(
-      div(class = "metric-card",
-        div(class = "metric-label", paste0("Most Likely Donors (Year ", input$forecast_years, ")")),
-        div(class = "metric-value", comma(round(final_year$P50))),
-        p(style = "margin-top: 0.5rem; color: #666; font-size: 0.9rem;",
-          paste0("Range: ", comma(round(final_year$P10)), " - ", comma(round(final_year$P90))))
+    fluidRow(
+      column(3,
+        div(class = "metric-card",
+          div(class = "metric-label", paste0("Most Likely Donors (Year ", input$forecast_years, ")")),
+          div(class = "metric-value", comma(round(final_year$P50))),
+          p(style = "margin-top: 0.5rem; color: #666; font-size: 0.9rem;",
+            paste0("Range: ", comma(round(final_year$P10)), " - ", comma(round(final_year$P90))))
+        )
       ),
-      div(class = "metric-card",
-        div(class = "metric-label", "Most Likely Revenue"),
-        div(class = "metric-value", dollar(final_year$Revenue_P50)),
-        p(style = "margin-top: 0.5rem; color: #666; font-size: 0.9rem;",
-          paste0("Range: ", dollar(round(final_year$Revenue_P10)), " - ", dollar(round(final_year$Revenue_P90))))
+      column(3,
+        div(class = "metric-card",
+          div(class = "metric-label", "Most Likely Revenue"),
+          div(class = "metric-value", dollar(final_year$Revenue_P50)),
+          p(style = "margin-top: 0.5rem; color: #666; font-size: 0.9rem;",
+            paste0("Range: ", dollar(round(final_year$Revenue_P10)), " - ", dollar(round(final_year$Revenue_P90))))
+        )
       ),
-      div(class = "metric-card",
-        div(class = "metric-label", "Total Revenue (Median)"),
-        div(class = "metric-value", dollar(sum(data$Revenue_P50)))
+      column(3,
+        div(class = "metric-card",
+          div(class = "metric-label", "Total Revenue (Median)"),
+          div(class = "metric-value", dollar(sum(data$Revenue_P50)))
+        )
       ),
-      div(class = "metric-card",
-        div(class = "metric-label", "Probability Analysis"),
-        div(class = "metric-value", "80%"),
-        p(style = "margin-top: 0.5rem; color: #666; font-size: 0.9rem;",
-          "Chance of staying within shown range")
+      column(3,
+        div(class = "metric-card",
+          div(class = "metric-label", "Probability Analysis"),
+          div(class = "metric-value", "80%"),
+          p(style = "margin-top: 0.5rem; color: #666; font-size: 0.9rem;",
+            "Chance of staying within shown range")
+        )
       )
     )
   })
