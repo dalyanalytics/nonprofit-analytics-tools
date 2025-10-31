@@ -383,7 +383,7 @@ ui <- fluidPage(
 
     tabsetPanel(
       # Baseline Scenario
-      tabPanel("Baseline (Status Quo)",
+      tabPanel(HTML("<i class='fa fa-chart-line'></i> Baseline (Status Quo)"),
         div(class = "scenario-box",
           div(class = "scenario-title", "Scenario A: Continue Current Operations"),
           p("This scenario assumes no changes to your current donor retention or acquisition strategy."),
@@ -415,7 +415,7 @@ ui <- fluidPage(
       ),
 
       # Retention Improvement Scenario
-      tabPanel("Retention Improvement",
+      tabPanel(HTML("<i class='fa fa-heart'></i> Retention Improvement"),
         div(class = "scenario-box",
           div(class = "scenario-title", "Scenario B: Improve Donor Retention"),
           p("Model the impact of a donor stewardship program or retention initiative."),
@@ -447,7 +447,7 @@ ui <- fluidPage(
       ),
 
       # Acquisition Focus Scenario
-      tabPanel("Acquisition Focus",
+      tabPanel(HTML("<i class='fa fa-user-plus'></i> Acquisition Focus"),
         div(class = "scenario-box",
           div(class = "scenario-title", "Scenario C: Increase New Donor Acquisition"),
           p("Explore the impact of acquiring more new donors through marketing campaigns."),
@@ -478,7 +478,7 @@ ui <- fluidPage(
       ),
 
       # Combined Strategy
-      tabPanel("Combined Strategy",
+      tabPanel(HTML("<i class='fa fa-rocket'></i> Combined Strategy"),
         div(class = "scenario-box",
           div(class = "scenario-title", "Scenario D: Retention + Acquisition"),
           p("Model a comprehensive strategy that improves retention AND increases acquisition."),
