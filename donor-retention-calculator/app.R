@@ -771,8 +771,7 @@ ui <- fluidPage(
           tags$a("Daly Analytics", href = "https://www.dalyanalytics.com", target = "_blank")
         )
       )
-    )
-  ),
+    ),
 
   # Footer
   div(
@@ -836,7 +835,8 @@ ui <- fluidPage(
       )
     )
   )  # Close app-footer
-)  # Close main-container
+  )  # Close main-container
+)  # Close fluidPage
 
 # Server
 server <- function(input, output, session) {
