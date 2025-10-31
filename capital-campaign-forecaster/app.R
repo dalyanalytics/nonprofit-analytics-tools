@@ -497,7 +497,6 @@ ui <- fluidPage(
           uiOutput("strategic_recommendation")
         )
       )
-    )
     )  # Close tabsetPanel
     )  # Close mainPanel
     ),  # Close sidebarLayout
