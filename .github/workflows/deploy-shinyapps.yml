@@ -10,14 +10,14 @@ on:
         type: choice
         options:
           - donor-retention-calculator
-          - donor-retention-forecaster
+          - capital-campaign-forecaster
           - board-packet-generator
           - grant-research-assistant
   push:
     branches: [ main ]
     paths:
       - 'donor-retention-calculator/**'
-      - 'donor-retention-forecaster/**'
+      - 'capital-campaign-forecaster/**'
       - 'board-packet-generator/**'
       - 'grant-research-assistant/**'
 
@@ -52,8 +52,8 @@ jobs:
           # Auto-determine based on changed files
           if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "donor-retention-calculator/"; then
             echo "app_name=donor-retention-calculator" >> $GITHUB_OUTPUT
-          elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "donor-retention-forecaster/"; then
-            echo "app_name=donor-retention-forecaster" >> $GITHUB_OUTPUT
+          elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "capital-campaign-forecaster/"; then
+            echo "app_name=capital-campaign-forecaster" >> $GITHUB_OUTPUT
           elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "board-packet-generator/"; then
             echo "app_name=board-packet-generator" >> $GITHUB_OUTPUT
           elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "grant-research-assistant/"; then
@@ -79,8 +79,8 @@ jobs:
         # All apps deployed as public (no -private suffix)
         if [ "${{ steps.determine-app.outputs.app_name }}" = "donor-retention-calculator" ]; then
           APP_NAME="donor-retention-calculator"
-        elif [ "${{ steps.determine-app.outputs.app_name }}" = "donor-retention-forecaster" ]; then
-          APP_NAME="donor-retention-forecaster"
+        elif [ "${{ steps.determine-app.outputs.app_name }}" = "capital-campaign-forecaster" ]; then
+          APP_NAME="capital-campaign-forecaster"
         elif [ "${{ steps.determine-app.outputs.app_name }}" = "board-packet-generator" ]; then
           APP_NAME="board-packet-generator"
         elif [ "${{ steps.determine-app.outputs.app_name }}" = "grant-research-assistant" ]; then

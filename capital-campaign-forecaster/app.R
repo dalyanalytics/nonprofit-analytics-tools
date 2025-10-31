@@ -278,8 +278,8 @@ ui <- fluidPage(
   ),
 
   div(class = "main-container",
-    h2("Donor Retention Forecaster"),
-    div(class = "subtitle", "Model different fundraising scenarios with Monte Carlo simulation"),
+    h2("Capital Campaign Forecaster"),
+    div(class = "subtitle", "Modernize campaign planning with Monte Carlo simulation"),
 
     # Monte Carlo Explainer
     div(class = "explainer-box",

@@ -29,13 +29,13 @@ Stop paying expensive monthly subscriptions for generic software. These tools ar
 - View foundation payout rates and grant amounts
 - Direct links to ProPublica to research grant recipients
 
-### [🎯 Donor Retention Forecaster](https://dalyanalytics.shinyapps.io/donor-retention-forecaster/)
-- Monte Carlo simulation with 1,000 scenarios for realistic forecasting
-- Model retention improvement programs with ROI probability analysis
-- Compare acquisition strategies with cost-effectiveness metrics
-- 3-5 year projections with confidence intervals (10th/50th/90th percentiles)
+### [📊 Capital Campaign Forecaster](https://dalyanalytics.shinyapps.io/capital-campaign-forecaster/)
+- Modernize campaign planning with Monte Carlo simulation (1,000 scenarios)
+- Multi-year capital campaign projections (3-5 years)
+- ROI probability analysis with confidence intervals (10th/50th/90th percentiles)
+- Model retention improvement and acquisition strategies
 - Animated scenario sliders for interactive what-if analysis
-- Strategic recommendations based on simulation outcomes
+- Risk assessment with strategic recommendations
 
 ## 🌟 Try All Tools
 **👉 [Launch Tool Suite](https://dalyanalytics.github.io/nonprofit-analytics-tools/)**
