@@ -188,25 +188,18 @@ ui <- fluidPage(
 
       /* Footer styling - full width edge-to-edge */
       footer, .footer {
-        flex-shrink: 0;
-        margin-top: auto !important;
-        position: relative;
-        width: 100vw !important;
-        max-width: none !important;
-        margin-left: calc(50% - 50vw) !important;
-        margin-right: calc(50% - 50vw) !important;
-        margin-bottom: 0 !important;
-        padding: 2rem 0 !important;
-        background: #0f172a;
+        margin-top: 4rem;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
         color: white;
+        border-radius: 16px;
       }
 
       /* Ensure footer content has proper padding and is centered */
       footer .container, .footer .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
+        max-width: none;
+        margin: 0;
+        padding: 0;
         width: 100%;
       }
 

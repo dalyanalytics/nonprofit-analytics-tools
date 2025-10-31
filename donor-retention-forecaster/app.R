@@ -55,7 +55,7 @@ ui <- fluidPage(
       .section-header {
         color: #D68A93;
         font-weight: 600;
-        font-size: 1.3rem;
+        font-size: 1.6rem;
         margin-top: 2rem;
         margin-bottom: 1rem;
         padding-bottom: 0.5rem;
