@@ -7,333 +7,182 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Free Nonprofit Analytics Tools | Daly Analytics</title>
-    <meta name="description" content="Free analytics tools built specifically for nonprofits. Calculate donor retention, create board meeting packets, track grants, and plan fundraising campaigns with data-driven insights.">
-    <meta name="keywords" content="nonprofit analytics, donor retention, grant tracking, fundraising tools, nonprofit CRM, data analysis">
-
-    <meta property="og:title" content="Free Nonprofit Analytics Tools | Daly Analytics">
-    <meta property="og:description" content="Replace expensive subscriptions with free tools built specifically for nonprofits.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://dalyanalytics.github.io/nonprofit-analytics-tools/">
-
-    <link rel="stylesheet" href="./assets/css/style.css?v=2">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #F9B397 0%, #D68A93 25%, #AD92B1 75%, #B07891 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #D68A93, #AD92B1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        .tool-card {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+        .tool-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .tool-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        .tool-card ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        .tool-card li:before {
+            content: "✓ ";
+            color: #AD92B1;
+            font-weight: bold;
+        }
+        .tool-card li {
+            padding: 0.3rem 0;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            text-align: center;
+            background: linear-gradient(135deg, #D68A93, #AD92B1);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e9ecef;
+            text-align: center;
+            color: #666;
+        }
+        footer a {
+            color: #AD92B1;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-container">
-                <a href="#" class="navbar-brand">
-                    <span class="text-gradient">Nonprofit Analytics</span>
-                </a>
-                <ul class="navbar-menu">
-                    <li><a href="#features" class="navbar-link">Features</a></li>
-                    <li><a href="#tools" class="navbar-link">Tools</a></li>
-                    <li><a href="#about" class="navbar-link">About</a></li>
-                    <li><a href="https://www.dalyanalytics.com/contact" class="btn btn-primary btn-sm">Get Custom Tools</a></li>
+    <div class="container">
+        <h1>Free Nonprofit Analytics Tools</h1>
+        <p class="subtitle">Purpose-built tools that understand your mission. No subscriptions, no vendor lock-in.</p>
+
+        <div class="tools-grid">
+            <!-- Donor Retention Calculator -->
+            <div class="tool-card">
+                <span class="badge">✅ Live Now</span>
+                <h2>📊 Donor Retention Calculator</h2>
+                <p>Calculate retention rates and understand donor behavior patterns with industry benchmarks.</p>
+                <ul>
+                    <li>Multi-year retention tracking</li>
+                    <li>Cohort analysis</li>
+                    <li>Industry benchmarks</li>
+                    <li>Donor segmentation</li>
                 </ul>
+                <a href="https://dalyanalytics.shinyapps.io/donor-retention-calculator/" class="btn" target="_blank">Launch Tool →</a>
+            </div>
+
+            <!-- Board Packet Generator -->
+            <div class="tool-card">
+                <span class="badge">✅ Live Now</span>
+                <h2>📄 Board Packet Generator</h2>
+                <p>Create professional board meeting packets with automated data visualizations and summaries.</p>
+                <ul>
+                    <li>Automated report generation</li>
+                    <li>Financial summaries</li>
+                    <li>Impact visualizations</li>
+                    <li>Executive dashboards</li>
+                </ul>
+                <a href="https://dalyanalytics.shinyapps.io/board-packet-generator/" class="btn" target="_blank">Launch Tool →</a>
+            </div>
+
+            <!-- Grant Research Assistant -->
+            <div class="tool-card">
+                <span class="badge">✅ Live Now</span>
+                <h2>🔍 Grant Research Assistant</h2>
+                <p>Find New England foundations that fund organizations like yours using IRS 990 data.</p>
+                <ul>
+                    <li>Search 15+ foundations</li>
+                    <li>Filter by state & size</li>
+                    <li>View grants paid data</li>
+                    <li>Export prospect lists</li>
+                </ul>
+                <a href="https://dalyanalytics.shinyapps.io/grant-research-assistant/" class="btn" target="_blank">Launch Tool →</a>
+            </div>
+
+            <!-- Capital Campaign Forecaster -->
+            <div class="tool-card">
+                <span class="badge">✅ Live Now</span>
+                <h2>📈 Capital Campaign Forecaster</h2>
+                <p>Modernize campaign planning with Monte Carlo simulation for multi-year capital campaigns.</p>
+                <ul>
+                    <li>Monte Carlo simulation (1,000 scenarios)</li>
+                    <li>3-5 year campaign projections</li>
+                    <li>ROI probability analysis</li>
+                    <li>Confidence intervals & risk assessment</li>
+                </ul>
+                <a href="https://dalyanalytics.shinyapps.io/capital-campaign-forecaster/" class="btn" target="_blank">Launch Tool →</a>
             </div>
         </div>
-    </nav>
 
-    <section class="hero-pattern text-white">
-        <div class="container">
-            <div class="section-lg text-center">
-                <h1 class="text-white animate-fade-in">Free Analytics Tools for Nonprofits</h1>
-                <p class="text-xl mb-xl text-white" style="opacity: 0.95;">
-                    Stop paying hundreds of dollars per month for generic software. Get purpose-built tools that understand your mission.
-                </p>
-                <div class="btn-group justify-center">
-                    <a href="#tools" class="btn btn-lg" style="background: white; color: var(--primary-color);">
-                        Explore Tools
-                    </a>
-                    <a href="https://github.com/dalyanalytics/nonprofit-analytics-tools" class="btn btn-lg btn-outline" style="border-color: white; color: white;">
-                        View Source Code
-                    </a>
-                </div>
-                
-                <div class="grid grid-cols-4 md:grid-cols-4 sm:grid-cols-2 gap-lg mt-3xl">
-                    <div class="stat-card animate-slide-up">
-                        <div style="font-size: 2rem; margin-bottom: 0.5rem; color: white;">💸</div>
-                        <div class="stat-value" style="color: white !important;">$0</div>
-                        <div class="stat-label" style="color: white !important; opacity: 0.9;">Monthly Cost</div>
-                    </div>
-                    <div class="stat-card animate-slide-up" style="animation-delay: 0.1s;">
-                        <div style="font-size: 2rem; margin-bottom: 0.5rem; color: white;">🔓</div>
-                        <div class="stat-value" style="color: white !important;">100%</div>
-                        <div class="stat-label" style="color: white !important; opacity: 0.9;">Open Source</div>
-                    </div>
-                    <div class="stat-card animate-slide-up" style="animation-delay: 0.2s;">
-                        <div style="font-size: 2rem; margin-bottom: 0.5rem; color: white;">🛠️</div>
-                        <div class="stat-value" style="color: white !important;">4</div>
-                        <div class="stat-label" style="color: white !important; opacity: 0.9;">Tools Available</div>
-                    </div>
-                    <div class="stat-card animate-slide-up" style="animation-delay: 0.3s;">
-                        <div style="font-size: 2rem; margin-bottom: 0.5rem; color: white;">⚡</div>
-                        <div class="stat-value" style="color: white !important;">∞</div>
-                        <div class="stat-label" style="color: white !important; opacity: 0.9;">Customizable</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="features" class="section bg-secondary">
-        <div class="container">
-            <div class="text-center mb-2xl">
-                <h2 class="text-gradient">Why Nonprofits Choose Our Tools</h2>
-                <p class="text-lg text-secondary">Built by someone who understands your challenges</p>
-            </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-xl">
-                <div class="card card-glass p-xl animate-fade-in">
-                    <div class="feature-icon">💸</div>
-                    <h3>Zero Cost Forever</h3>
-                    <p class="text-secondary">
-                        No subscriptions, no hidden fees, no vendor lock-in. These tools are free and will always be free for nonprofits.
-                    </p>
-                </div>
-                
-                <div class="card card-glass p-xl animate-fade-in" style="animation-delay: 0.1s;">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Purpose-Built</h3>
-                    <p class="text-secondary">
-                        Designed specifically for nonprofit workflows, not adapted from for-profit tools that don't understand your needs.
-                    </p>
-                </div>
-                
-                <div class="card card-glass p-xl animate-fade-in" style="animation-delay: 0.2s;">
-                    <div class="feature-icon">📊</div>
-                    <h3>Real Insights</h3>
-                    <p class="text-secondary">
-                        Go beyond basic charts. Get actionable recommendations, benchmarks, and predictive analytics that drive decisions.
-                    </p>
-                </div>
-                
-                <div class="card card-glass p-xl animate-fade-in" style="animation-delay: 0.3s;">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Your Data Stays Private</h3>
-                    <p class="text-secondary">
-                        Everything runs in your browser. Your sensitive donor and financial data never leaves your computer.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="tools" class="section">
-        <div class="container">
-            <div class="text-center mb-2xl">
-                <h2>Available Analytics Tools</h2>
-                <p class="text-lg text-secondary">Click any tool to launch it instantly in your browser</p>
-            </div>
-            
-            <div class="grid grid-cols-4 lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-xl">
-                <div class="card card-gradient card-floating animate-scale">
-                    <div class="card-body">
-                        <div class="badge badge-success mb-md">✅ Live Now</div>
-                        <div class="feature-icon feature-icon-outline mb-lg">📊</div>
-                        <h3>Donor Retention Calculator</h3>
-                        <p class="text-secondary mb-lg">
-                            Analyze retention rates, calculate lifetime value, and benchmark against industry standards.
-                        </p>
-                        <ul class="list-feature mb-lg">
-                            <li>Cohort analysis by year</li>
-                            <li>Lifetime value projections</li>
-                            <li>Industry benchmarks</li>
-                            <li>Segmentation insights</li>
-                        </ul>
-                        <a href="https://dalyanalytics.shinyapps.io/donor-retention-calculator/" class="btn btn-primary w-full" target="_blank">
-                            Launch Calculator →
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="card card-gradient card-floating animate-scale" style="animation-delay: 0.1s;">
-                    <div class="card-body">
-                        <div class="badge badge-success mb-md">✅ Live Now</div>
-                        <div class="feature-icon feature-icon-outline mb-lg">📄</div>
-                        <h3>Board Packet Generator</h3>
-                        <p class="text-secondary mb-lg">
-                            Create professional board meeting packets with automated data visualizations and executive summaries.
-                        </p>
-                        <ul class="list-feature mb-lg">
-                            <li>Automated report generation</li>
-                            <li>Financial summaries</li>
-                            <li>Impact visualizations</li>
-                            <li>Executive dashboards</li>
-                        </ul>
-                        <a href="https://dalyanalytics.shinyapps.io/board-packet-generator/" class="btn btn-primary w-full" target="_blank">
-                            Launch Generator →
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="card card-gradient card-floating animate-scale" style="animation-delay: 0.2s;">
-                    <div class="card-body">
-                        <div class="badge badge-success mb-md">✅ Live Now</div>
-                        <div class="feature-icon feature-icon-outline mb-lg">🔍</div>
-                        <h3>Grant Research Assistant</h3>
-                        <p class="text-secondary mb-lg">
-                            Find New England foundations that fund organizations like yours using IRS 990 data.
-                        </p>
-                        <ul class="list-feature mb-lg">
-                            <li>Search 15+ foundations</li>
-                            <li>Filter by state & size</li>
-                            <li>View grants paid data</li>
-                            <li>Export prospect lists</li>
-                        </ul>
-                        <a href="https://dalyanalytics.shinyapps.io/grant-research-assistant/" class="btn btn-primary w-full" target="_blank">
-                            Launch Assistant →
-                        </a>
-                    </div>
-                </div>
-
-                <div class="card card-gradient card-floating animate-scale" style="animation-delay: 0.3s;">
-                    <div class="card-body">
-                        <div class="badge badge-success mb-md">✅ Live Now</div>
-                        <div class="feature-icon feature-icon-outline mb-lg">📊</div>
-                        <h3>Capital Campaign Forecaster</h3>
-                        <p class="text-secondary mb-lg">
-                            Modernize campaign planning with Monte Carlo simulation for multi-year capital campaigns.
-                        </p>
-                        <ul class="list-feature mb-lg">
-                            <li>Monte Carlo simulation (1,000 scenarios)</li>
-                            <li>3-5 year campaign projections</li>
-                            <li>ROI probability analysis</li>
-                            <li>Confidence intervals & risk assessment</li>
-                        </ul>
-                        <a href="https://dalyanalytics.shinyapps.io/capital-campaign-forecaster/" class="btn btn-primary w-full" target="_blank">
-                            Launch Forecaster →
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center mt-2xl">
-                <p class="text-lg text-secondary mb-lg">
-                    More tools are in development based on nonprofit community feedback
-                </p>
-                <a href="https://github.com/dalyanalytics/nonprofit-analytics-tools/issues" class="btn btn-outline btn-lg">
-                    Request a Tool →
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" style="background: var(--primary-gradient);">
-        <div class="container">
-            <div class="card card-glass p-2xl">
-                <div class="text-center">
-                    <h2 class="mb-lg">Need Custom Analytics Solutions?</h2>
-                    <p class="text-lg text-secondary mb-xl">
-                        These tools showcase what's possible. Let's build something tailored to your organization's unique needs.
-                    </p>
-                    
-                    <div class="grid grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-lg mb-xl">
-                        <div class="text-left">
-                            <h4 class="text-gradient">What We Build</h4>
-                            <ul class="list-feature">
-                                <li>Custom donor dashboards with ML predictions</li>
-                                <li>Automated & professional impact reports for funders</li>
-                                <li>Program evaluation frameworks</li>
-                                <li>Real-time campaign tracking</li>
-                                <li>Board meeting analysis tools</li>
-                            </ul>
-                        </div>
-                        <div class="text-left">
-                            <h4 class="text-gradient">Technologies We Use</h4>
-                            <ul class="list-feature">
-                                <li>R & Python for advanced data science</li>
-                                <li>Machine learning for predictions</li>
-                                <li>AI for natural language insights</li>
-                                <li>Edge Cloud deployment</li>
-                                <li>API integrations with any platform</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="btn-group justify-center">
-                        <a href="https://www.dalyanalytics.com/contact" class="btn btn-primary btn-lg">
-                            Schedule Free Consultation →
-                        </a>
-                        <a href="https://www.dalyanalytics.com" class="btn btn-outline btn-lg">
-                            Learn More About Daly Analytics
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="section bg-secondary">
-        <div class="container container-md">
-            <div class="text-center">
-                <h2 class="mb-lg">About This Project</h2>
-                <p class="text-lg text-secondary mb-xl">
-                    After a year of consulting with nonprofits, I kept seeing the same problems: 
-                    organizations paying thousands for tools that don't understand their unique needs, 
-                    managing critical data in spreadsheets, and making decisions without proper analytics.
-                </p>
-                <p class="text-lg text-secondary mb-xl">
-                    These free tools are my contribution back to the nonprofit community. They're built 
-                    with modern data science techniques but designed to be accessible to everyone.
-                </p>
-                <div class="card card-glass p-xl">
-                    <img src="assets/profile_picture_2024.jpeg" alt="Jasmine Daly" class="mb-md" style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto;">
-                    <h4>Jasmine Daly</h4>
-                    <p class="text-secondary mb-md">Principal Consultant & Founder, Daly Analytics</p>
-                    <p class="text-secondary">
-                        Experienced data scientist specializing in nonprofit analytics, with expertise in R, Shiny, 
-                        machine learning, and building custom solutions that stakeholders love using.
-                    </p>
-                    <div class="flex gap-md justify-center mt-lg">
-                        <a href="https://www.linkedin.com/in/jasminemdaly/" class="btn btn-ghost btn-sm">LinkedIn</a>
-                        <a href="mailto:hello@dalyanalytics.com" class="btn btn-ghost btn-sm">Email</a>
-                        <a href="https://www.dalyanalytics.com" class="btn btn-ghost btn-sm">Website</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>Tools</h4>
-                    <ul class="list-unstyled">
-                        <li class="mb-sm"><a href="https://dalyanalytics.shinyapps.io/donor-retention-calculator/" class="footer-link">Donor Retention Calculator</a></li>
-                        <li class="mb-sm"><a href="https://dalyanalytics.shinyapps.io/board-packet-generator/" class="footer-link">Board Packet Generator</a></li>
-                        <li class="mb-sm"><a href="https://dalyanalytics.shinyapps.io/grant-research-assistant/" class="footer-link">Grant Research Assistant</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Resources</h4>
-                    <ul class="list-unstyled">
-                        <li class="mb-sm"><a href="https://github.com/dalyanalytics/nonprofit-analytics-tools" class="footer-link">Source Code</a></li>
-                        <li class="mb-sm"><a href="https://github.com/dalyanalytics/nonprofit-analytics-tools/issues" class="footer-link">Report Issues</a></li>
-                        <li class="mb-sm"><a href="#" class="footer-link">Documentation</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Daly Analytics</h4>
-                    <ul class="list-unstyled">
-                        <li class="mb-sm"><a href="https://www.dalyanalytics.com" class="footer-link">Website</a></li>
-                        <li class="mb-sm"><a href="https://www.dalyanalytics.com/contact" class="footer-link">Contact</a></li>
-                        <li class="mb-sm"><a href="https://www.linkedin.com/in/jasminemdaly/" class="footer-link">LinkedIn</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Mission</h4>
-                    <p style="color: rgba(255,255,255,0.7); line-height: 1.6;">
-                        Democratizing data analytics for nonprofits through free, 
-                        open-source tools that respect your mission and your budget.
-                    </p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2025 Daly Analytics. MIT License. Built with ❤️ for the nonprofit community.</p>
-            </div>
-        </div>
-    </footer>
+        <footer>
+            <p><strong>Need custom analytics solutions?</strong></p>
+            <p>These tools showcase what's possible. Let's build something tailored to your organization.</p>
+            <p style="margin-top: 1rem;">
+                <a href="https://www.dalyanalytics.com/contact" style="font-weight: 600; font-size: 1.1rem;">Get Custom Tools →</a>
+            </p>
+            <p style="margin-top: 2rem; font-size: 0.9rem;">
+                <a href="https://github.com/dalyanalytics/nonprofit-analytics-tools">View Source Code on GitHub</a> |
+                <a href="https://www.dalyanalytics.com">Daly Analytics</a>
+            </p>
+        </footer>
+    </div>
 </body>
 </html>
