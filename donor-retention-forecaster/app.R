@@ -667,230 +667,342 @@ server <- function(input, output, session) {
     )
   })
 
-  # Retention improvement comparison
+  # Retention improvement comparison (with Monte Carlo)
   output$retention_comparison_chart <- renderPlotly({
-    years <- 0:input$forecast_years
-
-    baseline <- forecast_donors(
-      input$current_donors,
-      input$current_retention,
-      input$baseline_acquisition,
-      input$forecast_years
+    # Baseline scenario
+    baseline_mc <- monte_carlo_forecast(
+      starting_donors = input$current_donors,
+      retention_rate = input$current_retention,
+      retention_var = input$retention_variability,
+      new_donors_per_year = input$baseline_acquisition,
+      acquisition_var = input$acquisition_variability,
+      years = input$forecast_years,
+      simulations = 1000
     )
 
-    improved <- forecast_donors(
-      input$current_donors,
-      input$retention_improvement,
-      input$baseline_acquisition,
-      input$forecast_years
+    # Improved retention scenario
+    improved_mc <- monte_carlo_forecast(
+      starting_donors = input$current_donors,
+      retention_rate = input$retention_improvement,
+      retention_var = input$retention_variability,
+      new_donors_per_year = input$baseline_acquisition,
+      acquisition_var = input$acquisition_variability,
+      years = input$forecast_years,
+      simulations = 1000
     )
 
-    data <- data.frame(
-      Year = years,
-      Baseline = baseline,
-      Improved = improved
-    )
+    baseline_data <- baseline_mc$percentiles
+    improved_data <- improved_mc$percentiles
 
-    plot_ly(data, x = ~Year) %>%
-      add_trace(y = ~Baseline, name = "Current Retention", type = "scatter", mode = "lines+markers",
+    plot_ly() %>%
+      # Baseline confidence band
+      add_ribbons(data = baseline_data, x = ~Year, ymin = ~P10, ymax = ~P90,
+                  fillcolor = "rgba(214, 138, 147, 0.1)",
+                  line = list(color = "transparent"),
+                  name = "Current Range",
+                  showlegend = FALSE,
+                  hoverinfo = "skip") %>%
+      # Improved confidence band
+      add_ribbons(data = improved_data, x = ~Year, ymin = ~P10, ymax = ~P90,
+                  fillcolor = "rgba(173, 146, 177, 0.15)",
+                  line = list(color = "transparent"),
+                  name = "Improved Range",
+                  showlegend = FALSE,
+                  hoverinfo = "skip") %>%
+      # Baseline median line
+      add_trace(data = baseline_data, x = ~Year, y = ~P50,
+                name = "Current Retention (Median)", type = "scatter", mode = "lines+markers",
                 line = list(color = "#D68A93", width = 3, dash = "dash"),
                 marker = list(size = 8)) %>%
-      add_trace(y = ~Improved, name = "Improved Retention", type = "scatter", mode = "lines+markers",
+      # Improved median line
+      add_trace(data = improved_data, x = ~Year, y = ~P50,
+                name = "Improved Retention (Median)", type = "scatter", mode = "lines+markers",
                 line = list(color = "#AD92B1", width = 3),
                 marker = list(size = 10)) %>%
       layout(
-        title = "Impact of Retention Improvement",
+        title = "Impact of Retention Improvement (1,000 Simulations)",
         xaxis = list(title = "Year"),
         yaxis = list(title = "Number of Donors"),
         hovermode = "x unified",
         plot_bgcolor = "#f8f9fa",
-        paper_bgcolor = "white"
+        paper_bgcolor = "white",
+        showlegend = TRUE,
+        legend = list(x = 0.02, y = 0.98)
       )
   })
 
-  # Retention ROI
+  # Retention ROI (with Monte Carlo and probability analysis)
   output$retention_roi <- renderUI({
-    years <- 0:input$forecast_years
-
-    baseline_donors <- forecast_donors(
-      input$current_donors,
-      input$current_retention,
-      input$baseline_acquisition,
-      input$forecast_years
+    # Run simulations for both scenarios
+    baseline_mc <- monte_carlo_forecast(
+      starting_donors = input$current_donors,
+      retention_rate = input$current_retention,
+      retention_var = input$retention_variability,
+      new_donors_per_year = input$baseline_acquisition,
+      acquisition_var = input$acquisition_variability,
+      years = input$forecast_years,
+      simulations = 1000
     )
 
-    improved_donors <- forecast_donors(
-      input$current_donors,
-      input$retention_improvement,
-      input$baseline_acquisition,
-      input$forecast_years
+    improved_mc <- monte_carlo_forecast(
+      starting_donors = input$current_donors,
+      retention_rate = input$retention_improvement,
+      retention_var = input$retention_variability,
+      new_donors_per_year = input$baseline_acquisition,
+      acquisition_var = input$acquisition_variability,
+      years = input$forecast_years,
+      simulations = 1000
     )
 
-    baseline_revenue <- sum(calculate_revenue(baseline_donors, input$avg_gift))
-    improved_revenue <- sum(calculate_revenue(improved_donors, input$avg_gift))
-    additional_revenue <- improved_revenue - baseline_revenue
+    # Calculate revenue for all simulations
+    baseline_all_sims <- baseline_mc$all_simulations
+    improved_all_sims <- improved_mc$all_simulations
 
+    # Total revenue across all years for each simulation
+    baseline_total_revenue <- apply(baseline_all_sims, 1, function(donors) sum(donors * input$avg_gift))
+    improved_total_revenue <- apply(improved_all_sims, 1, function(donors) sum(donors * input$avg_gift))
+
+    # Additional revenue for each simulation
+    additional_revenue_sims <- improved_total_revenue - baseline_total_revenue
+
+    # Program cost
     total_program_cost <- input$retention_program_cost * input$forecast_years
-    net_benefit <- additional_revenue - total_program_cost
-    roi <- ((additional_revenue - total_program_cost) / total_program_cost) * 100
+
+    # Net benefit for each simulation
+    net_benefit_sims <- additional_revenue_sims - total_program_cost
+
+    # Probability of positive ROI
+    prob_positive <- mean(net_benefit_sims > 0) * 100
+
+    # Median values
+    median_additional_revenue <- median(additional_revenue_sims)
+    median_net_benefit <- median(net_benefit_sims)
+    median_roi <- ((median_additional_revenue - total_program_cost) / total_program_cost) * 100
+
+    # Percentiles for net benefit
+    net_benefit_p10 <- quantile(net_benefit_sims, 0.10)
+    net_benefit_p90 <- quantile(net_benefit_sims, 0.90)
 
     tagList(
-      p(strong("Additional Revenue: "), dollar(additional_revenue)),
+      p(strong("Additional Revenue (Median): "), dollar(median_additional_revenue)),
       p(strong("Total Program Cost (", input$forecast_years, " years): "), dollar(total_program_cost)),
-      p(strong("Net Benefit: "),
-        span(style = if(net_benefit > 0) "color: #28a745; font-weight: 600;" else "color: #dc3545; font-weight: 600;",
-             dollar(net_benefit))),
-      p(strong("ROI: "),
-        span(style = if(roi > 0) "color: #28a745; font-weight: 600;" else "color: #dc3545; font-weight: 600;",
-             paste0(round(roi, 1), "%"))),
-      if(net_benefit > 0) {
+      p(strong("Net Benefit (Median): "),
+        span(style = if(median_net_benefit > 0) "color: #28a745; font-weight: 600;" else "color: #dc3545; font-weight: 600;",
+             dollar(median_net_benefit))),
+      p(style = "margin-left: 1.5rem; color: #666; font-size: 0.9rem;",
+        paste0("Range: ", dollar(round(net_benefit_p10)), " to ", dollar(round(net_benefit_p90)))),
+      p(strong("ROI (Median): "),
+        span(style = if(median_roi > 0) "color: #28a745; font-weight: 600;" else "color: #dc3545; font-weight: 600;",
+             paste0(round(median_roi, 1), "%"))),
+      p(strong("Probability of Positive ROI: "),
+        span(style = paste0("color: ", if(prob_positive > 70) "#28a745" else if(prob_positive > 40) "#ffc107" else "#dc3545", "; font-weight: 600; font-size: 1.2rem;"),
+             paste0(round(prob_positive, 0), "%"))),
+      if(prob_positive > 70) {
         p(style = "margin-top: 1rem; padding: 1rem; background: rgba(40, 167, 69, 0.1); border-radius: 8px;",
-          "✓ This retention program would generate a positive return on investment!")
+          "✓ Strong probability of positive ROI! Out of 1,000 simulations, ",
+          strong(round(prob_positive, 0), "%"), " showed a net benefit from this retention program.")
+      } else if(prob_positive > 40) {
+        p(style = "margin-top: 1rem; padding: 1rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px;",
+          "⚠ Moderate risk. About ", strong(round(prob_positive, 0), "%"), " of simulations showed positive ROI. ",
+          "Consider reducing program costs or targeting a higher retention rate to improve odds.")
       } else {
         p(style = "margin-top: 1rem; padding: 1rem; background: rgba(220, 53, 69, 0.1); border-radius: 8px;",
-          "⚠ This program would cost more than the additional revenue it generates. Consider adjusting the program cost or retention target.")
+          "⚠ High risk. Only ", strong(round(prob_positive, 0), "%"), " of simulations showed positive ROI. ",
+          "The program costs likely outweigh the benefits. Consider alternative approaches.")
       }
     )
   })
 
-  # Acquisition comparison chart
+  # Acquisition comparison chart (with Monte Carlo)
   output$acquisition_comparison_chart <- renderPlotly({
-    years <- 0:input$forecast_years
-
-    baseline <- forecast_donors(
-      input$current_donors,
-      input$current_retention,
-      input$baseline_acquisition,
-      input$forecast_years
+    # Baseline scenario
+    baseline_mc <- monte_carlo_forecast(
+      starting_donors = input$current_donors,
+      retention_rate = input$current_retention,
+      retention_var = input$retention_variability,
+      new_donors_per_year = input$baseline_acquisition,
+      acquisition_var = input$acquisition_variability,
+      years = input$forecast_years,
+      simulations = 1000
     )
 
-    aggressive <- forecast_donors(
-      input$current_donors,
-      input$current_retention,
-      input$aggressive_acquisition,
-      input$forecast_years
+    # Aggressive acquisition scenario
+    aggressive_mc <- monte_carlo_forecast(
+      starting_donors = input$current_donors,
+      retention_rate = input$current_retention,
+      retention_var = input$retention_variability,
+      new_donors_per_year = input$aggressive_acquisition,
+      acquisition_var = input$acquisition_variability,
+      years = input$forecast_years,
+      simulations = 1000
     )
 
-    data <- data.frame(
-      Year = years,
-      Baseline = baseline,
-      Aggressive = aggressive
-    )
+    baseline_data <- baseline_mc$percentiles
+    aggressive_data <- aggressive_mc$percentiles
 
-    plot_ly(data, x = ~Year) %>%
-      add_trace(y = ~Baseline, name = "Baseline Acquisition", type = "scatter", mode = "lines+markers",
+    plot_ly() %>%
+      # Baseline confidence band
+      add_ribbons(data = baseline_data, x = ~Year, ymin = ~P10, ymax = ~P90,
+                  fillcolor = "rgba(214, 138, 147, 0.1)",
+                  line = list(color = "transparent"),
+                  name = "Baseline Range",
+                  showlegend = FALSE,
+                  hoverinfo = "skip") %>%
+      # Aggressive confidence band
+      add_ribbons(data = aggressive_data, x = ~Year, ymin = ~P10, ymax = ~P90,
+                  fillcolor = "rgba(176, 120, 145, 0.15)",
+                  line = list(color = "transparent"),
+                  name = "Increased Range",
+                  showlegend = FALSE,
+                  hoverinfo = "skip") %>%
+      # Baseline median line
+      add_trace(data = baseline_data, x = ~Year, y = ~P50,
+                name = "Baseline Acquisition (Median)", type = "scatter", mode = "lines+markers",
                 line = list(color = "#D68A93", width = 3, dash = "dash"),
                 marker = list(size = 8)) %>%
-      add_trace(y = ~Aggressive, name = "Increased Acquisition", type = "scatter", mode = "lines+markers",
+      # Aggressive median line
+      add_trace(data = aggressive_data, x = ~Year, y = ~P50,
+                name = "Increased Acquisition (Median)", type = "scatter", mode = "lines+markers",
                 line = list(color = "#B07891", width = 3),
                 marker = list(size = 10)) %>%
       layout(
-        title = "Impact of Increased Acquisition",
+        title = "Impact of Increased Acquisition (1,000 Simulations)",
         xaxis = list(title = "Year"),
         yaxis = list(title = "Number of Donors"),
         hovermode = "x unified",
         plot_bgcolor = "#f8f9fa",
-        paper_bgcolor = "white"
+        paper_bgcolor = "white",
+        showlegend = TRUE,
+        legend = list(x = 0.02, y = 0.98)
       )
   })
 
-  # Acquisition analysis
+  # Acquisition analysis (with Monte Carlo and probability)
   output$acquisition_analysis <- renderUI({
-    baseline_donors <- forecast_donors(
-      input$current_donors,
-      input$current_retention,
-      input$baseline_acquisition,
-      input$forecast_years
+    # Run simulations
+    baseline_mc <- monte_carlo_forecast(
+      starting_donors = input$current_donors,
+      retention_rate = input$current_retention,
+      retention_var = input$retention_variability,
+      new_donors_per_year = input$baseline_acquisition,
+      acquisition_var = input$acquisition_variability,
+      years = input$forecast_years,
+      simulations = 1000
     )
 
-    aggressive_donors <- forecast_donors(
-      input$current_donors,
-      input$current_retention,
-      input$aggressive_acquisition,
-      input$forecast_years
+    aggressive_mc <- monte_carlo_forecast(
+      starting_donors = input$current_donors,
+      retention_rate = input$current_retention,
+      retention_var = input$retention_variability,
+      new_donors_per_year = input$aggressive_acquisition,
+      acquisition_var = input$acquisition_variability,
+      years = input$forecast_years,
+      simulations = 1000
     )
 
-    baseline_revenue <- sum(calculate_revenue(baseline_donors, input$avg_gift))
-    aggressive_revenue <- sum(calculate_revenue(aggressive_donors, input$avg_gift))
-    additional_revenue <- aggressive_revenue - baseline_revenue
+    # Calculate revenue for all simulations
+    baseline_total_revenue <- apply(baseline_mc$all_simulations, 1, function(donors) sum(donors * input$avg_gift))
+    aggressive_total_revenue <- apply(aggressive_mc$all_simulations, 1, function(donors) sum(donors * input$avg_gift))
 
+    # Additional revenue for each simulation
+    additional_revenue_sims <- aggressive_total_revenue - baseline_total_revenue
+
+    # Cost calculation
     additional_donors_acquired <- (input$aggressive_acquisition - input$baseline_acquisition) * input$forecast_years
     total_acquisition_cost <- additional_donors_acquired * input$acquisition_cost_per_donor
-    net_benefit <- additional_revenue - total_acquisition_cost
+
+    # Net benefit for each simulation
+    net_benefit_sims <- additional_revenue_sims - total_acquisition_cost
+
+    # Probability of positive net benefit
+    prob_positive <- mean(net_benefit_sims > 0) * 100
+
+    # Median values
+    median_additional_revenue <- median(additional_revenue_sims)
+    median_net_benefit <- median(net_benefit_sims)
 
     tagList(
-      p(strong("Additional Donors Acquired: "), comma(additional_donors_acquired)),
-      p(strong("Additional Revenue: "), dollar(additional_revenue)),
+      p(strong("Additional Donors Targeted: "), comma(additional_donors_acquired)),
+      p(strong("Additional Revenue (Median): "), dollar(median_additional_revenue)),
       p(strong("Total Acquisition Cost: "), dollar(total_acquisition_cost)),
-      p(strong("Net Benefit: "),
-        span(style = if(net_benefit > 0) "color: #28a745; font-weight: 600;" else "color: #dc3545; font-weight: 600;",
-             dollar(net_benefit))),
-      if(net_benefit > 0) {
+      p(strong("Net Benefit (Median): "),
+        span(style = if(median_net_benefit > 0) "color: #28a745; font-weight: 600;" else "color: #dc3545; font-weight: 600;",
+             dollar(median_net_benefit))),
+      p(strong("Probability of Positive ROI: "),
+        span(style = paste0("color: ", if(prob_positive > 70) "#28a745" else if(prob_positive > 40) "#ffc107" else "#dc3545", "; font-weight: 600; font-size: 1.2rem;"),
+             paste0(round(prob_positive, 0), "%"))),
+      if(prob_positive > 70) {
         p(style = "margin-top: 1rem; padding: 1rem; background: rgba(40, 167, 69, 0.1); border-radius: 8px;",
-          paste0("✓ Increasing acquisition would generate ", dollar(net_benefit),
-                 " in net revenue after acquisition costs."))
+          "✓ Strong case for increased acquisition! ", strong(round(prob_positive, 0), "%"),
+          " of simulations showed positive net benefit after acquisition costs.")
+      } else if(prob_positive > 40) {
+        p(style = "margin-top: 1rem; padding: 1rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px;",
+          "⚠ Moderate risk. About ", strong(round(prob_positive, 0), "%"), " of simulations were profitable. ",
+          "Consider lowering cost per donor or improving retention to maximize acquisition value.")
       } else {
         p(style = "margin-top: 1rem; padding: 1rem; background: rgba(220, 53, 69, 0.1); border-radius: 8px;",
-          "⚠ The acquisition cost exceeds the additional revenue generated. Consider lowering acquisition costs or improving retention to maximize value.")
+          "⚠ High risk. Only ", strong(round(prob_positive, 0), "%"), " of simulations showed positive ROI. ",
+          "Acquisition costs likely exceed the value generated. Focus on retention instead.")
       }
     )
   })
 
-  # All scenarios comparison chart
+  # All scenarios comparison chart (with Monte Carlo)
   output$all_scenarios_chart <- renderPlotly({
-    years <- 0:input$forecast_years
-
-    baseline <- forecast_donors(
-      input$current_donors,
-      input$current_retention,
-      input$baseline_acquisition,
-      input$forecast_years
+    # Run Monte Carlo for all 4 scenarios
+    baseline_mc <- monte_carlo_forecast(
+      input$current_donors, input$current_retention, input$retention_variability,
+      input$baseline_acquisition, input$acquisition_variability, input$forecast_years, 1000
     )
 
-    retention_only <- forecast_donors(
-      input$current_donors,
-      input$retention_improvement,
-      input$baseline_acquisition,
-      input$forecast_years
+    retention_mc <- monte_carlo_forecast(
+      input$current_donors, input$retention_improvement, input$retention_variability,
+      input$baseline_acquisition, input$acquisition_variability, input$forecast_years, 1000
     )
 
-    acquisition_only <- forecast_donors(
-      input$current_donors,
-      input$current_retention,
-      input$aggressive_acquisition,
-      input$forecast_years
+    acquisition_mc <- monte_carlo_forecast(
+      input$current_donors, input$current_retention, input$retention_variability,
+      input$aggressive_acquisition, input$acquisition_variability, input$forecast_years, 1000
     )
 
-    combined <- forecast_donors(
-      input$current_donors,
-      input$combined_retention,
-      input$combined_acquisition,
-      input$forecast_years
+    combined_mc <- monte_carlo_forecast(
+      input$current_donors, input$combined_retention, input$retention_variability,
+      input$combined_acquisition, input$acquisition_variability, input$forecast_years, 1000
     )
 
-    data <- data.frame(
-      Year = years,
-      Baseline = baseline,
-      RetentionOnly = retention_only,
-      AcquisitionOnly = acquisition_only,
-      Combined = combined
-    )
+    # Extract median lines
+    baseline_data <- baseline_mc$percentiles
+    retention_data <- retention_mc$percentiles
+    acquisition_data <- acquisition_mc$percentiles
+    combined_data <- combined_mc$percentiles
 
-    plot_ly(data, x = ~Year) %>%
-      add_trace(y = ~Baseline, name = "A: Baseline", type = "scatter", mode = "lines+markers",
+    plot_ly() %>%
+      # Combined strategy confidence band (most important)
+      add_ribbons(data = combined_data, x = ~Year, ymin = ~P10, ymax = ~P90,
+                  fillcolor = "rgba(214, 138, 147, 0.15)",
+                  line = list(color = "transparent"),
+                  name = "Combined Range",
+                  showlegend = FALSE,
+                  hoverinfo = "skip") %>%
+      # Median lines for all scenarios
+      add_trace(data = baseline_data, x = ~Year, y = ~P50,
+                name = "A: Baseline", type = "scatter", mode = "lines+markers",
                 line = list(color = "#999", width = 2, dash = "dash"),
                 marker = list(size = 6)) %>%
-      add_trace(y = ~RetentionOnly, name = "B: Retention Focus", type = "scatter", mode = "lines+markers",
+      add_trace(data = retention_data, x = ~Year, y = ~P50,
+                name = "B: Retention Focus", type = "scatter", mode = "lines+markers",
                 line = list(color = "#AD92B1", width = 3),
                 marker = list(size = 8)) %>%
-      add_trace(y = ~AcquisitionOnly, name = "C: Acquisition Focus", type = "scatter", mode = "lines+markers",
+      add_trace(data = acquisition_data, x = ~Year, y = ~P50,
+                name = "C: Acquisition Focus", type = "scatter", mode = "lines+markers",
                 line = list(color = "#B07891", width = 3),
                 marker = list(size = 8)) %>%
-      add_trace(y = ~Combined, name = "D: Combined Strategy", type = "scatter", mode = "lines+markers",
+      add_trace(data = combined_data, x = ~Year, y = ~P50,
+                name = "D: Combined Strategy", type = "scatter", mode = "lines+markers",
                 line = list(color = "#D68A93", width = 4),
                 marker = list(size = 10)) %>%
       layout(
-        title = "Compare All Scenarios",
+        title = "Compare All Scenarios (Median Outcomes from 1,000 Simulations)",
         xaxis = list(title = "Year"),
         yaxis = list(title = "Number of Donors"),
         hovermode = "x unified",
@@ -900,85 +1012,123 @@ server <- function(input, output, session) {
       )
   })
 
-  # Scenario comparison metrics
+  # Scenario comparison metrics (with Monte Carlo)
   output$scenario_comparison <- renderUI({
-    years <- 0:input$forecast_years
+    # Run Monte Carlo for all scenarios
+    baseline_mc <- monte_carlo_forecast(
+      input$current_donors, input$current_retention, input$retention_variability,
+      input$baseline_acquisition, input$acquisition_variability, input$forecast_years, 1000
+    )
 
-    baseline <- forecast_donors(input$current_donors, input$current_retention, input$baseline_acquisition, input$forecast_years)
-    retention_only <- forecast_donors(input$current_donors, input$retention_improvement, input$baseline_acquisition, input$forecast_years)
-    acquisition_only <- forecast_donors(input$current_donors, input$current_retention, input$aggressive_acquisition, input$forecast_years)
-    combined <- forecast_donors(input$current_donors, input$combined_retention, input$combined_acquisition, input$forecast_years)
+    retention_mc <- monte_carlo_forecast(
+      input$current_donors, input$retention_improvement, input$retention_variability,
+      input$baseline_acquisition, input$acquisition_variability, input$forecast_years, 1000
+    )
 
-    baseline_revenue <- sum(calculate_revenue(baseline, input$avg_gift))
-    retention_revenue <- sum(calculate_revenue(retention_only, input$avg_gift))
-    acquisition_revenue <- sum(calculate_revenue(acquisition_only, input$avg_gift))
-    combined_revenue <- sum(calculate_revenue(combined, input$avg_gift))
+    acquisition_mc <- monte_carlo_forecast(
+      input$current_donors, input$current_retention, input$retention_variability,
+      input$aggressive_acquisition, input$acquisition_variability, input$forecast_years, 1000
+    )
+
+    combined_mc <- monte_carlo_forecast(
+      input$current_donors, input$combined_retention, input$retention_variability,
+      input$combined_acquisition, input$acquisition_variability, input$forecast_years, 1000
+    )
+
+    # Get final year medians and total revenue
+    baseline_final <- tail(baseline_mc$percentiles$P50, 1)
+    retention_final <- tail(retention_mc$percentiles$P50, 1)
+    acquisition_final <- tail(acquisition_mc$percentiles$P50, 1)
+    combined_final <- tail(combined_mc$percentiles$P50, 1)
+
+    baseline_revenue <- sum(baseline_mc$percentiles$P50 * input$avg_gift)
+    retention_revenue <- sum(retention_mc$percentiles$P50 * input$avg_gift)
+    acquisition_revenue <- sum(acquisition_mc$percentiles$P50 * input$avg_gift)
+    combined_revenue <- sum(combined_mc$percentiles$P50 * input$avg_gift)
 
     tagList(
       div(class = "metric-card",
         div(class = "metric-label", "Baseline"),
-        div(class = "metric-value", comma(tail(baseline, 1))),
+        div(class = "metric-value", comma(round(baseline_final))),
         p(style = "margin-top: 0.5rem; color: #666;", dollar(baseline_revenue))
       ),
       div(class = "metric-card",
         div(class = "metric-label", "Retention Focus"),
-        div(class = "metric-value", comma(tail(retention_only, 1))),
+        div(class = "metric-value", comma(round(retention_final))),
         p(style = "margin-top: 0.5rem; color: #666;", dollar(retention_revenue))
       ),
       div(class = "metric-card",
         div(class = "metric-label", "Acquisition Focus"),
-        div(class = "metric-value", comma(tail(acquisition_only, 1))),
+        div(class = "metric-value", comma(round(acquisition_final))),
         p(style = "margin-top: 0.5rem; color: #666;", dollar(acquisition_revenue))
       ),
       div(class = "metric-card",
         div(class = "metric-label", "Combined Strategy"),
-        div(class = "metric-value", comma(tail(combined, 1))),
+        div(class = "metric-value", comma(round(combined_final))),
         p(style = "margin-top: 0.5rem; color: #666;", dollar(combined_revenue))
       )
     )
   })
 
-  # Strategic recommendation
+  # Strategic recommendation (with Monte Carlo probability)
   output$strategic_recommendation <- renderUI({
-    baseline <- forecast_donors(input$current_donors, input$current_retention, input$baseline_acquisition, input$forecast_years)
-    retention_only <- forecast_donors(input$current_donors, input$retention_improvement, input$baseline_acquisition, input$forecast_years)
-    acquisition_only <- forecast_donors(input$current_donors, input$current_retention, input$aggressive_acquisition, input$forecast_years)
-    combined <- forecast_donors(input$current_donors, input$combined_retention, input$combined_acquisition, input$forecast_years)
+    # Run Monte Carlo for all scenarios
+    baseline_mc <- monte_carlo_forecast(
+      input$current_donors, input$current_retention, input$retention_variability,
+      input$baseline_acquisition, input$acquisition_variability, input$forecast_years, 1000
+    )
 
-    baseline_revenue <- sum(calculate_revenue(baseline, input$avg_gift))
-    retention_revenue <- sum(calculate_revenue(retention_only, input$avg_gift))
-    acquisition_revenue <- sum(calculate_revenue(acquisition_only, input$avg_gift))
-    combined_revenue <- sum(calculate_revenue(combined, input$avg_gift))
+    combined_mc <- monte_carlo_forecast(
+      input$current_donors, input$combined_retention, input$retention_variability,
+      input$combined_acquisition, input$acquisition_variability, input$forecast_years, 1000
+    )
 
-    combined_net <- combined_revenue - (input$combined_total_cost * input$forecast_years)
-    baseline_net <- baseline_revenue
+    # Calculate total revenue for each simulation
+    baseline_total_revenue <- apply(baseline_mc$all_simulations, 1, function(donors) sum(donors * input$avg_gift))
+    combined_total_revenue <- apply(combined_mc$all_simulations, 1, function(donors) sum(donors * input$avg_gift))
 
-    improvement <- combined_net - baseline_net
-    improvement_pct <- (improvement / baseline_net) * 100
+    # Calculate net benefit for each simulation
+    total_cost <- input$combined_total_cost * input$forecast_years
+    net_benefit_sims <- combined_total_revenue - baseline_total_revenue - total_cost
 
-    roi <- ((combined_revenue - baseline_revenue - (input$combined_total_cost * input$forecast_years)) /
-            (input$combined_total_cost * input$forecast_years)) * 100
+    # Probability of positive ROI
+    prob_positive <- mean(net_benefit_sims > 0) * 100
 
-    best_scenario <- which.max(c(baseline_revenue, retention_revenue, acquisition_revenue, combined_revenue))
-    scenario_names <- c("Baseline (Status Quo)", "Retention Focus", "Acquisition Focus", "Combined Strategy")
+    # Median values
+    median_baseline_revenue <- median(baseline_total_revenue)
+    median_combined_revenue <- median(combined_total_revenue)
+    median_improvement <- median(net_benefit_sims)
+    improvement_pct <- ((median_combined_revenue - median_baseline_revenue) / median_baseline_revenue) * 100
+
+    median_roi <- ((median_combined_revenue - median_baseline_revenue - total_cost) / total_cost) * 100
 
     tagList(
-      p(strong("Highest Revenue Scenario: "), scenario_names[best_scenario]),
-      p(strong("Combined Strategy Net Benefit: "), dollar(improvement)),
+      p(strong("Combined Strategy Net Benefit (Median): "), dollar(median_improvement)),
       p(strong("Revenue Increase vs. Baseline: "), paste0(round(improvement_pct, 1), "%")),
-      p(strong("ROI on Combined Investment: "), paste0(round(roi, 1), "%")),
-      if(combined_revenue > baseline_revenue && roi > 100) {
+      p(strong("ROI on Combined Investment: "), paste0(round(median_roi, 1), "%")),
+      p(strong("Probability of Positive ROI: "),
+        span(style = paste0("color: ", if(prob_positive > 70) "#28a745" else if(prob_positive > 40) "#ffc107" else "#dc3545", "; font-weight: 600; font-size: 1.2rem;"),
+             paste0(round(prob_positive, 0), "%"))),
+      if(prob_positive > 70 && median_roi > 100) {
         p(style = "margin-top: 1rem; padding: 1rem; background: rgba(40, 167, 69, 0.1); border-radius: 8px;",
-          "✓ The combined strategy offers the best results and generates strong ROI. Investing in both retention and acquisition maximizes long-term donor value.")
-      } else if(best_scenario == 2) {
+          strong("✓ Recommended: Combined Strategy"), br(),
+          "The combined approach offers the best results with ", strong(round(prob_positive, 0), "%"),
+          " probability of positive ROI. Investing in both retention and acquisition maximizes long-term donor value.")
+      } else if(prob_positive > 40 && median_roi > 50) {
         p(style = "margin-top: 1rem; padding: 1rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px;",
-          "💡 Focus on retention improvement. With your current metrics, improving donor retention offers better ROI than aggressive acquisition.")
-      } else if(best_scenario == 3) {
-        p(style = "margin-top: 1rem; padding: 1rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px;",
-          "💡 Focus on acquisition. Your retention rate is relatively strong, so growing your donor base through acquisition is a good strategy.")
-      } else {
+          strong("⚠ Moderate Opportunity"), br(),
+          "About ", strong(round(prob_positive, 0), "%"), " chance of positive ROI. ",
+          "Consider testing one strategy at a time - either retention improvement OR increased acquisition - to reduce risk and investment.")
+      } else if(median_roi < 0) {
         p(style = "margin-top: 1rem; padding: 1rem; background: rgba(220, 53, 69, 0.1); border-radius: 8px;",
-          "⚠ The investment costs outweigh the benefits. Consider reducing program costs or adjusting targets to achieve better ROI.")
+          strong("⚠ High Risk - Not Recommended"), br(),
+          "Only ", strong(round(prob_positive, 0), "%"), " of simulations showed positive ROI. ",
+          "The investment costs ($", comma(total_cost), ") likely outweigh the benefits. Consider reducing program costs or focusing on lower-cost retention tactics first.")
+      } else {
+        p(style = "margin-top: 1rem; padding: 1rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px;",
+          strong("💡 Optimize First"), br(),
+          "Consider starting with one focused strategy to test effectiveness before full investment. ",
+          "Monitor results for 6-12 months, then expand if ROI proves positive.")
       }
     )
   })
