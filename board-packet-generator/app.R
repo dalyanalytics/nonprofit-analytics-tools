@@ -1444,8 +1444,8 @@ server <- function(input, output, session) {
     # Revenue: over budget = good (green), under = warning/bad
     revenue_color <- if(revenue_pct >= 100) "#27ae60" else if(revenue_pct >= 95) "#f39c12" else "#e74c3c"
 
-    # Expenses: under budget = good (green), over = warning/bad
-    expense_color <- if(expenses_pct <= 100) "#27ae60" else if(expenses_pct <= 105) "#f39c12" else "#e74c3c"
+    # Expenses: always use branded orange/peach color
+    expense_color <- "#F9B397"
 
     # Net Income: positive and over budget = good
     net_income_color <- if(net_income_pct >= 100) "#27ae60" else if(net_income_pct >= 95) "#f39c12" else "#e74c3c"
