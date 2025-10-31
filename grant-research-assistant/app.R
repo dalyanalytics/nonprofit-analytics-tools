@@ -640,7 +640,7 @@ ui <- fluidPage(
       )
     )
   )  # Close app-footer
-)  # Close main-container AND fluidPage
+)  # Close main-container and fluidPage
 
 # Server
 server <- function(input, output, session) {
