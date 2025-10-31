@@ -186,21 +186,36 @@ ui <- fluidPage(
         text-align: center;
       }
 
-      /* Footer styling - full width edge-to-edge */
-      footer, .footer {
-        margin-top: 4rem;
-        padding: 3rem 2rem;
+      /* Footer styling */
+      .app-footer {
         background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
         color: white;
+        padding: 3rem 2rem;
+        margin-top: 4rem;
         border-radius: 16px;
       }
 
-      /* Ensure footer content has proper padding and is centered */
-      footer .container, .footer .container {
-        max-width: none;
-        margin: 0;
-        padding: 0;
-        width: 100%;
+      .app-footer a {
+        color: #d68a93;
+        text-decoration: none;
+      }
+
+      .app-footer a:hover {
+        color: #F9B397;
+        text-decoration: underline;
+      }
+
+      /* CTA Button styling */
+      .app-footer .btn {
+        text-decoration: none !important;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .app-footer .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        text-decoration: none !important;
       }
 
       /* Ensure the body and all containers allow full width footer */
@@ -1289,84 +1304,71 @@ ui <- fluidPage(
       "Professional board materials powered by ",
       tags$a("Daly Analytics", href = "https://www.dalyanalytics.com", target = "_blank")
     )
-  )
-  ), # Close main-container div
+  ),
 
   # Footer
-  tags$footer(
-    class = "footer mt-5 py-4",
-    style = "background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white;",
-    div(
-      class = "container",
-      div(
-        class = "row align-items-center",
-        div(
-          class = "col-md-8",
-          h5("Need Custom Board Analytics Tools?", style = "color: white; margin-bottom: 1rem;"),
-          p(
-            style = "color: rgba(255,255,255,0.9); margin-bottom: 1rem;",
-            "This board packet generator demonstrates professional governance analytics capabilities. ",
-            "Daly Analytics creates custom board reporting solutions that transform organizational data into strategic insights."
-          ),
-          div(
-            class = "mb-3",
-            tags$ul(
-              class = "list-unstyled",
-              style = "color: rgba(255,255,255,0.8);",
-              tags$li(icon("check"), " Automated board packet generation"),
-              tags$li(icon("check"), " Real-time financial dashboards"),
-              tags$li(icon("check"), " Strategic KPI tracking systems"),
-              tags$li(icon("check"), " Custom governance reporting"),
-              tags$li(icon("check"), " Board portal integrations")
-            )
-          )
+  div(
+    class = "app-footer",
+    fluidRow(
+      column(7,
+        h4("Need Custom Board Analytics Tools?", style = "color: white; margin-bottom: 1rem; margin-top: 0;"),
+        p(
+          style = "color: rgba(255,255,255,0.9); margin-bottom: 1.5rem;",
+          "This board packet generator demonstrates professional governance analytics capabilities. ",
+          "Daly Analytics creates custom board reporting solutions that transform organizational data into strategic insights."
         ),
-        div(
-          class = "col-md-4 text-center",
-          div(
-            style = "background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px;",
-            h6("Ready to Streamline Board Governance?", style = "color: white; margin-bottom: 1rem;"),
-            tags$a(
-              "Schedule Free Consultation →",
-              href = "https://www.dalyanalytics.com/contact",
-              class = "btn btn-lg mb-2",
-              style = "background: linear-gradient(135deg, #F9B397, #D68A93, #AD92B1, #B07891); color: #2c3e50; font-weight: 600; width: 100%; text-decoration: none; border-radius: 8px;",
-              target = "_blank"
-            ),
-            tags$a(
-              "View Our Portfolio →",
-              href = "https://www.dalyanalytics.com",
-              class = "btn btn-outline-light",
-              style = "width: 100%; text-decoration: none; border-radius: 8px; border: 2px solid white;",
-              target = "_blank"
-            ),
-            div(
-              class = "mt-3",
-              style = "color: rgba(255,255,255,0.7); font-size: 0.9rem;",
-              icon("envelope"), " hello@dalyanalytics.com"
-            )
-          )
+        tags$div(
+          style = "color: rgba(255,255,255,0.85);",
+          tags$div(style = "margin-bottom: 8px;", HTML("✓ Automated board packet generation")),
+          tags$div(style = "margin-bottom: 8px;", HTML("✓ Real-time financial dashboards")),
+          tags$div(style = "margin-bottom: 8px;", HTML("✓ Strategic KPI tracking systems")),
+          tags$div(style = "margin-bottom: 8px;", HTML("✓ Custom governance reporting")),
+          tags$div(style = "margin-bottom: 8px;", HTML("✓ Board portal integrations"))
         )
       ),
-      hr(style = "border-color: rgba(255,255,255,0.2); margin: 2rem 0;"),
-      div(
-        class = "text-center",
-        style = "color: rgba(255,255,255,0.6);",
-        p(
-          class = "mb-0",
-          "© 2025 Daly Analytics LLC. This free tool was built to demonstrate our expertise in board governance analytics. ",
+      column(5,
+        div(
+          style = "border: 2px solid rgba(255,255,255,0.3); border-radius: 12px; padding: 24px; background: rgba(255,255,255,0.05);",
+          h5("Ready to Get Started?", style = "color: white; margin-bottom: 1.5rem; margin-top: 0;"),
           tags$a(
-            "Contact us",
+            "Schedule Free Consultation →",
             href = "https://www.dalyanalytics.com/contact",
-            style = "color: #d68a93;",
+            class = "btn btn-lg",
+            style = "background: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891); color: #2c3e50; font-weight: 600; width: 100%; padding: 12px; margin-bottom: 15px; text-decoration: none; border-radius: 8px;",
             target = "_blank"
           ),
-          " to build custom board solutions for your organization."
+          tags$a(
+            "View Our Portfolio →",
+            href = "https://www.dalyanalytics.com",
+            class = "btn btn-outline-light",
+            style = "width: 100%; padding: 12px; border: 2px solid white; text-decoration: none; border-radius: 8px;",
+            target = "_blank"
+          ),
+          div(
+            style = "color: rgba(255,255,255,0.8); font-size: 0.95rem; margin-top: 1.5rem;",
+            icon("envelope"), " hello@dalyanalytics.com"
+          )
         )
       )
+    ),
+    tags$hr(style = "border-color: rgba(255,255,255,0.2); margin: 2.5rem 0 1.5rem 0;"),
+    div(
+      class = "text-center",
+      style = "color: rgba(255,255,255,0.6); font-size: 0.9rem;",
+      p(
+        class = "mb-0",
+        "© 2025 Daly Analytics LLC. This free tool was built to demonstrate our expertise in board governance analytics. ",
+        tags$a(
+          "Contact us",
+          href = "https://www.dalyanalytics.com/contact",
+          style = "color: #F9B397;",
+          target = "_blank"
+        ),
+        " to build custom board solutions for your organization."
+      )
     )
-  )
-)
+  )  # Close app-footer
+)  # Close main-container
 
 # Server
 server <- function(input, output, session) {
