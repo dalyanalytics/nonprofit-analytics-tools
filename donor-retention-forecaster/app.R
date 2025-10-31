@@ -94,9 +94,15 @@ ui <- fluidPage(
 
       .metric-summary {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(4, 1fr);
         gap: 1rem;
         margin: 1.5rem 0;
+      }
+
+      @media (max-width: 768px) {
+        .metric-summary {
+          grid-template-columns: repeat(2, 1fr);
+        }
       }
 
       .metric-card {
