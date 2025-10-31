@@ -225,23 +225,33 @@ ui <- fluidPage(
         border-radius: 2px;
       }
 
-      .footer {
-        text-align: center;
-        padding: 2rem 0 1rem 0;
-        color: #666;
-        font-size: 0.9rem;
-        border-top: 1px solid #e9ecef;
-        margin-top: 3rem;
+      .app-footer {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 3rem 2rem;
+        margin-top: 4rem;
       }
 
-      .footer a {
-        color: #D68A93;
+      .app-footer a {
+        color: #d68a93;
         text-decoration: none;
-        font-weight: 500;
       }
 
-      .footer a:hover {
+      .app-footer a:hover {
+        color: #F9B397;
         text-decoration: underline;
+      }
+
+      .app-footer .btn {
+        text-decoration: none !important;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .app-footer .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        text-decoration: none !important;
       }
 
       .js-irs-0 .irs-bar,
@@ -511,20 +521,65 @@ ui <- fluidPage(
       )
     ),
 
-    # Footer
-    div(class = "footer",
-      p(
-        "Built with ❤️ by ",
-        tags$a(href = "https://www.dalyanalytics.com", "Daly Analytics", target = "_blank"),
-        " • ",
-        tags$a(href = "mailto:hello@dalyanalytics.com", "hello@dalyanalytics.com")
+    # Footer with CTA
+    div(
+      class = "app-footer",
+      fluidRow(
+        column(7,
+          h4("Need Custom Fundraising Analytics Tools?", style = "color: white; margin-bottom: 1rem; margin-top: 0;"),
+          p(
+            style = "color: rgba(255,255,255,0.9); margin-bottom: 1.5rem;",
+            "This donor retention forecaster demonstrates the power of Monte Carlo simulation for campaign planning. ",
+            "Daly Analytics specializes in creating tailored analytics solutions that solve your organization's unique fundraising challenges."
+          ),
+          tags$div(
+            style = "color: rgba(255,255,255,0.85);",
+            tags$div(style = "margin-bottom: 8px;", HTML("✓ Custom donor analytics dashboards with predictive insights")),
+            tags$div(style = "margin-bottom: 8px;", HTML("✓ Campaign ROI forecasting integrated with your CRM")),
+            tags$div(style = "margin-bottom: 8px;", HTML("✓ Board-ready reports with scenario planning")),
+            tags$div(style = "margin-bottom: 8px;", HTML("✓ Automated donor segmentation with ML-powered scoring"))
+          )
+        ),
+        column(5,
+          div(
+            style = "border: 2px solid rgba(255,255,255,0.3); border-radius: 12px; padding: 24px; background: rgba(255,255,255,0.05);",
+            h5("Ready to Get Started?", style = "color: white; margin-bottom: 1.5rem; margin-top: 0;"),
+            tags$a(
+              "Schedule Free Consultation →",
+              href = "https://www.dalyanalytics.com/contact",
+              class = "btn btn-lg",
+              style = "background: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891); color: #2c3e50; font-weight: 600; width: 100%; padding: 12px; margin-bottom: 15px; text-decoration: none; border-radius: 8px;",
+              target = "_blank"
+            ),
+            tags$a(
+              "View Our Portfolio →",
+              href = "https://www.dalyanalytics.com",
+              class = "btn btn-outline-light",
+              style = "width: 100%; padding: 12px; border: 2px solid white; text-decoration: none; border-radius: 8px;",
+              target = "_blank"
+            ),
+            div(
+              style = "color: rgba(255,255,255,0.8); font-size: 0.95rem; margin-top: 1.5rem;",
+              icon("envelope"), " hello@dalyanalytics.com"
+            )
+          )
+        )
       ),
-      p(
-        tags$a(href = "https://github.com/yourusername/nonprofit-analytics-tools",
-               "View on GitHub", target = "_blank"),
-        " • ",
-        tags$a(href = "https://dalyanalytics.github.io/nonprofit-analytics-tools/",
-               "More Free Tools", target = "_blank")
+      tags$hr(style = "border-color: rgba(255,255,255,0.2); margin: 2.5rem 0 1.5rem 0;"),
+      div(
+        class = "text-center",
+        style = "color: rgba(255,255,255,0.6); font-size: 0.9rem;",
+        p(
+          class = "mb-0",
+          "© 2025 Daly Analytics LLC. This free tool was built to demonstrate our expertise in nonprofit analytics. ",
+          tags$a(
+            "Contact us",
+            href = "https://www.dalyanalytics.com/contact",
+            style = "color: #F9B397;",
+            target = "_blank"
+          ),
+          " to build custom solutions for your organization."
+        )
       )
     )
   )
