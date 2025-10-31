@@ -215,13 +215,13 @@ ui <- fluidPage(
       }
 
       details summary::after {
-        content: ' \\\\25BC';
+        content: ' ▼';
         font-size: 0.8em;
         margin-left: 0.5rem;
       }
 
       details[open] summary::after {
-        content: ' \\\\25B2';
+        content: ' ▲';
       }
 
       .explainer-box {
@@ -422,18 +422,18 @@ ui <- fluidPage(
     tabsetPanel(
       # Baseline Scenario
       tabPanel(HTML("<i class='fa fa-chart-line'></i> Baseline (Status Quo)"),
+        br(),
         div(class = "scenario-box",
           div(class = "scenario-title", "Scenario A: Continue Current Operations"),
           p("This scenario assumes no changes to your current donor retention or acquisition strategy. Adjust the sidebar inputs to see how different assumptions affect your forecast.")
         ),
         plotlyOutput("baseline_chart", height = "350px"),
-        div(class = "metric-summary",
-          uiOutput("baseline_metrics")
-        )
+        uiOutput("baseline_metrics")
       ),
 
       # Retention Improvement Scenario
       tabPanel(HTML("<i class='fa fa-heart'></i> Retention Improvement"),
+        br(),
         div(class = "scenario-box",
           div(class = "scenario-title", "Scenario B: Improve Donor Retention"),
           p("Model the impact of a donor stewardship program or retention initiative."),
@@ -466,6 +466,7 @@ ui <- fluidPage(
 
       # Acquisition Focus Scenario
       tabPanel(HTML("<i class='fa fa-user-plus'></i> Acquisition Focus"),
+        br(),
         div(class = "scenario-box",
           div(class = "scenario-title", "Scenario C: Increase New Donor Acquisition"),
           p("Explore the impact of acquiring more new donors through marketing campaigns."),
@@ -497,6 +498,7 @@ ui <- fluidPage(
 
       # Combined Strategy
       tabPanel(HTML("<i class='fa fa-rocket'></i> Combined Strategy"),
+        br(),
         div(class = "scenario-box",
           div(class = "scenario-title", "Scenario D: Retention + Acquisition"),
           p("Model a comprehensive strategy that improves retention AND increases acquisition."),
