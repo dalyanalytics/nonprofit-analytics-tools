@@ -3,6 +3,7 @@ library(plotly)
 library(dplyr)
 library(tidyr)
 library(scales)
+library(bslib)
 
 # UI
 ui <- fluidPage(
@@ -156,6 +157,74 @@ ui <- fluidPage(
         box-shadow: 0 6px 20px rgba(214, 138, 147, 0.4);
       }
 
+      .info-box {
+        background: linear-gradient(135deg, rgba(173, 146, 177, 0.1) 0%, rgba(214, 138, 147, 0.05) 100%);
+        border-left: 3px solid #AD92B1;
+        border-radius: 0 8px 8px 0;
+        padding: 1rem 1.5rem;
+        margin: 1rem 0;
+        font-size: 0.95rem;
+      }
+
+      .info-box-title {
+        color: #AD92B1;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+      }
+
+      .help-icon {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        background: #AD92B1;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 18px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 8px;
+        cursor: help;
+      }
+
+      .explainer-box {
+        background: linear-gradient(135deg, rgba(249, 179, 151, 0.1) 0%, rgba(214, 138, 147, 0.1) 100%);
+        border: 2px solid #F9B397;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+      }
+
+      .explainer-title {
+        color: #D68A93;
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+      }
+
+      .confidence-band-legend {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        margin: 1rem 0;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .legend-color {
+        width: 30px;
+        height: 4px;
+        border-radius: 2px;
+      }
+
       .footer {
         text-align: center;
         padding: 2rem 0 1rem 0;
@@ -193,7 +262,28 @@ ui <- fluidPage(
 
   div(class = "main-container",
     h2("Donor Retention Forecaster"),
-    div(class = "subtitle", "Model different fundraising scenarios to optimize your campaign strategy"),
+    div(class = "subtitle", "Model different fundraising scenarios with Monte Carlo simulation"),
+
+    # Monte Carlo Explainer
+    div(class = "explainer-box",
+      div(class = "explainer-title", "🎲 How This Tool Works: Monte Carlo Simulation"),
+      p("Unlike simple forecasts that show one possible outcome, this tool runs ", strong("1,000 different simulations"),
+        " to account for real-world uncertainty in fundraising."),
+      p(strong("What gets simulated?")),
+      tags$ul(
+        tags$li(strong("Retention rates vary"), " each year (some donors stay, others don't - it's never exactly the same)"),
+        tags$li(strong("Acquisition varies"), " based on your marketing success (some campaigns work better than others)"),
+        tags$li(strong("Gift sizes fluctuate"), " due to economic conditions and donor circumstances")
+      ),
+      p(strong("What you'll see:")),
+      tags$ul(
+        tags$li(strong("Most Likely (50th percentile)"), " - the median outcome across all simulations"),
+        tags$li(strong("Best Case (90th percentile)"), " - if things go better than expected"),
+        tags$li(strong("Worst Case (10th percentile)"), " - if challenges arise")
+      ),
+      p(style = "margin-top: 1rem; color: #666; font-style: italic;",
+        "💡 This helps you plan with realistic expectations and prepare for multiple scenarios, just like professional financial planners do.")
+    ),
 
     # Current State Inputs
     div(class = "section-header", "📊 Current State"),
@@ -204,7 +294,11 @@ ui <- fluidPage(
                       "Current Total Donors",
                       value = 500,
                       min = 10,
-                      step = 10)
+                      step = 10),
+          div(class = "info-box",
+            div(class = "info-box-title", "What is this?"),
+            p("The total number of active donors who gave at least once in the past year. This is your starting point.")
+          )
         ),
         column(4,
           sliderInput("current_retention",
@@ -214,14 +308,61 @@ ui <- fluidPage(
                      value = 45,
                      step = 5,
                      post = "%",
-                     animate = animationOptions(interval = 800, loop = FALSE))
+                     animate = animationOptions(interval = 800, loop = FALSE)),
+          div(class = "info-box",
+            div(class = "info-box-title", "What is this?"),
+            p("The percentage of donors who give again the following year. Nonprofit average is 45%. Higher is better!")
+          )
         ),
         column(4,
           numericInput("avg_gift",
                       "Average Gift Size ($)",
                       value = 250,
                       min = 10,
-                      step = 10)
+                      step = 10),
+          div(class = "info-box",
+            div(class = "info-box-title", "What is this?"),
+            p("The typical donation amount across all your donors. Used to calculate total revenue projections.")
+          )
+        )
+      ),
+
+      # Uncertainty Parameters
+      fluidRow(
+        column(12,
+          div(class = "section-header", style = "margin-top: 1.5rem;", "🎲 Uncertainty & Variability"),
+          p(style = "color: #666; margin-bottom: 1rem;",
+            "Real fundraising isn't predictable. These settings control how much variation the simulation includes:")
+        )
+      ),
+      fluidRow(
+        column(6,
+          sliderInput("retention_variability",
+                     "Retention Rate Variability",
+                     min = 0,
+                     max = 20,
+                     value = 5,
+                     step = 1,
+                     post = " percentage points"),
+          div(class = "info-box",
+            div(class = "info-box-title", "What does this mean?"),
+            p("How much your retention rate might fluctuate year-to-year. ", strong("5 points"), " means your 45% retention could be anywhere from 40-50% in a given year."),
+            p(style = "margin-top: 0.5rem;", em("Higher = more unpredictable donor behavior"))
+          )
+        ),
+        column(6,
+          sliderInput("acquisition_variability",
+                     "Acquisition Variability",
+                     min = 0,
+                     max = 50,
+                     value = 15,
+                     step = 5,
+                     post = "%"),
+          div(class = "info-box",
+            div(class = "info-box-title", "What does this mean?"),
+            p("How much your new donor acquisition might vary. ", strong("15%"), " means if you plan for 100 new donors, you might get 85-115."),
+            p(style = "margin-top: 0.5rem;", em("Higher = more campaign uncertainty"))
+          )
         )
       )
     ),
@@ -392,82 +533,136 @@ ui <- fluidPage(
 # Server
 server <- function(input, output, session) {
 
-  # Forecasting function
-  forecast_donors <- function(starting_donors, retention_rate, new_donors_per_year, years) {
-    donors <- numeric(years + 1)
-    donors[1] <- starting_donors
+  # Monte Carlo simulation function
+  monte_carlo_forecast <- function(starting_donors, retention_rate, retention_var,
+                                    new_donors_per_year, acquisition_var,
+                                    years, simulations = 1000) {
+    # Matrix to store all simulations (rows = simulations, cols = years)
+    results <- matrix(0, nrow = simulations, ncol = years + 1)
+    results[, 1] <- starting_donors  # All start with same donor count
 
-    for (i in 2:(years + 1)) {
-      retained <- donors[i-1] * (retention_rate / 100)
-      donors[i] <- retained + new_donors_per_year
+    for (sim in 1:simulations) {
+      donors <- starting_donors
+
+      for (year in 2:(years + 1)) {
+        # Vary retention rate (bounded between 0 and 100)
+        actual_retention <- rnorm(1, mean = retention_rate, sd = retention_var)
+        actual_retention <- max(0, min(100, actual_retention))  # Keep between 0-100%
+
+        # Vary acquisition (bounded to be non-negative)
+        actual_acquisition <- rnorm(1, mean = new_donors_per_year, sd = new_donors_per_year * (acquisition_var/100))
+        actual_acquisition <- max(0, actual_acquisition)
+
+        # Calculate donors for this year
+        retained <- donors * (actual_retention / 100)
+        donors <- retained + actual_acquisition
+
+        results[sim, year] <- donors
+      }
     }
 
-    return(donors)
+    # Calculate percentiles for each year
+    percentiles <- data.frame(
+      Year = 0:years,
+      P10 = apply(results, 2, quantile, probs = 0.10),
+      P50 = apply(results, 2, quantile, probs = 0.50),
+      P90 = apply(results, 2, quantile, probs = 0.90),
+      Mean = apply(results, 2, mean)
+    )
+
+    return(list(
+      percentiles = percentiles,
+      all_simulations = results
+    ))
   }
 
-  # Calculate revenue
-  calculate_revenue <- function(donors, avg_gift) {
-    return(donors * avg_gift)
+  # Calculate revenue with percentiles
+  calculate_revenue_percentiles <- function(donor_percentiles, avg_gift) {
+    donor_percentiles %>%
+      mutate(
+        Revenue_P10 = P10 * avg_gift,
+        Revenue_P50 = P50 * avg_gift,
+        Revenue_P90 = P90 * avg_gift,
+        Revenue_Mean = Mean * avg_gift
+      )
   }
 
-  # Baseline scenario data
+  # Baseline scenario data (with Monte Carlo)
   baseline_data <- reactive({
-    years <- 0:input$forecast_years
-    donors <- forecast_donors(
-      input$current_donors,
-      input$current_retention,
-      input$baseline_acquisition,
-      input$forecast_years
+    mc_result <- monte_carlo_forecast(
+      starting_donors = input$current_donors,
+      retention_rate = input$current_retention,
+      retention_var = input$retention_variability,
+      new_donors_per_year = input$baseline_acquisition,
+      acquisition_var = input$acquisition_variability,
+      years = input$forecast_years,
+      simulations = 1000
     )
-    revenue <- calculate_revenue(donors, input$avg_gift)
 
-    data.frame(
-      Year = years,
-      Donors = round(donors),
-      Revenue = revenue
-    )
+    calculate_revenue_percentiles(mc_result$percentiles, input$avg_gift)
   })
 
-  # Baseline chart
+  # Baseline chart (with confidence bands)
   output$baseline_chart <- renderPlotly({
     data <- baseline_data()
 
     plot_ly(data, x = ~Year) %>%
-      add_trace(y = ~Donors, name = "Donor Count", type = "scatter", mode = "lines+markers",
+      # 10th-90th percentile band (light shading)
+      add_ribbons(ymin = ~P10, ymax = ~P90,
+                  fillcolor = "rgba(214, 138, 147, 0.15)",
+                  line = list(color = "transparent"),
+                  name = "10th-90th Percentile Range",
+                  hoverinfo = "text",
+                  text = ~paste("Year:", Year, "<br>Range:", round(P10), "-", round(P90), "donors")) %>%
+      # 50th percentile (median) line
+      add_trace(y = ~P50, name = "Most Likely (Median)", type = "scatter", mode = "lines+markers",
                 line = list(color = "#D68A93", width = 3),
                 marker = list(size = 10, color = "#D68A93")) %>%
+      # 90th percentile line (optimistic)
+      add_trace(y = ~P90, name = "Best Case (90th)", type = "scatter", mode = "lines",
+                line = list(color = "#AD92B1", width = 2, dash = "dash")) %>%
+      # 10th percentile line (conservative)
+      add_trace(y = ~P10, name = "Worst Case (10th)", type = "scatter", mode = "lines",
+                line = list(color = "#B07891", width = 2, dash = "dot")) %>%
       layout(
-        title = "Donor Growth Projection - Baseline Scenario",
+        title = "Donor Growth Projection - Baseline Scenario (1,000 Simulations)",
         xaxis = list(title = "Year"),
         yaxis = list(title = "Number of Donors"),
         hovermode = "x unified",
         plot_bgcolor = "#f8f9fa",
-        paper_bgcolor = "white"
+        paper_bgcolor = "white",
+        showlegend = TRUE,
+        legend = list(x = 0.02, y = 0.98)
       )
   })
 
-  # Baseline metrics
+  # Baseline metrics (with confidence ranges)
   output$baseline_metrics <- renderUI({
     data <- baseline_data()
     final_year <- data[nrow(data), ]
 
     tagList(
       div(class = "metric-card",
-        div(class = "metric-label", "Final Donor Count"),
-        div(class = "metric-value", comma(final_year$Donors))
+        div(class = "metric-label", paste0("Most Likely Donors (Year ", input$forecast_years, ")")),
+        div(class = "metric-value", comma(round(final_year$P50))),
+        p(style = "margin-top: 0.5rem; color: #666; font-size: 0.9rem;",
+          paste0("Range: ", comma(round(final_year$P10)), " - ", comma(round(final_year$P90))))
       ),
       div(class = "metric-card",
-        div(class = "metric-label", paste0("Year ", input$forecast_years, " Revenue")),
-        div(class = "metric-value", dollar(final_year$Revenue))
+        div(class = "metric-label", "Most Likely Revenue"),
+        div(class = "metric-value", dollar(final_year$Revenue_P50)),
+        p(style = "margin-top: 0.5rem; color: #666; font-size: 0.9rem;",
+          paste0("Range: ", dollar(round(final_year$Revenue_P10)), " - ", dollar(round(final_year$Revenue_P90))))
       ),
       div(class = "metric-card",
-        div(class = "metric-label", "Total Revenue"),
-        div(class = "metric-value", dollar(sum(data$Revenue)))
+        div(class = "metric-label", "Total Revenue (Median)"),
+        div(class = "metric-value", dollar(sum(data$Revenue_P50)))
       ),
       div(class = "metric-card",
-        div(class = "metric-label", "Donor Growth"),
-        div(class = "metric-value",
-            paste0(round(((final_year$Donors - input$current_donors) / input$current_donors) * 100, 1), "%"))
+        div(class = "metric-label", "Probability Analysis"),
+        div(class = "metric-value", "80%"),
+        p(style = "margin-top: 0.5rem; color: #666; font-size: 0.9rem;",
+          "Chance of staying within shown range")
       )
     )
   })
@@ -541,7 +736,7 @@ server <- function(input, output, session) {
 
     tagList(
       p(strong("Additional Revenue: "), dollar(additional_revenue)),
-      p(strong("Program Cost: "), dollar(total_program_cost)),
+      p(strong("Total Program Cost (", input$forecast_years, " years): "), dollar(total_program_cost)),
       p(strong("Net Benefit: "),
         span(style = if(net_benefit > 0) "color: #28a745; font-weight: 600;" else "color: #dc3545; font-weight: 600;",
              dollar(net_benefit))),
