@@ -1070,6 +1070,14 @@ ui <- fluidPage(
         "Executive Summary",
         icon = icon("chart-line"),
 
+        # Executive Summary (moved to top)
+        div(
+          class = "insight-callout",
+          style = "margin-bottom: 2rem;",
+          h4("Executive Summary"),
+          p(textOutput("executive_summary"))
+        ),
+
         # Key Financial Metrics Grid with semantic colors
         uiOutput("kpi_cards"),
 
@@ -1090,13 +1098,6 @@ ui <- fluidPage(
 
           # Chart
           plotOutput("financial_chart", height = "350px")
-        ),
-
-        # Executive Summary
-        div(
-          class = "insight-callout",
-          h4("Executive Summary"),
-          p(textOutput("executive_summary"))
         ),
 
         br(),
