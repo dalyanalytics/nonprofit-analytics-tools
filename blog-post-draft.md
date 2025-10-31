@@ -13,22 +13,14 @@ These four tools aren't demos—they're fully functional analytics applications 
 ### [Donor Retention Calculator](https://dalyanalytics.shinyapps.io/donor-retention-calculator/)
 Stop guessing about your donor base. This tool analyzes retention rates by cohort, calculates lifetime value projections, and benchmarks your performance against industry standards. Upload your donor data or explore with sample data—no CRM integration required, no vendor sales calls, no credit card.
 
-**Real use case**: A regional environmental nonprofit used this tool to discover their email-only donors had a 60% retention rate versus 35% for direct mail. They shifted $15K in campaign budget and increased retained donors by 40% the following year.
-
 ### [Board Packet Generator](https://dalyanalytics.shinyapps.io/board-packet-generator/)
 Create professional board meeting materials in minutes instead of hours. Generate executive summaries with KPIs, financial charts, and impact visualizations that actually tell your story. Build comprehensive HTML reports with drag-and-drop agenda editing, financial summaries, and committee updates.
-
-**Real use case**: An arts nonprofit cut board packet preparation time from 8 hours to 45 minutes, freeing up their Executive Director to spend time on fundraising instead of formatting PowerPoint slides.
 
 ### [Grant Research Assistant](https://dalyanalytics.shinyapps.io/grant-research-assistant/)
 Discover New England foundations that fund organizations like yours. Interactive map with 70+ foundations across six states, filterable by location, asset size, and annual grantmaking. See payout rates, grant amounts, and direct links to research past grant recipients on ProPublica.
 
-**Real use case**: A community health center identified 12 previously unknown foundations in their region, all with giving patterns matching their programs. They submitted 8 new applications and secured 3 new grants totaling $185K.
-
 ### [Capital Campaign Forecaster](https://dalyanalytics.shinyapps.io/capital-campaign-forecaster/)
 Modernize campaign planning with Monte Carlo simulation. Model retention improvement programs, compare acquisition strategies, and see ROI probability analysis with confidence intervals. Run 1,000 scenarios to understand best-case, worst-case, and most-likely outcomes for 3-5 year capital campaigns.
-
-**Real use case**: A museum planning a $5M capital campaign used this tool to model different donor retention scenarios. The simulation showed that a 5% improvement in major donor retention had higher ROI than increasing acquisition spending by 30%, informing their stewardship investment strategy.
 
 ## Why These Tools Are Different
 
