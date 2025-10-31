@@ -42,13 +42,9 @@ Stop paying expensive monthly subscriptions for generic software. These tools ar
 
 ## 💡 Why These Tools Exist
 
-After a year of consulting with nonprofits, I've seen the same problems repeatedly:
-- Paying $900/month for Tableau when you need simple donor reports
-- Using Airtable as a CRM and hitting its limitations
-- Managing grants in spreadsheets with constant deadline stress
-- Making fundraising decisions without data backing
+These free tools are my way of giving back to the nonprofit community while showcasing what's possible with custom analytics solutions. I believe in open source development and wanted to provide genuinely useful tools that nonprofits can use right away.
 
-These tools solve real problems I've encountered in client work.
+These tools also serve as examples of the kinds of custom solutions I can build for organizations with unique data challenges. Each demonstrates different capabilities—from Monte Carlo simulations to interactive mapping to automated reporting—that can be tailored to solve your specific problems.
 
 ## 🛠 Technical Stack
 
