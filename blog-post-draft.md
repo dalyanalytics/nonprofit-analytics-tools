@@ -28,7 +28,7 @@ Modernize campaign planning with Monte Carlo simulation. Model retention improve
 No "freemium" model. No "free trial." No surprise paywall after you've invested time learning the system. These tools are open-source and will always be free.
 
 **They Understand Nonprofit Work**
-Built by someone who's spent years in the sector, not a generic business intelligence tool adapted for nonprofits as an afterthought. These solve problems specific to mission-driven organizations.
+Built by someone who loves building things and learning how organizations work, not a generic business intelligence tool adapted for nonprofits as an afterthought. These solve problems specific to mission-driven organizations.
 
 **Your Data Stays Yours**
 Everything runs on secure cloud infrastructure with no data persistence. No data mining, no selling your donor information to marketing companies, no vendor lock-in.
