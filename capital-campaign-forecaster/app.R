@@ -281,138 +281,109 @@ ui <- fluidPage(
     h2("Capital Campaign Forecaster"),
     div(class = "subtitle", "Modernize campaign planning with Monte Carlo simulation"),
 
-    # Monte Carlo Explainer
-    div(class = "explainer-box",
-      div(class = "explainer-title", "🎲 How This Tool Works: Monte Carlo Simulation"),
-      p("Unlike simple forecasts that show one possible outcome, this tool runs ", strong("1,000 different simulations"),
-        " to account for real-world uncertainty in fundraising."),
-      p(strong("What gets simulated?")),
-      tags$ul(
-        tags$li(strong("Retention rates vary"), " each year (some donors stay, others don't - it's never exactly the same)"),
-        tags$li(strong("Acquisition varies"), " based on your marketing success (some campaigns work better than others)"),
-        tags$li(strong("Gift sizes fluctuate"), " due to economic conditions and donor circumstances")
+    # Monte Carlo Explainer (Collapsible)
+    tags$details(
+      tags$summary(
+        style = "cursor: pointer; font-size: 1.5rem; font-weight: 600; color: #D68A93; margin-bottom: 1rem;",
+        "🎲 How This Tool Works: Monte Carlo Simulation"
       ),
-      p(strong("What you'll see:")),
-      tags$ul(
-        tags$li(strong("Most Likely (50th percentile)"), " - the median outcome across all simulations"),
-        tags$li(strong("Best Case (90th percentile)"), " - if things go better than expected"),
-        tags$li(strong("Worst Case (10th percentile)"), " - if challenges arise")
-      ),
-      p(style = "margin-top: 1rem; color: #666; font-style: italic;",
-        "💡 This helps you plan with realistic expectations and prepare for multiple scenarios, just like professional financial planners do.")
-    ),
-
-    # Current State Inputs
-    div(class = "section-header", "📊 Current State"),
-    div(class = "input-section",
-      fluidRow(
-        column(4,
-          numericInput("current_donors",
-                      "Current Total Donors",
-                      value = 500,
-                      min = 10,
-                      step = 10),
-          div(class = "info-box",
-            div(class = "info-box-title", "What is this?"),
-            p("The total number of active donors who gave at least once in the past year. This is your starting point.")
-          )
+      div(class = "explainer-box",
+        p("Unlike simple forecasts that show one possible outcome, this tool runs ", strong("1,000 different simulations"),
+          " to account for real-world uncertainty in fundraising."),
+        p(strong("What gets simulated?")),
+        tags$ul(
+          tags$li(strong("Retention rates vary"), " each year (some donors stay, others don't - it's never exactly the same)"),
+          tags$li(strong("Acquisition varies"), " based on your marketing success (some campaigns work better than others)"),
+          tags$li(strong("Gift sizes fluctuate"), " due to economic conditions and donor circumstances")
         ),
-        column(4,
-          sliderInput("current_retention",
-                     "Current Retention Rate",
-                     min = 20,
-                     max = 90,
-                     value = 45,
-                     step = 5,
-                     post = "%",
-                     animate = animationOptions(interval = 800, loop = FALSE)),
-          div(class = "info-box",
-            div(class = "info-box-title", "What is this?"),
-            p("The percentage of donors who give again the following year. Nonprofit average is 45%. Higher is better!")
-          )
+        p(strong("What you'll see:")),
+        tags$ul(
+          tags$li(strong("Most Likely (50th percentile)"), " - the median outcome across all simulations"),
+          tags$li(strong("Best Case (90th percentile)"), " - if things go better than expected"),
+          tags$li(strong("Worst Case (10th percentile)"), " - if challenges arise")
         ),
-        column(4,
-          numericInput("avg_gift",
-                      "Average Gift Size ($)",
-                      value = 250,
-                      min = 10,
-                      step = 10),
-          div(class = "info-box",
-            div(class = "info-box-title", "What is this?"),
-            p("The typical donation amount across all your donors. Used to calculate total revenue projections.")
-          )
-        )
-      ),
-
-      # Uncertainty Parameters
-      fluidRow(
-        column(12,
-          div(class = "section-header", style = "margin-top: 1.5rem;", "🎲 Uncertainty & Variability"),
-          p(style = "color: #666; margin-bottom: 1rem;",
-            "Real fundraising isn't predictable. These settings control how much variation the simulation includes:")
-        )
-      ),
-      fluidRow(
-        column(6,
-          sliderInput("retention_variability",
-                     "Retention Rate Variability",
-                     min = 0,
-                     max = 20,
-                     value = 5,
-                     step = 1,
-                     post = " percentage points"),
-          div(class = "info-box",
-            div(class = "info-box-title", "What does this mean?"),
-            p("How much your retention rate might fluctuate year-to-year. ", strong("5 points"), " means your 45% retention could be anywhere from 40-50% in a given year."),
-            p(style = "margin-top: 0.5rem;", em("Higher = more unpredictable donor behavior"))
-          )
-        ),
-        column(6,
-          sliderInput("acquisition_variability",
-                     "Acquisition Variability",
-                     min = 0,
-                     max = 50,
-                     value = 15,
-                     step = 5,
-                     post = "%"),
-          div(class = "info-box",
-            div(class = "info-box-title", "What does this mean?"),
-            p("How much your new donor acquisition might vary. ", strong("15%"), " means if you plan for 100 new donors, you might get 85-115."),
-            p(style = "margin-top: 0.5rem;", em("Higher = more campaign uncertainty"))
-          )
-        )
+        p(style = "margin-top: 1rem; color: #666; font-style: italic;",
+          "💡 This helps you plan with realistic expectations and prepare for multiple scenarios, just like professional financial planners do.")
       )
     ),
 
-    # Scenario Planning
-    div(class = "section-header", "🎯 Campaign Scenarios"),
+    # Sidebar Layout
+    sidebarLayout(
+      # Sidebar with inputs
+      sidebarPanel(
+        width = 3,
+        style = "background: #f8f9fa; border-radius: 12px; padding: 1rem;",
+
+        # Current State Inputs
+        div(class = "section-header", style = "font-size: 1.2rem; margin-top: 0;", "📊 Current State"),
+
+        numericInput("current_donors",
+                    "Total Donors",
+                    value = 500,
+                    min = 10,
+                    step = 10),
+
+        sliderInput("current_retention",
+                   "Retention Rate",
+                   min = 20,
+                   max = 90,
+                   value = 45,
+                   step = 5,
+                   post = "%"),
+
+        numericInput("avg_gift",
+                    "Avg Gift ($)",
+                    value = 250,
+                    min = 10,
+                    step = 10),
+
+        sliderInput("baseline_acquisition",
+                   "New Donors/Year",
+                   min = 0,
+                   max = 500,
+                   value = 100,
+                   step = 10),
+
+        sliderInput("forecast_years",
+                   "Forecast Years",
+                   min = 1,
+                   max = 5,
+                   value = 3,
+                   step = 1),
+
+        # Uncertainty Parameters
+        div(class = "section-header", style = "font-size: 1.2rem; margin-top: 1rem;", "🎲 Variability"),
+
+        sliderInput("retention_variability",
+                   "Retention Variability",
+                   min = 0,
+                   max = 20,
+                   value = 5,
+                   step = 1,
+                   post = " pts"),
+
+        sliderInput("acquisition_variability",
+                   "Acquisition Variability",
+                   min = 0,
+                   max = 50,
+                   value = 15,
+                   step = 5,
+                   post = "%")
+      ),
+
+      # Main Panel with scenario tabs
+      mainPanel(
+        width = 9,
+
+        # Scenario Planning
+        div(class = "section-header", "🎯 Campaign Scenarios"),
 
     tabsetPanel(
       # Baseline Scenario
       tabPanel(HTML("<i class='fa fa-chart-line'></i> Baseline (Status Quo)"),
         div(class = "scenario-box",
           div(class = "scenario-title", "Scenario A: Continue Current Operations"),
-          p("This scenario assumes no changes to your current donor retention or acquisition strategy."),
-          fluidRow(
-            column(6,
-              sliderInput("baseline_acquisition",
-                         "New Donors Acquired per Year",
-                         min = 0,
-                         max = 500,
-                         value = 100,
-                         step = 10,
-                         animate = animationOptions(interval = 800, loop = FALSE))
-            ),
-            column(6,
-              sliderInput("forecast_years",
-                         "Forecast Timeline (Years)",
-                         min = 1,
-                         max = 5,
-                         value = 3,
-                         step = 1,
-                         animate = animationOptions(interval = 800, loop = FALSE))
-            )
-          )
+          p("This scenario assumes no changes to your current donor retention or acquisition strategy. Adjust the sidebar inputs to see how different assumptions affect your forecast.")
         ),
         plotlyOutput("baseline_chart", height = "350px"),
         div(class = "metric-summary",
@@ -526,7 +497,10 @@ ui <- fluidPage(
           uiOutput("strategic_recommendation")
         )
       )
-    ),
+    )
+    )  # Close tabsetPanel
+    )  # Close mainPanel
+    ),  # Close sidebarLayout
 
     # Footer with CTA
     div(
