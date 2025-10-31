@@ -355,8 +355,8 @@ ui <- fluidPage(
       .insight-callout {
         background: linear-gradient(135deg, rgba(214, 138, 147, 0.08) 0%, rgba(173, 146, 177, 0.05) 100%);
         border-left: 4px solid #d68a93;
-        padding: 1.5rem;
-        margin: 2rem 0;
+        padding: 1rem 1.5rem;
+        margin: 0 0 1rem 0;
         border-radius: 0 8px 8px 0;
       }
 
@@ -376,15 +376,15 @@ ui <- fluidPage(
       .metric-group {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.5rem;
-        margin: 2rem 0;
+        gap: 1rem;
+        margin: 0 0 1rem 0;
       }
 
       .metric-display {
         background: white;
         border: 1px solid #e9ecef;
         border-radius: 12px;
-        padding: 1.5rem;
+        padding: 1rem;
         text-align: center;
         position: relative;
         transition: all 0.2s ease;
@@ -413,7 +413,7 @@ ui <- fluidPage(
 
       /* Progressive disclosure sections */
       .disclosure-section {
-        margin: 2rem 0;
+        margin: 1rem 0;
         border: 1px solid #e9ecef;
         border-radius: 12px;
         overflow: hidden;
@@ -633,9 +633,7 @@ ui <- fluidPage(
           h4("Executive Summary"),
           p(textOutput("executive_summary"))
         ),
-        
-        br(),
-        
+
         # Key Metrics
         div(
           class = "metric-group",
@@ -660,9 +658,7 @@ ui <- fluidPage(
             div(class = "metric-label", "Projected 5-Year LTV")
           )
         ),
-        
-        br(),
-        
+
         # Industry Benchmark
         div(
           class = "disclosure-section",
@@ -718,9 +714,7 @@ ui <- fluidPage(
             )
           )
         ),
-        
-        br(),
-        
+
         # Additional Analysis - FAST SUMMARY VERSION
         div(
           class = "disclosure-section",
