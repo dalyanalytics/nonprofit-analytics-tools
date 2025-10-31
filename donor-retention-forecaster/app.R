@@ -1064,7 +1064,8 @@ server <- function(input, output, session) {
         hovermode = "x unified",
         plot_bgcolor = "#f8f9fa",
         paper_bgcolor = "white",
-        legend = list(orientation = "h", y = -0.2)
+        showlegend = TRUE,
+        legend = list(x = 0.02, y = 0.98)
       )
   })
 
