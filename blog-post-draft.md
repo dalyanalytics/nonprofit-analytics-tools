@@ -6,9 +6,9 @@
 
 Most analytics vendors build for enterprise budgets, then wonder why nonprofits struggle with adoption. At Daly Analytics, we take a different approach: open-source tools that solve real problems while demonstrating what's possible when data infrastructure is built specifically for mission-driven work.
 
-These three tools aren't demos—they're fully functional analytics applications you can use with your actual data today, processing everything stateless in your browser. They showcase the kind of purpose-built solutions we create for clients, now available for any nonprofit to use and learn from.
+These four tools aren't demos—they're fully functional analytics applications you can use with your actual data today, hosted on secure cloud infrastructure. They showcase the kind of purpose-built solutions we create for clients, now available for any nonprofit to use and learn from.
 
-## Three Tools, Zero Cost, Built for Real Nonprofit Challenges
+## Four Tools, Zero Cost, Built for Real Nonprofit Challenges
 
 ### [Donor Retention Calculator](https://dalyanalytics.shinyapps.io/donor-retention-calculator/)
 Stop guessing about your donor base. This tool analyzes retention rates by cohort, calculates lifetime value projections, and benchmarks your performance against industry standards. Upload your donor data or explore with sample data—no CRM integration required, no vendor sales calls, no credit card.
@@ -25,6 +25,11 @@ Discover New England foundations that fund organizations like yours. Interactive
 
 **Real use case**: A community health center identified 12 previously unknown foundations in their region, all with giving patterns matching their programs. They submitted 8 new applications and secured 3 new grants totaling $185K.
 
+### [Capital Campaign Forecaster](https://dalyanalytics.shinyapps.io/capital-campaign-forecaster/)
+Modernize campaign planning with Monte Carlo simulation. Model retention improvement programs, compare acquisition strategies, and see ROI probability analysis with confidence intervals. Run 1,000 scenarios to understand best-case, worst-case, and most-likely outcomes for 3-5 year capital campaigns.
+
+**Real use case**: A museum planning a $5M capital campaign used this tool to model different donor retention scenarios. The simulation showed that a 5% improvement in major donor retention had higher ROI than increasing acquisition spending by 30%, informing their stewardship investment strategy.
+
 ## Why These Tools Are Different
 
 **They're Actually Free**
@@ -34,7 +39,7 @@ No "freemium" model. No "free trial." No surprise paywall after you've invested 
 Built by someone who's spent years in the sector, not a generic business intelligence tool adapted for nonprofits as an afterthought. These solve problems specific to mission-driven organizations.
 
 **Your Data Stays Yours**
-Everything runs in your browser or on secure cloud infrastructure. No data mining, no selling your donor information to marketing companies, no vendor lock-in.
+Everything runs on secure cloud infrastructure with no data persistence. No data mining, no selling your donor information to marketing companies, no vendor lock-in.
 
 **You Can See How They Work**
 Every line of code is open-source on GitHub. Want to know how retention rates are calculated? Check the code. Want to customize it for your organization? Fork it and make it yours.
@@ -76,7 +81,7 @@ We believe open-source tools create transparency and community value. We build c
 
 ---
 
-*Try the tools: [Donor Retention Calculator](https://dalyanalytics.shinyapps.io/donor-retention-calculator/) | [Board Packet Generator](https://dalyanalytics.shinyapps.io/board-packet-generator/) | [Grant Research Assistant](https://dalyanalytics.shinyapps.io/grant-research-assistant/)*
+*Try the tools: [Donor Retention Calculator](https://dalyanalytics.shinyapps.io/donor-retention-calculator/) | [Board Packet Generator](https://dalyanalytics.shinyapps.io/board-packet-generator/) | [Grant Research Assistant](https://dalyanalytics.shinyapps.io/grant-research-assistant/) | [Capital Campaign Forecaster](https://dalyanalytics.shinyapps.io/capital-campaign-forecaster/)*
 
 *View the code: [GitHub Repository](https://github.com/dalyanalytics/nonprofit-analytics-tools)*
 
