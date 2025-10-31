@@ -230,6 +230,7 @@ ui <- fluidPage(
         color: white;
         padding: 3rem 2rem;
         margin-top: 4rem;
+        border-radius: 16px;
       }
 
       .app-footer a {
