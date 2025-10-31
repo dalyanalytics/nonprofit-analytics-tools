@@ -589,8 +589,8 @@ ui <- fluidPage(
       .insight-callout {
         background: linear-gradient(135deg, rgba(214, 138, 147, 0.08) 0%, rgba(173, 146, 177, 0.05) 100%);
         border-left: 4px solid #d68a93;
-        padding: 1.5rem;
-        margin: 2rem 0;
+        padding: 1rem 1.5rem;
+        margin: 0 0 1rem 0;
         border-radius: 0 8px 8px 0;
       }
 
@@ -610,15 +610,15 @@ ui <- fluidPage(
       .metric-group {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.5rem;
-        margin: 2rem 0;
+        gap: 1rem;
+        margin: 0 0 1rem 0;
       }
 
       .metric-display {
         background: white;
         border: 1px solid #e9ecef;
         border-radius: 12px;
-        padding: 1.5rem;
+        padding: 1rem;
         text-align: center;
         position: relative;
         transition: all 0.2s ease;
@@ -1073,7 +1073,6 @@ ui <- fluidPage(
         # Executive Summary (moved to top)
         div(
           class = "insight-callout",
-          style = "margin-bottom: 2rem;",
           h4("Executive Summary"),
           p(textOutput("executive_summary"))
         ),
@@ -1083,7 +1082,7 @@ ui <- fluidPage(
 
         # Financial Summary Chart with integrated alert
         div(
-          style = "background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);",
+          style = "background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);",
 
           # Header with download button
           div(
@@ -1100,11 +1099,8 @@ ui <- fluidPage(
           plotOutput("financial_chart", height = "350px")
         ),
 
-        br(),
-
         # Financial Summary Table
         div(
-          style = "margin-top: 1rem;",
           div(
             style = "display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;",
             h5("Detailed Financial Summary", style = "margin: 0;"),
