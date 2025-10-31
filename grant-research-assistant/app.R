@@ -577,7 +577,7 @@ ui <- fluidPage(
         )
       )
     )
-  ),
+  ),  # Close tabsetPanel
 
   # Footer
   div(
@@ -639,8 +639,8 @@ ui <- fluidPage(
         " to build custom solutions for your organization."
       )
     )
-  )
-)
+  )  # Close app-footer
+)  # Close main-container
 
 # Server
 server <- function(input, output, session) {
