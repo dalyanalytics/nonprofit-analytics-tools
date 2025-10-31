@@ -148,11 +148,10 @@ ui <- fluidPage(
   theme = bs_theme(version = 5),
   
   tags$head(
-    # Inline CSS since external stylesheets don't work in Shinylive
+    # Modern Nonprofit Analytics Tool Styling
     tags$style(HTML('
-      /* Shared CSS for Nonprofit Analytics Tools
-       * This file provides consistent styling across all tools
-       */
+      /* Import Inter font for modern typography */
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap");
 
       /* Global styles */
       html, body {
@@ -163,15 +162,12 @@ ui <- fluidPage(
       }
 
       body {
-        color: #2c3e50;
-        background-color: #ffffff;
-        line-height: 1.6;
-        display: flex;
-        flex-direction: column;
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #F9B397 0%, #D68A93 25%, #AD92B1 75%, #B07891 100%);
         min-height: 100vh;
-        margin: 0;
-        padding: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        padding: 20px;
+        color: #333;
+        line-height: 1.6;
       }
 
       :root {
@@ -184,6 +180,33 @@ ui <- fluidPage(
 
       .main-content {
         flex: 1 0 auto;
+      }
+
+      /* Main container - white card on gradient background */
+      .main-container {
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto 20px auto;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      }
+
+      /* Headers styling */
+      h1 {
+        color: #333;
+        font-weight: 700;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 1.1em;
+        margin-bottom: 30px;
+        font-weight: 300;
+        text-align: center;
       }
 
       /* Footer styling - full width edge-to-edge */
@@ -263,29 +286,27 @@ ui <- fluidPage(
         outline: none;
       }
 
-      /* Professional buttons */
+      /* Professional buttons with gradients */
       .btn {
-        font-weight: 500;
-        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        padding: 10px 25px;
         border-radius: 8px;
         transition: all 0.2s ease;
         text-transform: none;
         font-size: 1rem;
         letter-spacing: 0.02em;
+        border: none;
       }
 
       .btn-primary {
-        background: #d68a93;
-        border-color: #d68a93;
-        color: white;
-        box-shadow: 0 4px 12px rgba(214, 138, 147, 0.3);
+        background: linear-gradient(135deg, #D68A93, #AD92B1) !important;
+        border: none !important;
+        color: white !important;
       }
 
       .btn-primary:hover {
-        background: #c17882;
-        border-color: #c17882;
-        box-shadow: 0 6px 20px rgba(214, 138, 147, 0.4);
-        transform: translateY(-1px);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
       }
 
       /* Hero section for guided experience */
@@ -544,15 +565,13 @@ ui <- fluidPage(
   ),
   
   useShinyjs(),
-    
-    # Hero Section with Brand Gradient
-    div(
-      class = "hero-section",
-      style = "background: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891); background-size: 200% 100%; animation: gradient 15s ease infinite; color: white; text-align: center; padding: 3rem 2rem; margin-bottom: 2rem;",
-      div(icon("calculator"), style = "font-size: 3rem; margin-bottom: 1rem;"),
-      h1("Donor Retention Analysis", style = "color: white; font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;"),
-      p("Transform donor data into meaningful relationships that fuel your mission", 
-        style = "color: rgba(255,255,255,0.9); font-size: 1.2rem; margin-bottom: 0;")
+
+  # Main container - white card wrapper
+  div(class = "main-container",
+    # Header
+    h1(style = "margin-bottom: 5px;", "Donor Retention Calculator"),
+    div(class = "subtitle", style = "margin-bottom: 25px;",
+      "Transform donor data into meaningful relationships that fuel your mission"
     ),
     
     # Guided Steps Navigation
@@ -750,8 +769,9 @@ ui <- fluidPage(
           tags$a("Daly Analytics", href = "https://www.dalyanalytics.com", target = "_blank")
         )
       )
-    ),
-  
+    )
+  ), # Close main-container div
+
   # Footer
   tags$footer(
     class = "footer mt-5 py-4",
@@ -787,17 +807,17 @@ ui <- fluidPage(
             style = "background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px;",
             h6("Ready to Get Started?", style = "color: white; margin-bottom: 1rem;"),
             tags$a(
-              "Schedule Free Consultation",
+              "Schedule Free Consultation →",
               href = "https://www.dalyanalytics.com/contact",
               class = "btn btn-lg mb-2",
-              style = "background: linear-gradient(-45deg, #F9B397, #D68A93, #AD92B1, #B07891); color: #2c3e50; font-weight: 600; width: 100%;",
+              style = "background: linear-gradient(135deg, #F9B397, #D68A93, #AD92B1, #B07891); color: #2c3e50; font-weight: 600; width: 100%; text-decoration: none; border-radius: 8px;",
               target = "_blank"
             ),
             tags$a(
-              "View Our Portfolio",
+              "View Our Portfolio →",
               href = "https://www.dalyanalytics.com",
               class = "btn btn-outline-light",
-              style = "width: 100%;",
+              style = "width: 100%; text-decoration: none; border-radius: 8px; border: 2px solid white;",
               target = "_blank"
             ),
             div(
