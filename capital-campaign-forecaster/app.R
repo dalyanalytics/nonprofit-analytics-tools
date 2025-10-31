@@ -27,7 +27,7 @@ ui <- fluidPage(
       .main-container {
         background: white;
         border-radius: 16px;
-        padding: 40px;
+        padding: 30px;
         max-width: 1400px;
         margin: 0 auto 20px auto;
         box-shadow: 0 20px 60px rgba(0,0,0,0.15);
@@ -40,63 +40,63 @@ ui <- fluidPage(
         -webkit-text-fill-color: transparent;
         background-clip: text;
         font-weight: 700;
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
+        font-size: 2rem;
+        margin-bottom: 0.3rem;
         letter-spacing: -0.02em;
       }
 
       .subtitle {
         text-align: center;
         color: #666;
-        font-size: 1.1rem;
-        margin-bottom: 2rem;
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
       }
 
       .section-header {
         color: #D68A93;
         font-weight: 600;
-        font-size: 1.6rem;
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
+        font-size: 1.4rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.4rem;
         border-bottom: 2px solid #f0f0f0;
       }
 
       .input-section {
         background: #f8f9fa;
         border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
       }
 
       .well {
         background: white;
         border: 1px solid #e9ecef;
         border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
       }
 
       .scenario-box {
         background: linear-gradient(135deg, rgba(214, 138, 147, 0.08) 0%, rgba(173, 146, 177, 0.05) 100%);
         border: 2px solid #e9ecef;
         border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
       }
 
       .scenario-title {
         color: #D68A93;
         font-weight: 600;
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
       }
 
       .metric-summary {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 1rem;
-        margin: 1.5rem 0;
+        gap: 0.75rem;
+        margin: 1rem 0;
       }
 
       @media (max-width: 768px) {
@@ -109,23 +109,23 @@ ui <- fluidPage(
         background: white;
         border: 1px solid #e9ecef;
         border-radius: 12px;
-        padding: 1.5rem;
+        padding: 1rem;
         text-align: center;
       }
 
       .metric-value {
-        font-size: 2rem;
+        font-size: 1.75rem;
         font-weight: 700;
         background: linear-gradient(135deg, #D68A93, #AD92B1);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        margin: 0.5rem 0;
+        margin: 0.4rem 0;
       }
 
       .metric-label {
         color: #666;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -135,15 +135,15 @@ ui <- fluidPage(
         background: linear-gradient(135deg, rgba(214, 138, 147, 0.08) 0%, rgba(173, 146, 177, 0.05) 100%);
         border-left: 4px solid #D68A93;
         border-radius: 0 8px 8px 0;
-        padding: 1.5rem;
-        margin: 1.5rem 0;
+        padding: 1rem;
+        margin: 1rem 0;
       }
 
       .insight-title {
         color: #D68A93;
         font-weight: 600;
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
       }
 
       .btn-primary {
@@ -198,8 +198,8 @@ ui <- fluidPage(
         background: linear-gradient(135deg, rgba(249, 179, 151, 0.1) 0%, rgba(214, 138, 147, 0.1) 100%);
         border: 2px solid #F9B397;
         border-radius: 12px;
-        padding: 1.5rem;
-        margin: 1.5rem 0;
+        padding: 1rem;
+        margin: 1rem 0;
       }
 
       .explainer-title {
@@ -414,7 +414,7 @@ ui <- fluidPage(
             )
           )
         ),
-        plotlyOutput("baseline_chart", height = "400px"),
+        plotlyOutput("baseline_chart", height = "350px"),
         div(class = "metric-summary",
           uiOutput("baseline_metrics")
         )
@@ -445,7 +445,7 @@ ui <- fluidPage(
             )
           )
         ),
-        plotlyOutput("retention_comparison_chart", height = "400px"),
+        plotlyOutput("retention_comparison_chart", height = "350px"),
         div(class = "insight-box",
           div(class = "insight-title", "📈 ROI Analysis"),
           uiOutput("retention_roi")
@@ -476,7 +476,7 @@ ui <- fluidPage(
             )
           )
         ),
-        plotlyOutput("acquisition_comparison_chart", height = "400px"),
+        plotlyOutput("acquisition_comparison_chart", height = "350px"),
         div(class = "insight-box",
           div(class = "insight-title", "💰 Cost vs. Revenue"),
           uiOutput("acquisition_analysis")
@@ -517,7 +517,7 @@ ui <- fluidPage(
             )
           )
         ),
-        plotlyOutput("all_scenarios_chart", height = "500px"),
+        plotlyOutput("all_scenarios_chart", height = "400px"),
         div(class = "metric-summary",
           uiOutput("scenario_comparison")
         ),
