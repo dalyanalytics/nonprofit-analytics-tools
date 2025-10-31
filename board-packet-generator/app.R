@@ -1530,8 +1530,8 @@ server <- function(input, output, session) {
     # Create grouped bar chart
     data_matrix <- rbind(actual, budget, prior_year)
 
-    # Professional color palette (not branded)
-    colors <- c("#3498db", "#95a5a6", "#34495e")  # Blue, Gray, Dark Blue
+    # Brand color palette
+    colors <- c("#D68A93", "#AD92B1", "#B07891")  # Rose, Lavender, Mauve
 
     # Create the bar plot with more margin at bottom for labels
     par(mar = c(6, 5, 2, 2), bg = "white")
