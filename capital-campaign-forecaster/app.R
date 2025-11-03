@@ -190,6 +190,44 @@ ui <- fluidPage(
         font-weight: 600;
         margin-left: 8px;
         cursor: help;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+
+      .help-icon:hover {
+        background: #D68A93;
+        transform: scale(1.1);
+      }
+
+      /* Enhanced tooltip styling */
+      .help-icon[title]:hover::after {
+        content: attr(title);
+        position: absolute;
+        left: 50%;
+        bottom: calc(100% + 8px);
+        transform: translateX(-50%);
+        background: rgba(44, 62, 80, 0.95);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 400;
+        white-space: nowrap;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        pointer-events: none;
+      }
+
+      .help-icon[title]:hover::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: calc(100% + 2px);
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: rgba(44, 62, 80, 0.95);
+        z-index: 1000;
+        pointer-events: none;
       }
 
       details summary {
