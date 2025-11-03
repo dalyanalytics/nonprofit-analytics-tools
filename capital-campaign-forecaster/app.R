@@ -336,10 +336,9 @@ ui <- fluidPage(
     ),
 
     # Sidebar Layout
-    sidebarLayout(
-      # Sidebar with inputs
-      sidebarPanel(
-        width = 3,
+    layout_sidebar(
+      sidebar = sidebar(
+        width = 250,
         style = "background: #f8f9fa; border-radius: 12px; padding: 1rem;",
 
         # Current State Inputs
@@ -411,14 +410,11 @@ ui <- fluidPage(
                      step = 5,
                      post = "%")
         )
-      ),
+      ),  # Close sidebar
 
-      # Main Panel with scenario tabs
-      mainPanel(
-        width = 9,
-
-        # Scenario Planning
-        div(class = "section-header", "🎯 Campaign Scenarios"),
+      # Main content with scenario tabs
+      # Scenario Planning
+      div(class = "section-header", "🎯 Campaign Scenarios"),
 
     tabsetPanel(
       # Baseline Scenario
@@ -542,8 +538,7 @@ ui <- fluidPage(
         )
       )
     )  # Close tabsetPanel
-    )  # Close mainPanel
-    ),  # Close sidebarLayout
+    ),  # Close layout_sidebar
 
     # Footer with CTA
     div(
