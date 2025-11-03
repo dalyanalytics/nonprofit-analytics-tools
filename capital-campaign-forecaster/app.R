@@ -7,6 +7,7 @@ library(bslib)
 
 # UI
 ui <- fluidPage(
+  theme = bs_theme(version = 5),
 
   # Add Google Fonts
   tags$head(
