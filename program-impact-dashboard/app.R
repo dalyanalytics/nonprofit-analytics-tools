@@ -306,25 +306,25 @@ ui <- fluidPage(
         title = "Participants Served",
         value = textOutput("participants_display"),
         showcase = bsicons::bs_icon("people-fill"),
-        theme = "primary"
+        theme = "info"  # Blue - informational metric
       ),
       value_box(
         title = "Completion Rate",
         value = textOutput("completion_display"),
         showcase = bsicons::bs_icon("check-circle-fill"),
-        theme = "success"
+        theme = "success"  # Green - positive retention outcome
       ),
       value_box(
         title = "Outcome Improvement",
         value = textOutput("improvement_display"),
         showcase = bsicons::bs_icon("graph-up-arrow"),
-        theme = "success"
+        theme = "primary"  # Brand purple - main impact metric
       ),
       value_box(
         title = "Cost Per Participant",
         value = textOutput("cost_display"),
         showcase = bsicons::bs_icon("currency-dollar"),
-        theme = "info"
+        theme = "warning"  # Amber - cost metric requiring context
       )
     ),
 
