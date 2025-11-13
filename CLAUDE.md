@@ -249,7 +249,106 @@ When building tools, align naming with nonprofit sector language:
 ## License
 MIT License - Free for all nonprofit use
 
-## Recent Updates (Oct 31, 2024)
+## Recent Updates
+
+### November 13, 2024 - Program Impact Dashboard Development
+
+**New Tool Built**: Program Impact Dashboard with Causal Impact Analysis
+
+#### What We Built
+Created a comprehensive program impact assessment tool for Connecticut nonprofits with:
+- **Live Census Data Integration**: tidycensus package fetching ACS 5-year estimates
+- **Causal Impact Analysis**: Bayesian structural time-series modeling (CausalImpact package)
+- **Interactive Visualizations**: Plotly charts with counterfactual predictions and 95% credible intervals
+- **Connecticut Focus**: Leaflet mapping with geocoded towns, service-focused (no poverty targeting)
+- **5 Sample Programs**: Literacy, workforce training, diabetes prevention, arts enrichment, mindfulness/yoga
+
+#### Technical Implementation
+**Packages Added**:
+- `tidycensus` - US Census Bureau API integration
+- `tidygeocoder` - OpenStreetMap geocoding for town coordinates
+- `CausalImpact` - Bayesian causal inference (requires R >= 4.5.0)
+- `zoo` - Time series data formatting for CausalImpact
+- `bsts` - Bayesian structural time-series (dependency of CausalImpact)
+
+**Key Features**:
+1. **Value Boxes with Semantic Coloring**:
+   - Info (blue): Participants served
+   - Success (green): Completion rate
+   - Primary (purple): Outcome improvement (main metric)
+   - Warning (amber): Cost per participant
+
+2. **Census API Integration**:
+   - API key stored in `.Renviron` file: `c76c7fb917b33c30509c75b5ece3adf73fec364c`
+   - Fallback to sample data if API fails
+   - Fetches population and median household income for 15 largest CT towns
+   - Geocodes addresses via OSM for Leaflet mapping
+
+3. **CausalImpact Analysis**:
+   - Compares observed outcomes vs counterfactual prediction
+   - Uses state averages as control group
+   - Displays absolute effect, relative effect, p-values
+   - 95% credible intervals with shaded confidence bands
+   - Interpretation text explaining statistical significance
+
+4. **Service-Focused Design**:
+   - Removed poverty rate metrics (trauma-informed approach)
+   - Emphasizes program reach percentage
+   - Focus on service coverage, not demographic targeting
+
+#### Files Created/Modified
+- `program-impact-dashboard/app.R` - Main Shiny application (1,000+ lines)
+- `program-impact-dashboard/.Renviron` - Census API key (gitignored)
+- `program-impact-dashboard/.Renviron.example` - Template with setup instructions
+- `program-impact-dashboard/README.md` - Comprehensive documentation
+
+#### R Version Upgrade Assessment
+**Required**: Upgrade to R >= 4.5.0 for bsts package (CausalImpact dependency)
+
+**Quality Control Analysis Completed**:
+- **Risk Level**: LOW-MEDIUM
+- **Existing Apps**: All 4 apps use compatible packages, no breaking changes expected
+- **Main Concern**: Shinyapps.io may not yet support R 4.5.2 (needs verification)
+- **Migration Plan**: Staged deployment starting with lowest risk apps
+- **Testing Priority**:
+  1. program-impact-dashboard (must work with R 4.5.2)
+  2. grant-research-assistant (external API dependency)
+  3. donor-retention-calculator (standard packages)
+  4. capital-campaign-forecaster (Monte Carlo simulation)
+  5. board-packet-generator (base64 encoding)
+
+**Package Dependency Matrix**:
+- All apps use stable tidyverse/Shiny ecosystem packages
+- No deprecated functions or legacy base R patterns
+- bslib Bootstrap 5 already in use across apps
+- Only program-impact-dashboard requires R >= 4.5.0
+
+**Next Steps Before Deployment**:
+1. Verify shinyapps.io supports R 4.5.2 at https://docs.posit.co/shinyapps.io/guide/appendix/
+2. Update `.github/workflows/deploy-shinyapps.yml` line 35: `r-version: '4.5.2'`
+3. Test locally with R 4.5.2 before deploying
+4. Add program-impact-dashboard to GitHub Actions workflow options
+
+**Census API Key Management**:
+- Local: `.Renviron` file in app directory (gitignored)
+- Shinyapps.io: Add as environment variable in app settings
+- GitHub Actions: Add as repository secret `CENSUS_API_KEY`
+
+#### Design Patterns Established
+1. **Help Icon Tooltips**: Purple circles with hover tooltips explaining data sources
+2. **Service-Focused Metrics**: Removed exploitative poverty metrics, focused on reach
+3. **Statistical Rigor**: Added Bayesian modeling for grant/board reporting credibility
+4. **Fallback Data Strategy**: Apps work without Census API key using sample data
+5. **Semantic Color Coding**: Value boxes use meaningful colors (info/success/warning)
+
+#### Deployment Blockers
+- **R Version**: Need R 4.5.2 locally and on shinyapps.io
+- **Census API**: Need to add key as environment variable (not committed to git)
+- **System Dependencies**: May need liblapack-dev, libblas-dev, gfortran for bsts compilation
+
+---
+
+### Oct 31, 2024
 
 ### Landing Page Crisis & Resolution
 - **Issue**: GitHub Pages landing page was crashing Chrome browsers when scrolling to tools section
