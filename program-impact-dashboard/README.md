@@ -6,10 +6,12 @@ Measure and communicate your program's impact in Connecticut communities with da
 
 - **Impact Metrics**: Track participants served, completion rates, outcome improvements, and cost efficiency
 - **Live Census Data**: Real-time Connecticut demographic data via US Census Bureau ACS 5-year estimates
+- **Causal Impact Analysis**: Bayesian structural time-series modeling to estimate the causal effect of your program
 - **Interactive Visualizations**: Plotly charts showing outcome improvements and trends over time
 - **Community Mapping**: Leaflet map displaying service areas across Connecticut towns
 - **Sample Programs**: 5 pre-loaded examples (literacy, workforce training, health, arts, mindfulness)
 - **Service-Focused**: Emphasizes program reach and impact, not demographic targeting
+- **Statistical Rigor**: Includes counterfactual prediction, 95% credible intervals, and p-values
 
 ## Setup Instructions
 
@@ -28,7 +30,9 @@ install.packages(c(
   "leaflet",
   "DT",
   "tidycensus",
-  "tidygeocoder"
+  "tidygeocoder",
+  "CausalImpact",
+  "zoo"
 ))
 ```
 
@@ -99,15 +103,19 @@ The app will attempt to fetch live Census data. If the API key is missing or inv
 2. **Select Service Towns** from the dropdown to define your geographic reach
 3. **Enter Program Metrics**: Budget, participants, completion rate, pre/post scores
 4. **Click "Analyze Impact"** to view visualizations and insights
-5. Review the **Impact Overview** value boxes, charts, and community context map
+5. Review the **Impact Overview** value boxes showing key metrics
+6. Examine the **Causal Impact Analysis** with statistical significance testing
+7. Explore the **Community Context** map and demographic data for your service area
 
 ## Technical Details
 
 - **Framework**: R Shiny with Bootstrap 5 (bslib)
+- **Statistical Method**: Bayesian structural time-series (BSTS) via CausalImpact package
 - **Data Fetching**: Performed once at app startup via `tryCatch()` with fallback
 - **Caching**: Census data cached for the session duration
 - **API Rate Limits**: Census API allows 500 requests/day without authentication, unlimited with key
 - **Geocoding**: Uses OpenStreetMap (free, no key required)
+- **Causal Inference**: Uses state averages as control group for counterfactual prediction
 
 ## Customization for Production
 

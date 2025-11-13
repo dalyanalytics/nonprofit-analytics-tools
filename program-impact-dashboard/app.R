@@ -8,6 +8,8 @@ library(leaflet)
 library(DT)
 library(tidycensus)
 library(tidygeocoder)
+library(CausalImpact)
+library(zoo)
 
 # Load Census API key from .Renviron
 census_api_key(Sys.getenv("CENSUS_API_KEY"))
@@ -420,6 +422,20 @@ ui <- fluidPage(
       )
     ),
 
+    # Causal Impact Analysis
+    div(class = "section-header",
+      HTML('📈 Causal Impact Analysis
+        <span class="help-icon" title="Bayesian structural time-series model estimating the causal effect of your program. Compares actual post-program outcomes against a statistical counterfactual (predicted outcomes without the program). Includes 95% credible intervals showing the range of likely impact.">?</span>')
+    ),
+
+    card(
+      card_header("Statistical Impact Assessment"),
+      plotlyOutput("causal_impact_plot", height = "450px"),
+      div(style = "padding: 15px; margin-top: 10px; background: #f8f9fa; border-radius: 8px;",
+        uiOutput("causal_impact_summary")
+      )
+    ),
+
     # Connecticut Context
     div(class = "section-header",
       HTML('📍 Connecticut Community Context
@@ -692,6 +708,255 @@ server <- function(input, output, session) {
         margin = list(l = 60, r = 20, t = 40, b = 60)
       ) %>%
       config(displayModeBar = FALSE)
+  })
+
+  # Causal Impact Analysis
+  output$causal_impact_plot <- renderPlotly({
+    program <- current_program()
+
+    if (is.null(program)) {
+      # Default data if no sample loaded
+      pre_data <- rep(input$pre_score, 6)
+      post_data <- rep(input$post_score, 6)
+      state_pre <- rep(input$pre_score * 1.2, 6)
+      state_post <- rep(input$post_score * 0.95, 6)
+    } else {
+      pre_data <- program$time_series_pre
+      post_data <- program$time_series_post
+      state_pre <- program$state_avg_pre
+      state_post <- program$state_avg_post
+    }
+
+    # Prepare data for CausalImpact
+    # Combine pre and post data
+    y <- c(pre_data, post_data)  # Observed outcome (your program)
+    x <- c(state_pre, state_post)  # Control/covariate (state average)
+
+    # Create time series data
+    data <- zoo::zoo(cbind(y, x))
+
+    # Define pre and post intervention periods
+    pre_period <- c(1, 6)
+    post_period <- c(7, 12)
+
+    # Run CausalImpact analysis
+    impact <- tryCatch({
+      CausalImpact(data, pre_period, post_period)
+    }, error = function(e) {
+      NULL
+    })
+
+    if (is.null(impact)) {
+      # If CausalImpact fails, show a simple message
+      plot_ly() %>%
+        add_annotations(
+          text = "Unable to compute causal impact analysis with current data.\nTry loading a sample program or adjusting your metrics.",
+          xref = "paper",
+          yref = "paper",
+          x = 0.5,
+          y = 0.5,
+          showarrow = FALSE,
+          font = list(size = 14, color = "#666")
+        ) %>%
+        layout(
+          xaxis = list(showgrid = FALSE, showticklabels = FALSE, zeroline = FALSE),
+          yaxis = list(showgrid = FALSE, showticklabels = FALSE, zeroline = FALSE)
+        )
+    } else {
+      # Extract plot data from CausalImpact object
+      impact_data <- impact$series
+      impact_data$time <- 1:nrow(impact_data)
+
+      # Create three panel plot: Original, Pointwise, Cumulative
+      fig <- plot_ly()
+
+      # Panel 1: Original data with prediction and confidence interval
+      fig <- fig %>%
+        add_trace(
+          data = impact_data,
+          x = ~time,
+          y = ~response,
+          type = "scatter",
+          mode = "lines+markers",
+          name = "Observed",
+          line = list(color = "#2c3e50", width = 2),
+          marker = list(size = 6)
+        ) %>%
+        add_trace(
+          data = impact_data,
+          x = ~time,
+          y = ~point.pred,
+          type = "scatter",
+          mode = "lines",
+          name = "Predicted (Counterfactual)",
+          line = list(color = "#D68A93", width = 2, dash = "dash")
+        ) %>%
+        add_ribbons(
+          data = impact_data,
+          x = ~time,
+          ymin = ~point.pred.lower,
+          ymax = ~point.pred.upper,
+          name = "95% Credible Interval",
+          fillcolor = "rgba(214, 138, 147, 0.2)",
+          line = list(color = "transparent")
+        )
+
+      # Add vertical line at intervention point
+      fig <- fig %>%
+        layout(
+          xaxis = list(
+            title = "Time Period (Months)",
+            tickmode = "linear",
+            tick0 = 1,
+            dtick = 1
+          ),
+          yaxis = list(title = input$score_label),
+          hovermode = "x unified",
+          plot_bgcolor = "rgba(0,0,0,0)",
+          paper_bgcolor = "rgba(0,0,0,0)",
+          legend = list(
+            orientation = "h",
+            x = 0,
+            y = -0.15
+          ),
+          shapes = list(
+            list(
+              type = "line",
+              x0 = 6.5,
+              x1 = 6.5,
+              y0 = 0,
+              y1 = 1,
+              yref = "paper",
+              line = list(color = "#2c3e50", width = 2, dash = "dot")
+            )
+          ),
+          annotations = list(
+            list(
+              x = 3,
+              y = 1.05,
+              yref = "paper",
+              text = "Pre-Program",
+              showarrow = FALSE,
+              font = list(size = 11, color = "#666")
+            ),
+            list(
+              x = 9,
+              y = 1.05,
+              yref = "paper",
+              text = "Post-Program (Intervention)",
+              showarrow = FALSE,
+              font = list(size = 11, color = "#666")
+            )
+          ),
+          margin = list(l = 60, r = 20, t = 40, b = 80)
+        ) %>%
+        config(displayModeBar = FALSE)
+
+      fig
+    }
+  })
+
+  # Causal Impact Summary
+  output$causal_impact_summary <- renderUI({
+    program <- current_program()
+
+    if (is.null(program)) {
+      pre_data <- rep(input$pre_score, 6)
+      post_data <- rep(input$post_score, 6)
+      state_pre <- rep(input$pre_score * 1.2, 6)
+      state_post <- rep(input$post_score * 0.95, 6)
+    } else {
+      pre_data <- program$time_series_pre
+      post_data <- program$time_series_post
+      state_pre <- program$state_avg_pre
+      state_post <- program$state_avg_post
+    }
+
+    # Prepare data for CausalImpact
+    y <- c(pre_data, post_data)
+    x <- c(state_pre, state_post)
+    data <- zoo::zoo(cbind(y, x))
+
+    pre_period <- c(1, 6)
+    post_period <- c(7, 12)
+
+    impact <- tryCatch({
+      CausalImpact(data, pre_period, post_period)
+    }, error = function(e) {
+      NULL
+    })
+
+    if (is.null(impact)) {
+      return(div(
+        style = "text-align: center; color: #999; padding: 20px;",
+        "Causal impact analysis unavailable. Load a sample program to see statistical assessment."
+      ))
+    }
+
+    # Extract summary statistics
+    summary_data <- impact$summary
+
+    # Calculate key metrics
+    absolute_effect <- summary_data$Actual[2] - summary_data$Pred[2]
+    absolute_effect_lower <- summary_data$Actual.lower[2] - summary_data$Pred.upper[2]
+    absolute_effect_upper <- summary_data$Actual.upper[2] - summary_data$Pred.lower[2]
+
+    relative_effect <- summary_data$RelEffect[2] * 100
+    relative_effect_lower <- summary_data$RelEffect.lower[2] * 100
+    relative_effect_upper <- summary_data$RelEffect.upper[2] * 100
+
+    p_value <- impact$summary$p[2]
+
+    # Determine significance
+    is_significant <- p_value < 0.05
+    significance_text <- if (is_significant) {
+      "statistically significant"
+    } else {
+      "not statistically significant"
+    }
+
+    # Determine effect color
+    effect_color <- if (absolute_effect > 0) "#28a745" else "#dc3545"
+
+    tagList(
+      div(style = "margin-bottom: 15px;",
+        h5("Statistical Assessment", style = "color: #2c3e50; margin-top: 0;")
+      ),
+      div(style = "display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px;",
+        div(
+          div(style = "font-size: 0.9rem; color: #666; margin-bottom: 5px;", "Absolute Effect"),
+          div(style = paste0("font-size: 1.5rem; font-weight: 600; color: ", effect_color, ";"),
+              sprintf("%+.2f points", absolute_effect)
+          ),
+          div(style = "font-size: 0.85rem; color: #999;",
+              sprintf("95%% CI: [%.2f, %.2f]", absolute_effect_lower, absolute_effect_upper)
+          )
+        ),
+        div(
+          div(style = "font-size: 0.9rem; color: #666; margin-bottom: 5px;", "Relative Effect"),
+          div(style = paste0("font-size: 1.5rem; font-weight: 600; color: ", effect_color, ";"),
+              sprintf("%+.1f%%", relative_effect)
+          ),
+          div(style = "font-size: 0.85rem; color: #999;",
+              sprintf("95%% CI: [%.1f%%, %.1f%%]", relative_effect_lower, relative_effect_upper)
+          )
+        )
+      ),
+      div(style = "padding: 15px; background: white; border-left: 4px solid #AD92B1; border-radius: 4px;",
+        div(style = "font-size: 0.95rem; color: #2c3e50; line-height: 1.6;",
+          HTML(sprintf(
+            "<strong>Interpretation:</strong> The program's effect is <strong>%s</strong> (p = %.3f). ",
+            significance_text, p_value
+          )),
+          if (absolute_effect > 0) {
+            sprintf("Participants showed an improvement of approximately %.2f points compared to the predicted outcome without the program.", absolute_effect)
+          } else {
+            sprintf("The observed change was %.2f points less than would be expected without the program.", abs(absolute_effect))
+          },
+          HTML("<br><br><em>Note: This analysis uses Bayesian structural time-series modeling to estimate what would have happened without your program (the counterfactual) based on state averages.</em>")
+        )
+      )
+    )
   })
 
   # Connecticut map
