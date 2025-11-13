@@ -112,10 +112,8 @@ sample_programs <- list(
 )
 
 # UI
-ui <- page_sidebar(
+ui <- fluidPage(
   theme = bs_theme(version = 5),
-
-  title = "Program Impact Dashboard",
 
   # Add custom CSS
   tags$head(
@@ -225,19 +223,22 @@ ui <- page_sidebar(
         font-weight: 600;
         color: #2c3e50;
       }
-
-      /* Sidebar styling */
-      .bslib-sidebar-layout > .sidebar {
-        background: #f8f9fa;
-        border-radius: 12px;
-        padding: 1rem;
-      }
     "))
   ),
 
-  # Sidebar
-  sidebar = sidebar(
-    width = 280,
+  div(class = "main-container",
+    h2("Program Impact Dashboard"),
+    div(class = "subtitle", "Measure and communicate your program's impact in Connecticut communities"),
+
+    div(class = "info-box",
+      HTML("<strong>About this tool:</strong> Analyze your program's impact with data-driven insights. Compare outcomes to Connecticut benchmarks, visualize community need, and generate board-ready reports.")
+    ),
+
+    # Sidebar Layout
+    layout_sidebar(
+      sidebar = sidebar(
+        width = 250,
+        style = "background: #f8f9fa; border-radius: 12px; padding: 1rem;",
 
     h4("Program Setup", style = "margin-top: 0; color: #2c3e50;"),
 
@@ -293,18 +294,10 @@ ui <- page_sidebar(
 
     actionButton("analyze", "Analyze Impact", class = "btn-primary w-100",
                  style = "background: linear-gradient(135deg, #D68A93, #AD92B1); border: none;")
-  ),
+      ),  # Close sidebar
 
-  # Main content
-  div(class = "main-container",
-    h2("Program Impact Dashboard"),
-    div(class = "subtitle", "Measure and communicate your program's impact in Connecticut communities"),
-
-    div(class = "info-box",
-      HTML("<strong>About this tool:</strong> Analyze your program's impact with data-driven insights. Compare outcomes to Connecticut benchmarks, visualize community need, and generate board-ready reports.")
-    ),
-
-    # Impact Overview Section
+      # Main content with dashboard
+      # Impact Overview Section
     div(class = "section-header", "📊 Impact Overview"),
 
     layout_columns(
@@ -431,9 +424,10 @@ ui <- page_sidebar(
           " to build custom analytics solutions for your organization."
         )
       )
-    )
-  )
-)
+    )  # Close app-footer
+    ),  # Close layout_sidebar
+  )  # Close main-container
+)  # Close fluidPage
 
 # Server
 server <- function(input, output, session) {
