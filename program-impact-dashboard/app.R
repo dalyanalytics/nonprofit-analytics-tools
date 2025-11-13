@@ -19,9 +19,6 @@ ct_towns_data <- data.frame(
   population = c(121054, 134023, 148654, 135470, 107568,
                  91184, 86518, 73206, 63023, 63341,
                  62707, 60850, 60039, 58241, 55046),
-  poverty_rate = c(28.2, 24.6, 18.7, 9.8, 20.1,
-                   10.2, 11.5, 21.3, 5.4, 6.1,
-                   11.8, 15.2, 12.4, 11.9, 19.7),
   median_income = c(34658, 44120, 52124, 89269, 45240,
                     82766, 73921, 43240, 96342, 141243,
                     65432, 54321, 58976, 62345, 47890),
@@ -401,7 +398,7 @@ ui <- fluidPage(
       card(
         card_header(
           HTML('Community Data
-            <span class="help-icon" title="Population, poverty rate, and median income data shown are representative samples. Production version will fetch live American Community Survey (ACS) 5-year estimates via tidycensus.">?</span>')
+            <span class="help-icon" title="Population and economic context shown are representative samples. Production version will fetch live American Community Survey (ACS) 5-year estimates via tidycensus. Focus is on program reach and service coverage, not demographic targeting.">?</span>')
         ),
         uiOutput("community_stats")
       )
@@ -713,31 +710,27 @@ server <- function(input, output, session) {
     }
 
     total_pop <- sum(selected_data$population)
-    avg_poverty <- mean(selected_data$poverty_rate)
     avg_income <- mean(selected_data$median_income)
+    reach_percent <- (input$participants / total_pop) * 100
 
     tagList(
       div(style = "padding: 15px;",
-        div(style = "margin-bottom: 15px;",
+        div(style = "margin-bottom: 20px;",
           div(style = "font-size: 0.9rem; color: #666;", "Total Population"),
           div(style = "font-size: 1.8rem; font-weight: 600; color: #2c3e50;", comma(total_pop))
         ),
-        div(style = "margin-bottom: 15px;",
-          div(style = "font-size: 0.9rem; color: #666;", "Avg Poverty Rate"),
-          div(style = "font-size: 1.8rem; font-weight: 600; color: #D68A93;", paste0(round(avg_poverty, 1), "%"))
-        ),
-        div(style = "margin-bottom: 15px;",
-          div(style = "font-size: 0.9rem; color: #666;", "Avg Median Income"),
-          div(style = "font-size: 1.8rem; font-weight: 600; color: #28a745;", paste0("$", comma(round(avg_income))))
+        div(style = "margin-bottom: 20px;",
+          div(style = "font-size: 0.9rem; color: #666;", "Median Household Income"),
+          div(style = "font-size: 1.5rem; font-weight: 600; color: #7f8c8d;", paste0("$", comma(round(avg_income))))
         ),
         hr(style = "margin: 20px 0;"),
         div(style = "margin-top: 15px;",
           div(style = "font-size: 0.9rem; color: #666;", "Program Reach"),
-          div(style = "font-size: 1.5rem; font-weight: 600; color: #AD92B1;",
-              paste0(round((input$participants / total_pop) * 100, 2), "%")
+          div(style = "font-size: 2rem; font-weight: 600; color: #AD92B1;",
+              paste0(round(reach_percent, 2), "%")
           ),
           div(style = "font-size: 0.85rem; color: #999; margin-top: 5px;",
-              paste0(comma(input$participants), " of ", comma(total_pop), " residents")
+              paste0(comma(input$participants), " participants served")
           )
         )
       )
