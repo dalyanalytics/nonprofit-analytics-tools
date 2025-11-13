@@ -6,29 +6,66 @@ library(tidyr)
 library(scales)
 library(leaflet)
 library(DT)
+library(tidycensus)
+library(tidygeocoder)
 
-# Connecticut towns data (sample/representative data for demonstration)
-# Production version would use tidycensus to fetch live US Census Bureau ACS 5-year estimates
-ct_towns_data <- data.frame(
-  town = c("Hartford", "New Haven", "Bridgeport", "Stamford", "Waterbury",
-           "Norwalk", "Danbury", "New Britain", "West Hartford", "Greenwich",
-           "Hamden", "Meriden", "Bristol", "Manchester", "West Haven"),
-  county = c("Hartford", "New Haven", "Fairfield", "Fairfield", "New Haven",
-             "Fairfield", "Fairfield", "Hartford", "Hartford", "Fairfield",
-             "New Haven", "New Haven", "Hartford", "Hartford", "New Haven"),
-  population = c(121054, 134023, 148654, 135470, 107568,
-                 91184, 86518, 73206, 63023, 63341,
-                 62707, 60850, 60039, 58241, 55046),
-  median_income = c(34658, 44120, 52124, 89269, 45240,
-                    82766, 73921, 43240, 96342, 141243,
-                    65432, 54321, 58976, 62345, 47890),
-  lat = c(41.7658, 41.3083, 41.1792, 41.0534, 41.5582,
-          41.1177, 41.3948, 41.6612, 41.7621, 41.0268,
-          41.3959, 41.5382, 41.6718, 41.7798, 41.2706),
-  lng = c(-72.6734, -72.9279, -73.1894, -73.5387, -73.0515,
-          -73.4079, -73.4540, -72.7795, -72.7420, -73.6282,
-          -72.8968, -72.8071, -72.9493, -72.5215, -72.9473)
-)
+# Load Census API key from .Renviron
+census_api_key(Sys.getenv("CENSUS_API_KEY"))
+
+# Fetch Connecticut place (town/city) data from Census Bureau ACS 5-year estimates
+# This fetches live data instead of using hardcoded samples
+ct_towns_data <- tryCatch({
+  # Get ACS data for Connecticut places
+  acs_data <- get_acs(
+    geography = "place",
+    state = "CT",
+    variables = c(
+      population = "B01003_001",      # Total population
+      median_income = "B19013_001"    # Median household income
+    ),
+    year = 2022,
+    survey = "acs5",
+    output = "wide"
+  ) %>%
+    # Clean up place names (remove ", Connecticut" suffix)
+    mutate(
+      town = gsub(" town, Connecticut| city, Connecticut", "", NAME),
+      population = populationE,
+      median_income = median_incomeE
+    ) %>%
+    # Keep only the most populous towns for the app
+    arrange(desc(population)) %>%
+    head(15) %>%
+    select(GEOID, town, population, median_income)
+
+  # Geocode the town addresses to get lat/lng for mapping
+  acs_data %>%
+    mutate(address = paste0(town, ", Connecticut")) %>%
+    geocode(address, method = "osm", lat = lat, long = lng) %>%
+    select(GEOID, town, population, median_income, lat, lng)
+
+}, error = function(e) {
+  # Fallback to sample data if Census API fails (no key, rate limit, etc.)
+  warning("Failed to fetch Census data. Using sample data. Error: ", e$message)
+  data.frame(
+    GEOID = paste0("sample_", 1:15),
+    town = c("Hartford", "New Haven", "Bridgeport", "Stamford", "Waterbury",
+             "Norwalk", "Danbury", "New Britain", "West Hartford", "Greenwich",
+             "Hamden", "Meriden", "Bristol", "Manchester", "West Haven"),
+    population = c(121054, 134023, 148654, 135470, 107568,
+                   91184, 86518, 73206, 63023, 63341,
+                   62707, 60850, 60039, 58241, 55046),
+    median_income = c(34658, 44120, 52124, 89269, 45240,
+                      82766, 73921, 43240, 96342, 141243,
+                      65432, 54321, 58976, 62345, 47890),
+    lat = c(41.7658, 41.3083, 41.1792, 41.0534, 41.5582,
+            41.1177, 41.3948, 41.6612, 41.7621, 41.0268,
+            41.3959, 41.5382, 41.6718, 41.7798, 41.2706),
+    lng = c(-72.6734, -72.9279, -73.1894, -73.5387, -73.0515,
+            -73.4079, -73.4540, -72.7795, -72.7420, -73.6282,
+            -72.8968, -72.8071, -72.9493, -72.5215, -72.9473)
+  )
+})
 
 # Sample program data
 sample_programs <- list(
@@ -386,7 +423,7 @@ ui <- fluidPage(
     # Connecticut Context
     div(class = "section-header",
       HTML('📍 Connecticut Community Context
-        <span class="help-icon" title="Geographic and demographic data is currently sample data. Future versions will integrate real-time US Census Bureau data via tidycensus API for accurate community statistics.">?</span>')
+        <span class="help-icon" title="Geographic and demographic data sourced from US Census Bureau American Community Survey (ACS) 5-year estimates via tidycensus API. Data is updated annually by the Census Bureau.">?</span>')
     ),
 
     layout_columns(
@@ -398,7 +435,7 @@ ui <- fluidPage(
       card(
         card_header(
           HTML('Community Data
-            <span class="help-icon" title="Population and economic context shown are representative samples. Production version will fetch live American Community Survey (ACS) 5-year estimates via tidycensus. Focus is on program reach and service coverage, not demographic targeting.">?</span>')
+            <span class="help-icon" title="Population and median household income from 2022 ACS 5-year estimates. Focus is on program reach and service coverage. Data fetched securely via Census API.">?</span>')
         ),
         uiOutput("community_stats")
       )

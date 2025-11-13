@@ -1,0 +1,27 @@
+# Census API Key Configuration
+#
+# To use live US Census Bureau data in this app, you need a free Census API key.
+#
+# How to get your Census API key:
+# 1. Visit https://api.census.gov/data/key_signup.html
+# 2. Fill out the form with your organization email
+# 3. Check your email for the API key
+# 4. Copy the key and paste it below
+#
+# For local development:
+# 1. Rename this file to .Renviron (remove .example)
+# 2. Replace YOUR_CENSUS_API_KEY_HERE with your actual key
+# 3. Restart your R session
+#
+# For Shinyapps.io deployment:
+# 1. Go to your app settings on shinyapps.io
+# 2. Add CENSUS_API_KEY as an environment variable
+# 3. Paste your key as the value
+#
+# For GitHub Actions deployment:
+# 1. Go to repository Settings > Secrets and variables > Actions
+# 2. Add a new secret named CENSUS_API_KEY
+# 3. Paste your key as the value
+# 4. Update deploy-shinyapps.yml to pass the secret as an environment variable
+
+CENSUS_API_KEY=YOUR_CENSUS_API_KEY_HERE
