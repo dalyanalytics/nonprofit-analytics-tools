@@ -78,6 +78,36 @@ sample_programs <- list(
     time_series_post = c(6.8, 6.5, 6.3, 6.1, 6.0, 6.0),
     state_avg_pre = c(7.0, 7.1, 7.0, 7.1, 7.0, 7.1),
     state_avg_post = c(7.0, 6.9, 6.9, 6.9, 6.8, 6.8)
+  ),
+  arts_enrichment = list(
+    name = "Arts Enrichment for Children",
+    type = "Youth Development",
+    towns = c("New Haven", "Hamden", "West Haven"),
+    budget = 62000,
+    participants = 85,
+    completion_rate = 88,
+    pre_score = 2.8,
+    post_score = 4.1,
+    score_label = "Creative Confidence Score (1-5)",
+    time_series_pre = c(2.6, 2.7, 2.8, 2.9, 2.8, 2.9),
+    time_series_post = c(3.5, 3.7, 3.9, 4.0, 4.1, 4.2),
+    state_avg_pre = c(3.0, 3.1, 3.0, 3.1, 3.2, 3.1),
+    state_avg_post = c(3.2, 3.3, 3.3, 3.4, 3.4, 3.5)
+  ),
+  mindfulness_yoga = list(
+    name = "Mindfulness & Yoga for Students",
+    type = "Youth Development",
+    towns = c("West Hartford", "Hartford"),
+    budget = 48000,
+    participants = 120,
+    completion_rate = 92,
+    pre_score = 3.2,
+    post_score = 4.6,
+    score_label = "Emotional Regulation Score (1-5)",
+    time_series_pre = c(3.0, 3.1, 3.2, 3.3, 3.2, 3.3),
+    time_series_post = c(4.0, 4.2, 4.3, 4.5, 4.6, 4.7),
+    state_avg_pre = c(3.4, 3.5, 3.4, 3.5, 3.6, 3.5),
+    state_avg_post = c(3.6, 3.7, 3.7, 3.8, 3.8, 3.9)
   )
 )
 
@@ -218,7 +248,9 @@ ui <- page_sidebar(
         "Select a sample..." = "",
         "After-School Literacy" = "youth_literacy",
         "Manufacturing Training" = "workforce",
-        "Diabetes Prevention" = "health"
+        "Diabetes Prevention" = "health",
+        "Arts Enrichment" = "arts_enrichment",
+        "Mindfulness & Yoga" = "mindfulness_yoga"
       )
     ),
 
