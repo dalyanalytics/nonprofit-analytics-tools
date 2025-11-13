@@ -7,7 +7,8 @@ library(scales)
 library(leaflet)
 library(DT)
 
-# Sample Connecticut towns data (simplified - will be replaced with tidycensus)
+# Connecticut towns data (sample/representative data for demonstration)
+# Production version would use tidycensus to fetch live US Census Bureau ACS 5-year estimates
 ct_towns_data <- data.frame(
   town = c("Hartford", "New Haven", "Bridgeport", "Stamford", "Waterbury",
            "Norwalk", "Danbury", "New Britain", "West Hartford", "Greenwich",
@@ -169,6 +170,50 @@ ui <- fluidPage(
         font-size: 1.3rem;
         margin-bottom: 1rem;
         margin-top: 1.5rem;
+      }
+
+      /* Help icon tooltip styling */
+      .help-icon {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        background: #AD92B1;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 18px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 8px;
+        cursor: help;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+
+      .help-icon:hover {
+        background: #D68A93;
+        transform: scale(1.1);
+      }
+
+      /* Enhanced tooltip styling */
+      .help-icon[title]:hover::after {
+        content: attr(title);
+        position: absolute;
+        left: 50%;
+        bottom: calc(100% + 8px);
+        transform: translateX(-50%);
+        background: rgba(44, 62, 80, 0.95);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 400;
+        white-space: normal;
+        width: 300px;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        pointer-events: none;
+        text-align: left;
       }
 
       /* Footer styling */
@@ -342,7 +387,10 @@ ui <- fluidPage(
     ),
 
     # Connecticut Context
-    div(class = "section-header", "📍 Connecticut Community Context"),
+    div(class = "section-header",
+      HTML('📍 Connecticut Community Context
+        <span class="help-icon" title="Geographic and demographic data is currently sample data. Future versions will integrate real-time US Census Bureau data via tidycensus API for accurate community statistics.">?</span>')
+    ),
 
     layout_columns(
       col_widths = c(8, 4),
@@ -351,7 +399,10 @@ ui <- fluidPage(
         leafletOutput("ct_map", height = "400px")
       ),
       card(
-        card_header("Community Data"),
+        card_header(
+          HTML('Community Data
+            <span class="help-icon" title="Population, poverty rate, and median income data shown are representative samples. Production version will fetch live American Community Survey (ACS) 5-year estimates via tidycensus.">?</span>')
+        ),
         uiOutput("community_stats")
       )
     ),
