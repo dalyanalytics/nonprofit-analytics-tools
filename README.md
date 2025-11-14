@@ -37,6 +37,14 @@ Stop paying expensive monthly subscriptions for generic software. These tools ar
 - Animated scenario sliders for interactive what-if analysis
 - Risk assessment with strategic recommendations
 
+### [📈 Program Impact Dashboard](https://dalyanalytics.shinyapps.io/program-impact-dashboard/)
+- Measure program effectiveness with causal impact analysis
+- Bayesian structural time-series modeling (CausalImpact)
+- Live Census data integration for Connecticut communities
+- Multiple outcome metrics per program type
+- Interactive geographic mapping of service areas
+- Statistical significance testing with confidence intervals
+
 ## 🌟 Try All Tools
 **👉 [Launch Tool Suite](https://dalyanalytics.github.io/nonprofit-analytics-tools/)**
 
@@ -54,6 +62,8 @@ These tools also serve as examples of the kinds of custom solutions I can build 
 - **Plotly** for interactive visualizations
 - **DT** for data tables
 - **Leaflet** for interactive maps
+- **CausalImpact** for Bayesian causal inference
+- **tidycensus** for live demographic data
 
 ## 📈 Want Custom Solutions?
 

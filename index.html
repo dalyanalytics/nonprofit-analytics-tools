@@ -96,6 +96,19 @@
             font-size: 0.85rem;
             margin-bottom: 1rem;
         }
+        .badge.coming-soon {
+            background: #ffc107;
+            color: #333;
+        }
+        .btn.disabled {
+            background: #6c757d;
+            color: white;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn.disabled:hover {
+            transform: none;
+        }
         footer {
             margin-top: 3rem;
             padding-top: 2rem;
@@ -169,6 +182,34 @@
                     <li>Confidence intervals & risk assessment</li>
                 </ul>
                 <a href="https://dalyanalytics.shinyapps.io/capital-campaign-forecaster/" class="btn" target="_blank">Launch Tool →</a>
+            </div>
+
+            <!-- Program Impact Dashboard -->
+            <div class="tool-card">
+                <span class="badge">✅ Live Now</span>
+                <h2>📊 Program Impact Dashboard</h2>
+                <p>Measure program effectiveness with causal impact analysis and statistical significance testing.</p>
+                <ul>
+                    <li>Bayesian causal inference (CausalImpact)</li>
+                    <li>Live Census data for CT communities</li>
+                    <li>Multiple outcome metrics per program</li>
+                    <li>Interactive geographic mapping</li>
+                </ul>
+                <a href="https://dalyanalytics.shinyapps.io/program-impact-dashboard/" class="btn" target="_blank">Launch Tool →</a>
+            </div>
+
+            <!-- Data Governance Toolkit - Coming Soon -->
+            <div class="tool-card">
+                <span class="badge coming-soon">🚧 Coming Soon</span>
+                <h2>🔐 Data Governance Toolkit</h2>
+                <p>Comprehensive data management and privacy compliance tools for nonprofit organizations.</p>
+                <ul>
+                    <li>Data inventory and classification</li>
+                    <li>Privacy policy generator</li>
+                    <li>Donor consent management</li>
+                    <li>Data retention scheduling</li>
+                </ul>
+                <div class="btn disabled">In Development</div>
             </div>
         </div>
 

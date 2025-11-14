@@ -12,7 +12,7 @@ library(CausalImpact)
 library(zoo)
 
 # Load Census API key from .Renviron
-census_api_key(Sys.getenv("CENSUS_API_KEY"))
+census_api_key(Sys.getenv("CENSUS_API_KEY"), overwrite = TRUE)
 
 # Fetch Connecticut place (town/city) data from Census Bureau ACS 5-year estimates
 # This fetches live data instead of using hardcoded samples
@@ -44,6 +44,7 @@ ct_towns_data <- tryCatch({
   acs_data %>%
     mutate(address = paste0(town, ", Connecticut")) %>%
     geocode(address, method = "osm", lat = lat, long = lng) %>%
+    filter(!is.na(lat) & !is.na(lng)) %>%  # Remove rows with failed geocoding
     select(GEOID, town, population, median_income, lat, lng)
 
 }, error = function(e) {
@@ -69,7 +70,7 @@ ct_towns_data <- tryCatch({
   )
 })
 
-# Sample program data
+# Sample program data with multiple outcome metrics
 sample_programs <- list(
   youth_literacy = list(
     name = "After-School Literacy Program",
@@ -78,13 +79,49 @@ sample_programs <- list(
     budget = 75000,
     participants = 50,
     completion_rate = 82,
-    pre_score = 2.3,
-    post_score = 3.7,
-    score_label = "Grade Level",
-    time_series_pre = c(2.1, 2.2, 2.3, 2.2, 2.4, 2.5),
-    time_series_post = c(3.1, 3.3, 3.5, 3.8, 4.0, 4.2),
-    state_avg_pre = c(2.8, 2.9, 2.8, 2.9, 3.0, 3.0),
-    state_avg_post = c(3.1, 3.1, 3.2, 3.2, 3.3, 3.3)
+    # Multiple outcome metrics
+    outcome_metrics = list(
+      "Reading Fluency (Words Per Minute)" = list(
+        pre_score = 65,
+        post_score = 110,
+        time_series_pre = c(62, 63, 65, 64, 66, 67),
+        time_series_post = c(85, 92, 98, 105, 110, 115),
+        state_avg_pre = c(75, 76, 75, 77, 78, 78),
+        state_avg_post = c(80, 81, 82, 83, 84, 85)
+      ),
+      "Comprehension Test Score (0-100)" = list(
+        pre_score = 58,
+        post_score = 82,
+        time_series_pre = c(55, 56, 58, 57, 59, 60),
+        time_series_post = c(70, 74, 78, 80, 82, 85),
+        state_avg_pre = c(65, 66, 65, 67, 68, 68),
+        state_avg_post = c(70, 71, 72, 73, 74, 75)
+      ),
+      "Books Read Independently" = list(
+        pre_score = 2,
+        post_score = 12,
+        time_series_pre = c(1, 2, 2, 1, 3, 2),
+        time_series_post = c(8, 9, 10, 11, 12, 14),
+        state_avg_pre = c(4, 4, 4, 5, 5, 5),
+        state_avg_post = c(6, 6, 7, 7, 8, 8)
+      ),
+      "School Attendance Rate (%)" = list(
+        pre_score = 78,
+        post_score = 91,
+        time_series_pre = c(75, 76, 78, 77, 79, 80),
+        time_series_post = c(85, 87, 89, 90, 91, 92),
+        state_avg_pre = c(82, 83, 82, 84, 85, 85),
+        state_avg_post = c(86, 87, 87, 88, 88, 89)
+      )
+    ),
+    # Default metric
+    pre_score = 65,
+    post_score = 110,
+    score_label = "Reading Fluency (Words Per Minute)",
+    time_series_pre = c(62, 63, 65, 64, 66, 67),
+    time_series_post = c(85, 92, 98, 105, 110, 115),
+    state_avg_pre = c(75, 76, 75, 77, 78, 78),
+    state_avg_post = c(80, 81, 82, 83, 84, 85)
   ),
   workforce = list(
     name = "Manufacturing Skills Training",
@@ -93,13 +130,49 @@ sample_programs <- list(
     budget = 120000,
     participants = 30,
     completion_rate = 87,
-    pre_score = 35,
-    post_score = 78,
-    score_label = "Employment Rate (%)",
-    time_series_pre = c(32, 34, 35, 33, 36, 37),
-    time_series_post = c(65, 70, 75, 78, 80, 82),
-    state_avg_pre = c(55, 56, 55, 57, 58, 58),
-    state_avg_post = c(59, 60, 60, 61, 61, 62)
+    # Multiple outcome metrics
+    outcome_metrics = list(
+      "Average Hourly Wage ($)" = list(
+        pre_score = 12.50,
+        post_score = 22.75,
+        time_series_pre = c(12.00, 12.25, 12.50, 12.40, 12.60, 12.75),
+        time_series_post = c(18.50, 19.75, 21.00, 22.00, 22.75, 23.50),
+        state_avg_pre = c(15.00, 15.25, 15.00, 15.50, 15.75, 15.75),
+        state_avg_post = c(16.00, 16.25, 16.50, 16.75, 17.00, 17.25)
+      ),
+      "Job Placement Within 90 Days (%)" = list(
+        pre_score = 35,
+        post_score = 85,
+        time_series_pre = c(32, 34, 35, 33, 36, 37),
+        time_series_post = c(70, 75, 80, 83, 85, 88),
+        state_avg_pre = c(45, 46, 45, 47, 48, 48),
+        state_avg_post = c(50, 51, 52, 53, 54, 55)
+      ),
+      "Industry Certifications Earned" = list(
+        pre_score = 0,
+        post_score = 2.3,
+        time_series_pre = c(0, 0, 0, 0, 0.1, 0.1),
+        time_series_post = c(1.5, 1.8, 2.0, 2.2, 2.3, 2.5),
+        state_avg_pre = c(0.5, 0.5, 0.5, 0.6, 0.6, 0.6),
+        state_avg_post = c(0.8, 0.9, 0.9, 1.0, 1.0, 1.1)
+      ),
+      "6-Month Job Retention Rate (%)" = list(
+        pre_score = 45,
+        post_score = 88,
+        time_series_pre = c(42, 43, 45, 44, 46, 47),
+        time_series_post = c(78, 82, 85, 87, 88, 90),
+        state_avg_pre = c(60, 61, 60, 62, 63, 63),
+        state_avg_post = c(65, 66, 67, 68, 69, 70)
+      )
+    ),
+    # Default metric
+    pre_score = 12.50,
+    post_score = 22.75,
+    score_label = "Average Hourly Wage ($)",
+    time_series_pre = c(12.00, 12.25, 12.50, 12.40, 12.60, 12.75),
+    time_series_post = c(18.50, 19.75, 21.00, 22.00, 22.75, 23.50),
+    state_avg_pre = c(15.00, 15.25, 15.00, 15.50, 15.75, 15.75),
+    state_avg_post = c(16.00, 16.25, 16.50, 16.75, 17.00, 17.25)
   ),
   health = list(
     name = "Diabetes Prevention Program",
@@ -108,6 +181,32 @@ sample_programs <- list(
     budget = 90000,
     participants = 75,
     completion_rate = 71,
+    outcome_metrics = list(
+      "Average A1C Level" = list(
+        pre_score = 7.2,
+        post_score = 6.1,
+        time_series_pre = c(7.4, 7.3, 7.2, 7.3, 7.1, 7.2),
+        time_series_post = c(6.8, 6.5, 6.3, 6.1, 6.0, 6.0),
+        state_avg_pre = c(7.0, 7.1, 7.0, 7.1, 7.0, 7.1),
+        state_avg_post = c(7.0, 6.9, 6.9, 6.9, 6.8, 6.8)
+      ),
+      "Healthy Days per Month" = list(
+        pre_score = 12,
+        post_score = 22,
+        time_series_pre = c(10, 11, 12, 11, 13, 12),
+        time_series_post = c(18, 19, 20, 21, 22, 23),
+        state_avg_pre = c(15, 15, 15, 16, 16, 16),
+        state_avg_post = c(17, 17, 18, 18, 19, 19)
+      ),
+      "Emergency Room Visits (per year)" = list(
+        pre_score = 3.2,
+        post_score = 0.8,
+        time_series_pre = c(3.5, 3.4, 3.2, 3.3, 3.1, 3.2),
+        time_series_post = c(1.8, 1.5, 1.2, 1.0, 0.8, 0.7),
+        state_avg_pre = c(2.5, 2.6, 2.5, 2.6, 2.5, 2.6),
+        state_avg_post = c(2.4, 2.3, 2.3, 2.2, 2.2, 2.1)
+      )
+    ),
     pre_score = 7.2,
     post_score = 6.1,
     score_label = "Average A1C Level",
@@ -123,13 +222,39 @@ sample_programs <- list(
     budget = 62000,
     participants = 85,
     completion_rate = 88,
-    pre_score = 2.8,
-    post_score = 4.1,
-    score_label = "Creative Confidence Score (1-5)",
-    time_series_pre = c(2.6, 2.7, 2.8, 2.9, 2.8, 2.9),
-    time_series_post = c(3.5, 3.7, 3.9, 4.0, 4.1, 4.2),
-    state_avg_pre = c(3.0, 3.1, 3.0, 3.1, 3.2, 3.1),
-    state_avg_post = c(3.2, 3.3, 3.3, 3.4, 3.4, 3.5)
+    outcome_metrics = list(
+      "School Engagement Index (0-100)" = list(
+        pre_score = 52,
+        post_score = 78,
+        time_series_pre = c(48, 50, 52, 51, 53, 54),
+        time_series_post = c(68, 72, 75, 77, 78, 80),
+        state_avg_pre = c(60, 61, 60, 62, 63, 63),
+        state_avg_post = c(65, 66, 67, 68, 69, 70)
+      ),
+      "Creative Problem-Solving Score (1-5)" = list(
+        pre_score = 3.2,
+        post_score = 4.5,
+        time_series_pre = c(3.0, 3.1, 3.2, 3.1, 3.3, 3.4),
+        time_series_post = c(4.0, 4.2, 4.3, 4.4, 4.5, 4.6),
+        state_avg_pre = c(3.5, 3.6, 3.5, 3.6, 3.7, 3.7),
+        state_avg_post = c(3.8, 3.9, 3.9, 4.0, 4.0, 4.1)
+      ),
+      "Public Performances per Year" = list(
+        pre_score = 0,
+        post_score = 3,
+        time_series_pre = c(0, 0, 0, 0, 0, 0),
+        time_series_post = c(1, 1, 2, 2, 3, 3),
+        state_avg_pre = c(0.5, 0.5, 0.5, 0.5, 0.6, 0.6),
+        state_avg_post = c(1.0, 1.0, 1.1, 1.2, 1.3, 1.3)
+      )
+    ),
+    pre_score = 52,
+    post_score = 78,
+    score_label = "School Engagement Index (0-100)",
+    time_series_pre = c(48, 50, 52, 51, 53, 54),
+    time_series_post = c(68, 72, 75, 77, 78, 80),
+    state_avg_pre = c(60, 61, 60, 62, 63, 63),
+    state_avg_post = c(65, 66, 67, 68, 69, 70)
   ),
   mindfulness_yoga = list(
     name = "Mindfulness & Yoga for Students",
@@ -138,13 +263,39 @@ sample_programs <- list(
     budget = 48000,
     participants = 120,
     completion_rate = 92,
-    pre_score = 3.2,
-    post_score = 4.6,
-    score_label = "Emotional Regulation Score (1-5)",
-    time_series_pre = c(3.0, 3.1, 3.2, 3.3, 3.2, 3.3),
-    time_series_post = c(4.0, 4.2, 4.3, 4.5, 4.6, 4.7),
-    state_avg_pre = c(3.4, 3.5, 3.4, 3.5, 3.6, 3.5),
-    state_avg_post = c(3.6, 3.7, 3.7, 3.8, 3.8, 3.9)
+    outcome_metrics = list(
+      "Student Stress Index (0-10, lower is better)" = list(
+        pre_score = 7.8,
+        post_score = 4.2,
+        time_series_pre = c(8.0, 7.9, 7.8, 7.9, 7.7, 7.8),
+        time_series_post = c(5.5, 5.0, 4.6, 4.4, 4.2, 4.0),
+        state_avg_pre = c(7.2, 7.3, 7.2, 7.3, 7.2, 7.3),
+        state_avg_post = c(6.8, 6.7, 6.6, 6.5, 6.4, 6.3)
+      ),
+      "School Behavior Incidents (per month)" = list(
+        pre_score = 2.4,
+        post_score = 0.6,
+        time_series_pre = c(2.6, 2.5, 2.4, 2.5, 2.3, 2.4),
+        time_series_post = c(1.2, 1.0, 0.8, 0.7, 0.6, 0.5),
+        state_avg_pre = c(2.0, 2.1, 2.0, 2.1, 2.0, 2.1),
+        state_avg_post = c(1.8, 1.7, 1.7, 1.6, 1.6, 1.5)
+      ),
+      "Attendance Rate (%)" = list(
+        pre_score = 82,
+        post_score = 94,
+        time_series_pre = c(80, 81, 82, 81, 83, 82),
+        time_series_post = c(90, 91, 92, 93, 94, 95),
+        state_avg_pre = c(85, 86, 85, 86, 87, 87),
+        state_avg_post = c(88, 89, 89, 90, 90, 91)
+      )
+    ),
+    pre_score = 7.8,
+    post_score = 4.2,
+    score_label = "Student Stress Index (0-10, lower is better)",
+    time_series_pre = c(8.0, 7.9, 7.8, 7.9, 7.7, 7.8),
+    time_series_post = c(5.5, 5.0, 4.6, 4.4, 4.2, 4.0),
+    state_avg_pre = c(7.2, 7.3, 7.2, 7.3, 7.2, 7.3),
+    state_avg_post = c(6.8, 6.7, 6.6, 6.5, 6.4, 6.3)
   )
 )
 
@@ -304,6 +455,42 @@ ui <- fluidPage(
         font-weight: 600;
         color: #2c3e50;
       }
+      
+      /* Tab styling */
+      .nav-tabs .nav-link {
+        color: #666;
+        border: none;
+        background: transparent;
+        font-weight: 500;
+        padding: 0.75rem 1.25rem;
+      }
+      
+      .nav-tabs .nav-link.active {
+        color: #AD92B1;
+        background: rgba(173, 146, 177, 0.1);
+        border-bottom: 3px solid #AD92B1;
+      }
+      
+      .nav-tabs .nav-link:hover {
+        color: #D68A93;
+        background: rgba(214, 138, 147, 0.05);
+      }
+      
+      /* Plotly toolbar styling */
+      .modebar {
+        background: transparent !important;
+        border-radius: 8px;
+        padding: 4px !important;
+        box-shadow: none !important;
+      }
+      
+      .modebar-btn {
+        color: #666 !important;
+      }
+      
+      .modebar-btn:hover {
+        color: #AD92B1 !important;
+      }
     "))
   ),
 
@@ -366,6 +553,12 @@ ui <- fluidPage(
     hr(),
 
     h5("Outcome Metrics", style = "color: #2c3e50; margin-top: 0;"),
+    
+    selectInput("outcome_metric", "Select Outcome Metric:",
+                choices = list(
+                  "Choose a metric..." = ""
+                ),
+                selected = ""),
 
     numericInput("pre_score", "Pre-Program Score:", value = 2.3, step = 0.1),
     numericInput("post_score", "Post-Program Score:", value = 3.7, step = 0.1),
@@ -377,93 +570,110 @@ ui <- fluidPage(
                  style = "background: linear-gradient(135deg, #D68A93, #AD92B1); border: none;")
       ),  # Close sidebar
 
-      # Main content with dashboard
-      # Impact Overview Section
-    div(class = "section-header", "📊 Impact Overview"),
-
-    layout_columns(
-      col_widths = c(3, 3, 3, 3),
-      value_box(
-        title = "Participants Served",
-        value = textOutput("participants_display"),
-        showcase = bsicons::bs_icon("people-fill"),
-        theme = "info"  # Blue - informational metric
-      ),
-      value_box(
-        title = "Completion Rate",
-        value = textOutput("completion_display"),
-        showcase = bsicons::bs_icon("check-circle-fill"),
-        theme = "success"  # Green - positive retention outcome
-      ),
-      value_box(
-        title = "Outcome Improvement",
-        value = textOutput("improvement_display"),
-        showcase = bsicons::bs_icon("graph-up-arrow"),
-        theme = "primary"  # Brand purple - main impact metric
-      ),
-      value_box(
-        title = "Cost Per Participant",
-        value = textOutput("cost_display"),
-        showcase = bsicons::bs_icon("currency-dollar"),
-        theme = "warning"  # Amber - cost metric requiring context
-      )
-    ),
-
-    # Charts Section
-    layout_columns(
-      col_widths = c(6, 6),
-      card(
-        card_header("Outcome Improvement"),
-        plotlyOutput("outcome_chart", height = "350px")
-      ),
-      card(
-        card_header("Impact Over Time"),
-        plotlyOutput("time_series_chart", height = "350px")
-      )
-    ),
-
-    # Causal Impact Analysis
-    div(class = "section-header",
-      HTML('📈 Causal Impact Analysis
-        <span class="help-icon" title="Bayesian structural time-series model estimating the causal effect of your program. Compares actual post-program outcomes against a statistical counterfactual (predicted outcomes without the program). Includes 95% credible intervals showing the range of likely impact.">?</span>')
-    ),
-
-    card(
-      card_header("Statistical Impact Assessment"),
-      plotlyOutput("causal_impact_plot", height = "450px"),
-      div(style = "padding: 15px; margin-top: 10px; background: #f8f9fa; border-radius: 8px;",
-        uiOutput("causal_impact_summary")
-      )
-    ),
-
-    # Connecticut Context
-    div(class = "section-header",
-      HTML('📍 Connecticut Community Context
-        <span class="help-icon" title="Geographic and demographic data sourced from US Census Bureau American Community Survey (ACS) 5-year estimates via tidycensus API. Data is updated annually by the Census Bureau.">?</span>')
-    ),
-
-    layout_columns(
-      col_widths = c(8, 4),
-      card(
-        card_header("Service Area Map"),
-        leafletOutput("ct_map", height = "400px")
-      ),
-      card(
-        card_header(
-          HTML('Community Data
-            <span class="help-icon" title="Population and median household income from 2022 ACS 5-year estimates. Focus is on program reach and service coverage. Data fetched securely via Census API.">?</span>')
+      # Main content with tabbed interface
+      navset_card_tab(
+        nav_panel(
+          title = "Impact Overview",
+          icon = bsicons::bs_icon("bar-chart-line-fill"),
+          
+          # Impact Overview Section
+          div(class = "section-header", "📊 Impact Overview"),
+          
+          layout_columns(
+            col_widths = c(3, 3, 3, 3),
+            value_box(
+              title = "Participants Served",
+              value = textOutput("participants_display"),
+              showcase = bsicons::bs_icon("people-fill"),
+              theme = "info"  # Blue - informational metric
+            ),
+            value_box(
+              title = "Completion Rate",
+              value = textOutput("completion_display"),
+              showcase = bsicons::bs_icon("check-circle-fill"),
+              theme = "success"  # Green - positive retention outcome
+            ),
+            value_box(
+              title = "Outcome Improvement",
+              value = textOutput("improvement_display"),
+              showcase = bsicons::bs_icon("graph-up-arrow"),
+              theme = "primary"  # Brand purple - main impact metric
+            ),
+            value_box(
+              title = "Cost Per Participant",
+              value = textOutput("cost_display"),
+              showcase = bsicons::bs_icon("currency-dollar"),
+              theme = "warning"  # Amber - cost metric requiring context
+            )
+          ),
+          
+          # Charts Section
+          layout_columns(
+            col_widths = c(6, 6),
+            card(
+              card_header("Outcome Improvement"),
+              plotlyOutput("outcome_chart", height = "350px")
+            ),
+            card(
+              card_header("Impact Over Time"),
+              plotlyOutput("time_series_chart", height = "350px")
+            )
+          )
         ),
-        uiOutput("community_stats")
-      )
-    ),
-
-    # Demographics Section
-    div(class = "section-header", "👥 Demographics & Reach"),
-
-    card(
-      card_header("Program Reach Analysis"),
-      plotlyOutput("reach_chart", height = "300px")
-    ),
+        
+        nav_panel(
+          title = "Statistical Impact",
+          icon = bsicons::bs_icon("calculator-fill"),
+          
+          # Causal Impact Analysis
+          div(class = "section-header",
+            HTML('📈 Causal Impact Analysis
+              <span class="help-icon" title="Bayesian structural time-series model estimating the causal effect of your program. Compares actual post-program outcomes against a statistical counterfactual (predicted outcomes without the program). Includes 95% credible intervals showing the range of likely impact.">?</span>')
+          ),
+          
+          card(
+            card_header("Statistical Impact Assessment"),
+            plotlyOutput("causal_impact_plot", height = "450px"),
+            div(style = "padding: 15px; margin-top: 10px; background: #f8f9fa; border-radius: 8px;",
+              uiOutput("causal_impact_summary")
+            )
+          )
+        ),
+        
+        nav_panel(
+          title = "Community Context",
+          icon = bsicons::bs_icon("geo-alt-fill"),
+          
+          # Connecticut Context
+          div(class = "section-header",
+            HTML('📍 Connecticut Community Context
+              <span class="help-icon" title="Geographic and demographic data sourced from US Census Bureau American Community Survey (ACS) 5-year estimates via tidycensus API. Data is updated annually by the Census Bureau.">?</span>')
+          ),
+          
+          layout_columns(
+            col_widths = c(8, 4),
+            card(
+              card_header("Service Area Map"),
+              leafletOutput("ct_map", height = "400px")
+            ),
+            card(
+              card_header(
+                HTML('Community Data
+                  <span class="help-icon" title="Population and median household income from 2022 ACS 5-year estimates. Focus is on program reach and service coverage. Data fetched securely via Census API.">?</span>')
+              ),
+              uiOutput("community_stats")
+            )
+          ),
+          
+          # Demographics Section
+          div(class = "section-header", "👥 Demographics & Reach"),
+          
+          card(
+            card_header("Program Reach Analysis"),
+            plotlyOutput("reach_chart", height = "300px")
+          )
+        )
+      ),
 
     # Footer with CTA
     div(
@@ -548,11 +758,53 @@ server <- function(input, output, session) {
     updateNumericInput(session, "participants", value = program$participants)
     updateNumericInput(session, "budget", value = program$budget)
     updateNumericInput(session, "completion_rate", value = program$completion_rate)
+    
+    # Update outcome metrics dropdown if program has multiple metrics
+    if (!is.null(program$outcome_metrics)) {
+      metric_choices <- names(program$outcome_metrics)
+      updateSelectInput(session, "outcome_metric", 
+                       choices = metric_choices,
+                       selected = metric_choices[1])
+    } else {
+      # For older programs without multiple metrics
+      updateSelectInput(session, "outcome_metric", 
+                       choices = list(program$score_label),
+                       selected = program$score_label)
+    }
+    
     updateNumericInput(session, "pre_score", value = program$pre_score)
     updateNumericInput(session, "post_score", value = program$post_score)
     updateTextInput(session, "score_label", value = program$score_label)
 
     current_program(program)
+  })
+  
+  # Update scores when outcome metric is selected
+  observeEvent(input$outcome_metric, {
+    req(input$outcome_metric != "")
+    req(!is.null(current_program()))
+    
+    program <- current_program()
+    
+    # If program has multiple outcome metrics
+    if (!is.null(program$outcome_metrics) && input$outcome_metric %in% names(program$outcome_metrics)) {
+      metric_data <- program$outcome_metrics[[input$outcome_metric]]
+      
+      updateNumericInput(session, "pre_score", value = metric_data$pre_score)
+      updateNumericInput(session, "post_score", value = metric_data$post_score)
+      updateTextInput(session, "score_label", value = input$outcome_metric)
+      
+      # Update the program data with selected metric's time series
+      program$pre_score <- metric_data$pre_score
+      program$post_score <- metric_data$post_score
+      program$score_label <- input$outcome_metric
+      program$time_series_pre <- metric_data$time_series_pre
+      program$time_series_post <- metric_data$time_series_post
+      program$state_avg_pre <- metric_data$state_avg_pre
+      program$state_avg_post <- metric_data$state_avg_post
+      
+      current_program(program)
+    }
   })
 
   # Value boxes
@@ -601,7 +853,12 @@ server <- function(input, output, session) {
         paper_bgcolor = "rgba(0,0,0,0)",
         margin = list(l = 60, r = 20, t = 20, b = 40)
       ) %>%
-      config(displayModeBar = FALSE)
+      config(displayModeBar = TRUE, toImageButtonOptions = list(
+        format = "png",
+        filename = "chart_export",
+        width = 800,
+        height = 500
+      ))
   })
 
   # Time series chart
@@ -609,12 +866,12 @@ server <- function(input, output, session) {
     program <- current_program()
 
     if (is.null(program)) {
-      # Default data if no sample loaded
+      # Default data if no sample loaded - add slight variation to avoid constant series
       months <- 1:12
-      pre_data <- rep(input$pre_score, 6)
-      post_data <- rep(input$post_score, 6)
-      state_pre <- rep(input$pre_score * 1.2, 6)
-      state_post <- rep(input$post_score * 0.95, 6)
+      pre_data <- input$pre_score + c(-0.1, 0.05, -0.05, 0.1, 0, -0.02)
+      post_data <- input$post_score + c(0.1, -0.05, 0.15, -0.1, 0.05, 0.2)
+      state_pre <- input$pre_score * 1.2 + c(-0.05, 0.02, 0.03, -0.01, 0.04, -0.03)
+      state_post <- input$post_score * 0.95 + c(0.02, -0.01, 0.03, 0.01, -0.02, 0.05)
     } else {
       months <- 1:12
       pre_data <- program$time_series_pre
@@ -707,7 +964,12 @@ server <- function(input, output, session) {
         ),
         margin = list(l = 60, r = 20, t = 40, b = 60)
       ) %>%
-      config(displayModeBar = FALSE)
+      config(displayModeBar = TRUE, toImageButtonOptions = list(
+        format = "png",
+        filename = "chart_export",
+        width = 800,
+        height = 500
+      ))
   })
 
   # Causal Impact Analysis
@@ -715,11 +977,11 @@ server <- function(input, output, session) {
     program <- current_program()
 
     if (is.null(program)) {
-      # Default data if no sample loaded
-      pre_data <- rep(input$pre_score, 6)
-      post_data <- rep(input$post_score, 6)
-      state_pre <- rep(input$pre_score * 1.2, 6)
-      state_post <- rep(input$post_score * 0.95, 6)
+      # Default data if no sample loaded - add slight variation to avoid constant series
+      pre_data <- input$pre_score + c(-0.1, 0.05, -0.05, 0.1, 0, -0.02)
+      post_data <- input$post_score + c(0.1, -0.05, 0.15, -0.1, 0.05, 0.2)
+      state_pre <- input$pre_score * 1.2 + c(-0.05, 0.02, 0.03, -0.01, 0.04, -0.03)
+      state_post <- input$post_score * 0.95 + c(0.02, -0.01, 0.03, 0.01, -0.02, 0.05)
     } else {
       pre_data <- program$time_series_pre
       post_data <- program$time_series_post
@@ -739,12 +1001,18 @@ server <- function(input, output, session) {
     pre_period <- c(1, 6)
     post_period <- c(7, 12)
 
-    # Run CausalImpact analysis
-    impact <- tryCatch({
-      CausalImpact(data, pre_period, post_period)
-    }, error = function(e) {
-      NULL
-    })
+    # Check for constant data that would break CausalImpact
+    if (length(unique(y)) <= 1 || length(unique(x)) <= 1 || var(y) == 0 || var(x) == 0) {
+      impact <- NULL
+    } else {
+      # Run CausalImpact analysis
+      impact <- tryCatch({
+        CausalImpact(data, pre_period, post_period)
+      }, error = function(e) {
+        warning("CausalImpact failed: ", e$message)
+        NULL
+      })
+    }
 
     if (is.null(impact)) {
       # If CausalImpact fails, show a simple message
@@ -763,42 +1031,46 @@ server <- function(input, output, session) {
           yaxis = list(showgrid = FALSE, showticklabels = FALSE, zeroline = FALSE)
         )
     } else {
-      # Extract plot data from CausalImpact object
+      # Extract plot data from CausalImpact object safely
       impact_data <- impact$series
-      impact_data$time <- 1:nrow(impact_data)
+      time_points <- 1:nrow(impact_data)
+      
+      # Extract data vectors directly to avoid plotly data association issues
+      observed_data <- as.vector(impact_data$response)
+      predicted_data <- as.vector(impact_data$point.pred)
+      lower_data <- as.vector(impact_data$point.pred.lower)
+      upper_data <- as.vector(impact_data$point.pred.upper)
 
-      # Create three panel plot: Original, Pointwise, Cumulative
-      fig <- plot_ly()
-
-      # Panel 1: Original data with prediction and confidence interval
-      fig <- fig %>%
-        add_trace(
-          data = impact_data,
-          x = ~time,
-          y = ~response,
-          type = "scatter",
-          mode = "lines+markers",
-          name = "Observed",
-          line = list(color = "#2c3e50", width = 2),
-          marker = list(size = 6)
+      # Create plot with explicit data vectors
+      fig <- plot_ly() %>%
+        # Confidence band first (so it's in background)
+        add_ribbons(
+          x = time_points,
+          ymin = lower_data,
+          ymax = upper_data,
+          name = "95% Credible Interval",
+          fillcolor = "rgba(214, 138, 147, 0.2)",
+          line = list(color = "transparent"),
+          hoverinfo = "none"
         ) %>%
+        # Predicted/counterfactual line
         add_trace(
-          data = impact_data,
-          x = ~time,
-          y = ~point.pred,
+          x = time_points,
+          y = predicted_data,
           type = "scatter",
           mode = "lines",
           name = "Predicted (Counterfactual)",
           line = list(color = "#D68A93", width = 2, dash = "dash")
         ) %>%
-        add_ribbons(
-          data = impact_data,
-          x = ~time,
-          ymin = ~point.pred.lower,
-          ymax = ~point.pred.upper,
-          name = "95% Credible Interval",
-          fillcolor = "rgba(214, 138, 147, 0.2)",
-          line = list(color = "transparent")
+        # Observed data (on top)
+        add_trace(
+          x = time_points,
+          y = observed_data,
+          type = "scatter",
+          mode = "lines+markers",
+          name = "Observed",
+          line = list(color = "#2c3e50", width = 2),
+          marker = list(size = 6)
         )
 
       # Add vertical line at intervention point
@@ -850,7 +1122,12 @@ server <- function(input, output, session) {
           ),
           margin = list(l = 60, r = 20, t = 40, b = 80)
         ) %>%
-        config(displayModeBar = FALSE)
+        config(displayModeBar = TRUE, toImageButtonOptions = list(
+        format = "png",
+        filename = "chart_export",
+        width = 800,
+        height = 500
+      ))
 
       fig
     }
@@ -861,10 +1138,11 @@ server <- function(input, output, session) {
     program <- current_program()
 
     if (is.null(program)) {
-      pre_data <- rep(input$pre_score, 6)
-      post_data <- rep(input$post_score, 6)
-      state_pre <- rep(input$pre_score * 1.2, 6)
-      state_post <- rep(input$post_score * 0.95, 6)
+      # Default data with variation to avoid constant series warnings
+      pre_data <- input$pre_score + c(-0.1, 0.05, -0.05, 0.1, 0, -0.02)
+      post_data <- input$post_score + c(0.1, -0.05, 0.15, -0.1, 0.05, 0.2)
+      state_pre <- input$pre_score * 1.2 + c(-0.05, 0.02, 0.03, -0.01, 0.04, -0.03)
+      state_post <- input$post_score * 0.95 + c(0.02, -0.01, 0.03, 0.01, -0.02, 0.05)
     } else {
       pre_data <- program$time_series_pre
       post_data <- program$time_series_post
@@ -875,16 +1153,21 @@ server <- function(input, output, session) {
     # Prepare data for CausalImpact
     y <- c(pre_data, post_data)
     x <- c(state_pre, state_post)
-    data <- zoo::zoo(cbind(y, x))
 
-    pre_period <- c(1, 6)
-    post_period <- c(7, 12)
+    # Check for constant data that would break CausalImpact
+    if (length(unique(y)) <= 1 || length(unique(x)) <= 1 || var(y) == 0 || var(x) == 0) {
+      impact <- NULL
+    } else {
+      data <- zoo::zoo(cbind(y, x))
+      pre_period <- c(1, 6)
+      post_period <- c(7, 12)
 
-    impact <- tryCatch({
-      CausalImpact(data, pre_period, post_period)
-    }, error = function(e) {
-      NULL
-    })
+      impact <- tryCatch({
+        CausalImpact(data, pre_period, post_period)
+      }, error = function(e) {
+        NULL
+      })
+    }
 
     if (is.null(impact)) {
       return(div(
@@ -893,22 +1176,49 @@ server <- function(input, output, session) {
       ))
     }
 
-    # Extract summary statistics
+    # Extract summary statistics with safety checks
     summary_data <- impact$summary
+    
+    # Check if summary data has the expected structure
+    if (is.null(summary_data) || nrow(summary_data) < 2 || is.null(summary_data$Actual) || 
+        length(summary_data$Actual) < 2 || is.null(summary_data$p) || length(summary_data$p) < 2) {
+      return(div(
+        style = "text-align: center; color: #999; padding: 20px;",
+        "Causal impact analysis incomplete. Try a different program configuration."
+      ))
+    }
 
-    # Calculate key metrics
-    absolute_effect <- summary_data$Actual[2] - summary_data$Pred[2]
-    absolute_effect_lower <- summary_data$Actual.lower[2] - summary_data$Pred.upper[2]
-    absolute_effect_upper <- summary_data$Actual.upper[2] - summary_data$Pred.lower[2]
+    # Calculate key metrics safely
+    absolute_effect <- tryCatch({
+      summary_data$Actual[2] - summary_data$Pred[2]
+    }, error = function(e) 0)
+    
+    absolute_effect_lower <- tryCatch({
+      summary_data$Actual.lower[2] - summary_data$Pred.upper[2]
+    }, error = function(e) 0)
+    
+    absolute_effect_upper <- tryCatch({
+      summary_data$Actual.upper[2] - summary_data$Pred.lower[2]
+    }, error = function(e) 0)
 
-    relative_effect <- summary_data$RelEffect[2] * 100
-    relative_effect_lower <- summary_data$RelEffect.lower[2] * 100
-    relative_effect_upper <- summary_data$RelEffect.upper[2] * 100
+    relative_effect <- tryCatch({
+      summary_data$RelEffect[2] * 100
+    }, error = function(e) 0)
+    
+    relative_effect_lower <- tryCatch({
+      summary_data$RelEffect.lower[2] * 100
+    }, error = function(e) 0)
+    
+    relative_effect_upper <- tryCatch({
+      summary_data$RelEffect.upper[2] * 100
+    }, error = function(e) 0)
 
-    p_value <- impact$summary$p[2]
+    p_value <- tryCatch({
+      summary_data$p[2]
+    }, error = function(e) 1)
 
     # Determine significance
-    is_significant <- p_value < 0.05
+    is_significant <- !is.na(p_value) && !is.null(p_value) && length(p_value) > 0 && p_value < 0.05
     significance_text <- if (is_significant) {
       "statistically significant"
     } else {
@@ -985,7 +1295,6 @@ server <- function(input, output, session) {
         label = ~paste0(
           town, ", CT",
           "<br>Population: ", comma(population),
-          "<br>Poverty Rate: ", poverty_rate, "%",
           "<br>Median Income: $", comma(median_income)
         ) %>% lapply(HTML),
         labelOptions = labelOptions(
@@ -1087,7 +1396,12 @@ server <- function(input, output, session) {
         paper_bgcolor = "rgba(0,0,0,0)",
         margin = list(l = 60, r = 20, t = 20, b = 60)
       ) %>%
-      config(displayModeBar = FALSE)
+      config(displayModeBar = TRUE, toImageButtonOptions = list(
+        format = "png",
+        filename = "chart_export",
+        width = 800,
+        height = 500
+      ))
   })
 }
 

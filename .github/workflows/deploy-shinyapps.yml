@@ -13,6 +13,7 @@ on:
           - capital-campaign-forecaster
           - board-packet-generator
           - grant-research-assistant
+          - program-impact-dashboard
   push:
     branches: [ main ]
     paths:
@@ -20,6 +21,7 @@ on:
       - 'capital-campaign-forecaster/**'
       - 'board-packet-generator/**'
       - 'grant-research-assistant/**'
+      - 'program-impact-dashboard/**'
 
 jobs:
   deploy-shinyapps:
@@ -32,7 +34,7 @@ jobs:
     - name: Set up R
       uses: r-lib/actions/setup-r@v2
       with:
-        r-version: '4.4.1'
+        r-version: '4.5.2'
 
     - name: Install system dependencies
       run: |
@@ -41,7 +43,7 @@ jobs:
 
     - name: Install R dependencies
       run: |
-        R -e "install.packages(c('rsconnect', 'shiny', 'bslib', 'dplyr', 'lubridate', 'DT', 'shinyjs', 'tidyr', 'plotly', 'jsonlite', 'scales', 'leaflet', 'httr2', 'tidygeocoder'))"
+        R -e "install.packages(c('rsconnect', 'shiny', 'bslib', 'dplyr', 'lubridate', 'DT', 'shinyjs', 'tidyr', 'plotly', 'jsonlite', 'scales', 'leaflet', 'httr2', 'tidygeocoder', 'tidycensus', 'CausalImpact', 'zoo', 'bsts', 'base64enc', 'purrr'))"
 
     - name: Determine app to deploy
       id: determine-app
@@ -58,6 +60,8 @@ jobs:
             echo "app_name=board-packet-generator" >> $GITHUB_OUTPUT
           elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "grant-research-assistant/"; then
             echo "app_name=grant-research-assistant" >> $GITHUB_OUTPUT
+          elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "program-impact-dashboard/"; then
+            echo "app_name=program-impact-dashboard" >> $GITHUB_OUTPUT
           else
             echo "app_name=donor-retention-calculator" >> $GITHUB_OUTPUT
           fi
@@ -72,6 +76,12 @@ jobs:
       run: |
         R -e "rsconnect::setAccountInfo(name='${{ secrets.SHINYAPPS_ACCOUNT }}', token='${{ secrets.SHINYAPPS_TOKEN }}', secret='${{ secrets.SHINYAPPS_SECRET }}')"
 
+    - name: Set up Census API key for program-impact-dashboard
+      if: steps.determine-app.outputs.app_name == 'program-impact-dashboard'
+      run: |
+        cd ${{ steps.determine-app.outputs.app_name }}
+        echo "CENSUS_API_KEY=${{ secrets.CENSUS_API_KEY }}" > .Renviron
+
     - name: Deploy to shinyapps.io
       run: |
         cd ${{ steps.determine-app.outputs.app_name }}
@@ -85,6 +95,8 @@ jobs:
           APP_NAME="board-packet-generator"
         elif [ "${{ steps.determine-app.outputs.app_name }}" = "grant-research-assistant" ]; then
           APP_NAME="grant-research-assistant"
+        elif [ "${{ steps.determine-app.outputs.app_name }}" = "program-impact-dashboard" ]; then
+          APP_NAME="program-impact-dashboard"
         fi
 
         R -e "rsconnect::deployApp(appName='$APP_NAME', account='${{ secrets.SHINYAPPS_ACCOUNT }}', forceUpdate=TRUE)"
