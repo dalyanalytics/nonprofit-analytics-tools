@@ -370,10 +370,25 @@ ui <- fluidPage(
         font-weight: 400;
         white-space: normal;
         width: 300px;
-        z-index: 1000;
+        z-index: 99999;
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         pointer-events: none;
         text-align: left;
+      }
+
+      /* Ensure section headers with help icons don't clip tooltips */
+      .section-header {
+        overflow: visible !important;
+      }
+
+      /* Ensure nav panels and cards don't clip tooltips */
+      .nav-panel, .tab-pane, .card, .card-body, .tab-content {
+        overflow: visible !important;
+      }
+
+      /* Ensure bslib card components don't clip */
+      .bslib-card, .bslib-card .card-body {
+        overflow: visible !important;
       }
 
       /* Footer styling */
@@ -597,15 +612,15 @@ ui <- fluidPage(
         nav_panel(
           title = "Statistical Impact",
           icon = bsicons::bs_icon("calculator-fill"),
-          
+
           # Causal Impact Analysis
-          div(class = "section-header",
-            HTML('📈 Causal Impact Analysis
-              <span class="help-icon" title="Bayesian structural time-series model estimating the causal effect of your program. Compares actual post-program outcomes against a statistical counterfactual (predicted outcomes without the program). Includes 95% credible intervals showing the range of likely impact.">?</span>')
-          ),
-          
+          div(class = "section-header", "📈 Causal Impact Analysis"),
+
           card(
-            card_header("Statistical Impact Assessment"),
+            card_header(
+              HTML('Statistical Impact Assessment
+                <span class="help-icon" title="Bayesian structural time-series model estimating the causal effect of your program. Compares actual post-program outcomes against a statistical counterfactual (predicted outcomes without the program). Includes 95% credible intervals showing the range of likely impact.">?</span>')
+            ),
             plotlyOutput("causal_impact_plot", height = "450px"),
             div(style = "padding: 15px; margin-top: 10px; background: #f8f9fa; border-radius: 8px;",
               uiOutput("causal_impact_summary")
@@ -826,7 +841,7 @@ server <- function(input, output, session) {
         paper_bgcolor = "rgba(0,0,0,0)",
         margin = list(l = 60, r = 20, t = 20, b = 40)
       ) %>%
-      config(displayModeBar = TRUE, toImageButtonOptions = list(
+      config(displayModeBar = FALSE, toImageButtonOptions = list(
         format = "png",
         filename = "chart_export",
         width = 800,
@@ -937,7 +952,7 @@ server <- function(input, output, session) {
         ),
         margin = list(l = 60, r = 20, t = 40, b = 60)
       ) %>%
-      config(displayModeBar = TRUE, toImageButtonOptions = list(
+      config(displayModeBar = FALSE, toImageButtonOptions = list(
         format = "png",
         filename = "chart_export",
         width = 800,
@@ -1095,7 +1110,7 @@ server <- function(input, output, session) {
           ),
           margin = list(l = 60, r = 20, t = 40, b = 80)
         ) %>%
-        config(displayModeBar = TRUE, toImageButtonOptions = list(
+        config(displayModeBar = FALSE, toImageButtonOptions = list(
         format = "png",
         filename = "chart_export",
         width = 800,
@@ -1369,7 +1384,7 @@ server <- function(input, output, session) {
         paper_bgcolor = "rgba(0,0,0,0)",
         margin = list(l = 60, r = 20, t = 20, b = 60)
       ) %>%
-      config(displayModeBar = TRUE, toImageButtonOptions = list(
+      config(displayModeBar = FALSE, toImageButtonOptions = list(
         format = "png",
         filename = "chart_export",
         width = 800,
