@@ -191,6 +191,23 @@
     "longitude": -73.6285
   },
   {
+    "foundation_name": "Synchrony Foundation",
+    "foundation_ein": 822935158,
+    "foundation_city": "Stamford",
+    "foundation_state": "CT",
+    "form_type": 2,
+    "total_assets": 88394943,
+    "total_revenue": 2446644,
+    "total_expenses": 18711547,
+    "grants_paid": 4667827,
+    "payout_rate": 5.28,
+    "has_red_flags": false,
+    "red_flags": "",
+    "filing_year": 2023,
+    "latitude": 41.0534,
+    "longitude": -73.5387
+  },
+  {
     "foundation_name": "Hayes Foundation",
     "foundation_ein": 61636828,
     "foundation_city": "New Haven",
@@ -223,23 +240,6 @@
     "filing_year": 2024,
     "latitude": 41.0265,
     "longitude": -73.6285
-  },
-  {
-    "foundation_name": "Oaklawn Foundation",
-    "foundation_ein": 136127896,
-    "foundation_city": "Wilton",
-    "foundation_state": "CT",
-    "form_type": 2,
-    "total_assets": 14999063,
-    "total_revenue": 934704,
-    "total_expenses": 1156656,
-    "grants_paid": 1048787,
-    "payout_rate": 6.99,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 41.1954,
-    "longitude": -73.4379
   },
   {
     "foundation_name": "Fidelity Foundation",
@@ -395,25 +395,6 @@
     "longitude": -71.0578
   },
   {
-    "foundation_name": "Longyear Foundation",
-    "foundation_ein": 42203829,
-    "foundation_city": "Chestnut Hill",
-    "foundation_state": "MA",
-    "form_type": 0,
-    "total_assets": 86823475,
-    "total_revenue": 8558090,
-    "total_expenses": 5306676,
-    "admin_expenses": 274727,
-    "grants_paid": 8127141,
-    "payout_rate": 9.36,
-    "admin_ratio": 3.38,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 42.3235,
-    "longitude": -71.1639
-  },
-  {
     "foundation_name": "Wagner Foundation",
     "foundation_ein": 206079941,
     "foundation_city": "Cambridge",
@@ -463,6 +444,23 @@
     "filing_year": 2023,
     "latitude": 42.3588,
     "longitude": -71.0578
+  },
+  {
+    "foundation_name": "Gordon Foundation",
+    "foundation_ein": 42794647,
+    "foundation_city": "Danvers",
+    "foundation_state": "MA",
+    "form_type": 2,
+    "total_assets": 1257806,
+    "total_revenue": 7047706,
+    "total_expenses": 7042689,
+    "grants_paid": 69967,
+    "payout_rate": 5.56,
+    "has_red_flags": false,
+    "red_flags": "",
+    "filing_year": 2023,
+    "latitude": 42.5665,
+    "longitude": -70.9363
   },
   {
     "foundation_name": "Lunder Foundation",
@@ -713,23 +711,6 @@
     "longitude": -70.7602
   },
   {
-    "foundation_name": "Deka Foundation",
-    "foundation_ein": 271188399,
-    "foundation_city": "Manchester",
-    "foundation_state": "NH",
-    "form_type": 2,
-    "total_assets": 15651767,
-    "total_revenue": 839150,
-    "total_expenses": 960445,
-    "grants_paid": 805304,
-    "payout_rate": 5.15,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 42.9956,
-    "longitude": -71.4548
-  },
-  {
     "foundation_name": "Sphinx Foundation",
     "foundation_ein": 26007881,
     "foundation_city": "Hanover",
@@ -747,6 +728,23 @@
     "filing_year": 2023,
     "latitude": 43.7024,
     "longitude": -72.2892
+  },
+  {
+    "foundation_name": "Deka Foundation",
+    "foundation_ein": 271188399,
+    "foundation_city": "Manchester",
+    "foundation_state": "NH",
+    "form_type": 2,
+    "total_assets": 15651767,
+    "total_revenue": 839150,
+    "total_expenses": 960445,
+    "grants_paid": 805304,
+    "payout_rate": 5.15,
+    "has_red_flags": false,
+    "red_flags": "",
+    "filing_year": 2023,
+    "latitude": 42.9956,
+    "longitude": -71.4548
   },
   {
     "foundation_name": "Windhover Foundation",
@@ -891,6 +889,23 @@
     "filing_year": 2023,
     "latitude": 43.643,
     "longitude": -72.2516
+  },
+  {
+    "foundation_name": "Weatherlow Foundation",
+    "foundation_ein": 274283491,
+    "foundation_city": "Portsmouth",
+    "foundation_state": "NH",
+    "form_type": 2,
+    "total_assets": 4926872,
+    "total_revenue": 138855,
+    "total_expenses": 273190,
+    "grants_paid": 260010,
+    "payout_rate": 5.28,
+    "has_red_flags": false,
+    "red_flags": "",
+    "filing_year": 2023,
+    "latitude": 43.0751,
+    "longitude": -70.7602
   },
   {
     "foundation_name": "Dorot Foundation",
@@ -1171,6 +1186,23 @@
     "longitude": -73.2276
   },
   {
+    "foundation_name": "Vsecu Foundation",
+    "foundation_ein": 874079773,
+    "foundation_city": "Montpelier",
+    "foundation_state": "VT",
+    "form_type": 2,
+    "total_assets": 241768,
+    "total_revenue": 91817,
+    "total_expenses": 375362,
+    "grants_paid": 20548,
+    "payout_rate": 8.5,
+    "has_red_flags": false,
+    "red_flags": "",
+    "filing_year": 2023,
+    "latitude": 44.2602,
+    "longitude": -72.575
+  },
+  {
     "foundation_name": "Oakland Foundation",
     "foundation_ein": 550754353,
     "foundation_city": "Stowe",
@@ -1203,23 +1235,6 @@
     "filing_year": 2022,
     "latitude": 44.4762,
     "longitude": -73.2129
-  },
-  {
-    "foundation_name": "Vsecu Foundation",
-    "foundation_ein": 874079773,
-    "foundation_city": "Montpelier",
-    "foundation_state": "VT",
-    "form_type": 2,
-    "total_assets": 241768,
-    "total_revenue": 91817,
-    "total_expenses": 375362,
-    "grants_paid": 20548,
-    "payout_rate": 8.5,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 44.2602,
-    "longitude": -72.575
   },
   {
     "foundation_name": "Sander Foundation",
