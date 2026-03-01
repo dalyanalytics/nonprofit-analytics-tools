@@ -134,8 +134,8 @@
     "has_red_flags": true,
     "red_flags": "Low payout rate (<5%)",
     "filing_year": 2023,
-    "latitude": 41.3766,
-    "longitude": -71.8461
+    "latitude": 41.3778,
+    "longitude": -71.8372
   },
   {
     "foundation_name": "Wolverine Foundation",
@@ -223,23 +223,6 @@
     "filing_year": 2023,
     "latitude": 41.1176,
     "longitude": -73.4079
-  },
-  {
-    "foundation_name": "Hayes Foundation",
-    "foundation_ein": 61636828,
-    "foundation_city": "New Haven",
-    "foundation_state": "CT",
-    "form_type": 2,
-    "total_assets": 28870478,
-    "total_revenue": 3748327,
-    "total_expenses": 1789761,
-    "grants_paid": 1769149,
-    "payout_rate": 6.13,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 41.3082,
-    "longitude": -72.9251
   },
   {
     "foundation_name": "Fidelity Foundation",
@@ -501,7 +484,7 @@
   {
     "foundation_name": "Onion Foundation",
     "foundation_ein": 471289795,
-    "foundation_city": "Auburn",
+    "foundation_city": "Wayne",
     "foundation_state": "ME",
     "form_type": 2,
     "total_assets": 64768101,
@@ -512,8 +495,8 @@
     "has_red_flags": true,
     "red_flags": "Low payout rate (<5%)",
     "filing_year": 2023,
-    "latitude": 44.0965,
-    "longitude": -70.2249
+    "latitude": 44.3487,
+    "longitude": -70.0662
   },
   {
     "foundation_name": "Huber Foundation",
