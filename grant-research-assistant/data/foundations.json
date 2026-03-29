@@ -620,25 +620,6 @@
     "longitude": -70.2587
   },
   {
-    "foundation_name": "Timanous Foundation",
-    "foundation_ein": 352580434,
-    "foundation_city": "Raymond",
-    "foundation_state": "ME",
-    "form_type": 0,
-    "total_assets": 9566083,
-    "total_revenue": 2393274,
-    "total_expenses": 1616536,
-    "admin_expenses": 156924,
-    "grants_paid": 573044,
-    "payout_rate": 5.99,
-    "admin_ratio": 27.38,
-    "has_red_flags": true,
-    "red_flags": "High admin costs (>20%)",
-    "filing_year": 2023,
-    "latitude": 43.9019,
-    "longitude": -70.4704
-  },
-  {
     "foundation_name": "Jaffe Foundation",
     "foundation_ein": 61469004,
     "foundation_city": "Portsmouth",
@@ -870,23 +851,6 @@
     "longitude": -70.9754
   },
   {
-    "foundation_name": "Dorot Foundation",
-    "foundation_ein": 136116927,
-    "foundation_city": "Providence",
-    "foundation_state": "RI",
-    "form_type": 2,
-    "total_assets": 136345978,
-    "total_revenue": 4085947,
-    "total_expenses": 8992825,
-    "grants_paid": 6598490,
-    "payout_rate": 4.84,
-    "has_red_flags": true,
-    "red_flags": "Low payout rate (<5%)",
-    "filing_year": 2023,
-    "latitude": 41.824,
-    "longitude": -71.4128
-  },
-  {
     "foundation_name": "Collis Foundation",
     "foundation_ein": 61472006,
     "foundation_city": "Providence",
@@ -919,6 +883,23 @@
     "filing_year": 2023,
     "latitude": 42.0029,
     "longitude": -71.5148
+  },
+  {
+    "foundation_name": "Dorot Foundation",
+    "foundation_ein": 136116927,
+    "foundation_city": "Providence",
+    "foundation_state": "RI",
+    "form_type": 2,
+    "total_assets": 136345978,
+    "total_revenue": 4085947,
+    "total_expenses": 8992825,
+    "grants_paid": 6598490,
+    "payout_rate": 4.84,
+    "has_red_flags": true,
+    "red_flags": "Low payout rate (<5%)",
+    "filing_year": 2023,
+    "latitude": 41.824,
+    "longitude": -71.4128
   },
   {
     "foundation_name": "Hassenfeld Foundation",
