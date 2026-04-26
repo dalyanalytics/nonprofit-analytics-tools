@@ -208,21 +208,21 @@
     "longitude": -73.5387
   },
   {
-    "foundation_name": "Westwind Foundation",
-    "foundation_ein": 526358830,
-    "foundation_city": "Norwalk",
+    "foundation_name": "Hayes Foundation",
+    "foundation_ein": 61636828,
+    "foundation_city": "New Haven",
     "foundation_state": "CT",
     "form_type": 2,
-    "total_assets": 91397147,
-    "total_revenue": 2609036,
-    "total_expenses": 6909220,
-    "grants_paid": 5899327,
-    "payout_rate": 6.45,
+    "total_assets": 28870478,
+    "total_revenue": 3748327,
+    "total_expenses": 1789761,
+    "grants_paid": 1769149,
+    "payout_rate": 6.13,
     "has_red_flags": false,
     "red_flags": "",
     "filing_year": 2023,
-    "latitude": 41.1176,
-    "longitude": -73.4079
+    "latitude": 41.3082,
+    "longitude": -72.9251
   },
   {
     "foundation_name": "Fidelity Foundation",
@@ -618,6 +618,25 @@
     "filing_year": 2023,
     "latitude": 43.6574,
     "longitude": -70.2587
+  },
+  {
+    "foundation_name": "Timanous Foundation",
+    "foundation_ein": 352580434,
+    "foundation_city": "Raymond",
+    "foundation_state": "ME",
+    "form_type": 0,
+    "total_assets": 9566083,
+    "total_revenue": 2393274,
+    "total_expenses": 1616536,
+    "admin_expenses": 156924,
+    "grants_paid": 573044,
+    "payout_rate": 5.99,
+    "admin_ratio": 27.38,
+    "has_red_flags": true,
+    "red_flags": "High admin costs (>20%)",
+    "filing_year": 2023,
+    "latitude": 43.9019,
+    "longitude": -70.4704
   },
   {
     "foundation_name": "Jaffe Foundation",
@@ -1129,9 +1148,9 @@
     "longitude": -73.2129
   },
   {
-    "foundation_name": "Vsecu Foundation",
+    "foundation_name": "Eastrise Foundation",
     "foundation_ein": 874079773,
-    "foundation_city": "Montpelier",
+    "foundation_city": "Williston",
     "foundation_state": "VT",
     "form_type": 2,
     "total_assets": 241768,
@@ -1142,8 +1161,8 @@
     "has_red_flags": false,
     "red_flags": "",
     "filing_year": 2023,
-    "latitude": 44.2602,
-    "longitude": -72.575
+    "latitude": 44.4376,
+    "longitude": -73.0683
   },
   {
     "foundation_name": "Oakland Foundation",
