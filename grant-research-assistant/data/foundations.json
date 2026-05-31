@@ -726,6 +726,23 @@
     "longitude": -70.7602
   },
   {
+    "foundation_name": "Deka Foundation",
+    "foundation_ein": 271188399,
+    "foundation_city": "Manchester",
+    "foundation_state": "NH",
+    "form_type": 2,
+    "total_assets": 15651767,
+    "total_revenue": 839150,
+    "total_expenses": 960445,
+    "grants_paid": 805304,
+    "payout_rate": 5.15,
+    "has_red_flags": false,
+    "red_flags": "",
+    "filing_year": 2023,
+    "latitude": 42.9956,
+    "longitude": -71.4548
+  },
+  {
     "foundation_name": "Sphinx Foundation",
     "foundation_ein": 26007881,
     "foundation_city": "Hanover",
@@ -743,23 +760,6 @@
     "filing_year": 2023,
     "latitude": 43.7024,
     "longitude": -72.2892
-  },
-  {
-    "foundation_name": "Deka Foundation",
-    "foundation_ein": 271188399,
-    "foundation_city": "Manchester",
-    "foundation_state": "NH",
-    "form_type": 2,
-    "total_assets": 15651767,
-    "total_revenue": 839150,
-    "total_expenses": 960445,
-    "grants_paid": 805304,
-    "payout_rate": 5.15,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 42.9956,
-    "longitude": -71.4548
   },
   {
     "foundation_name": "Tamworth Foundation",
