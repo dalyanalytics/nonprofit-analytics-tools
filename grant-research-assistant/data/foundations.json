@@ -138,23 +138,6 @@
     "longitude": -73.6285
   },
   {
-    "foundation_name": "Bossidy Foundation",
-    "foundation_ein": 61188527,
-    "foundation_city": "Ridgefield",
-    "foundation_state": "CT",
-    "form_type": 2,
-    "total_assets": 1874168,
-    "total_revenue": 110206,
-    "total_expenses": 875347,
-    "grants_paid": 177738,
-    "payout_rate": 9.48,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 41.2815,
-    "longitude": -73.4982
-  },
-  {
     "foundation_name": "Rodos Foundation",
     "foundation_ein": 831561129,
     "foundation_city": "Bloomfield",
@@ -172,6 +155,23 @@
     "filing_year": 2024,
     "latitude": 41.8313,
     "longitude": -72.737
+  },
+  {
+    "foundation_name": "Bossidy Foundation",
+    "foundation_ein": 61188527,
+    "foundation_city": "Ridgefield",
+    "foundation_state": "CT",
+    "form_type": 2,
+    "total_assets": 1874168,
+    "total_revenue": 110206,
+    "total_expenses": 875347,
+    "grants_paid": 177738,
+    "payout_rate": 9.48,
+    "has_red_flags": false,
+    "red_flags": "",
+    "filing_year": 2023,
+    "latitude": 41.2815,
+    "longitude": -73.4982
   },
   {
     "foundation_name": "Synchrony Foundation",
@@ -427,23 +427,6 @@
     "filing_year": 2023,
     "latitude": 42.3656,
     "longitude": -71.104
-  },
-  {
-    "foundation_name": "Quonochontaug Foundation",
-    "foundation_ein": 274129667,
-    "foundation_city": "Beverly",
-    "foundation_state": "MA",
-    "form_type": 2,
-    "total_assets": 20449988,
-    "total_revenue": 3713279,
-    "total_expenses": 2275685,
-    "grants_paid": 1185328,
-    "payout_rate": 5.8,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 42.549,
-    "longitude": -70.8782
   },
   {
     "foundation_name": "Lunder Foundation",
@@ -1161,8 +1144,8 @@
     "has_red_flags": false,
     "red_flags": "",
     "filing_year": 2023,
-    "latitude": 44.4376,
-    "longitude": -73.0683
+    "latitude": 44.4385,
+    "longitude": -73.0728
   },
   {
     "foundation_name": "Oakland Foundation",
