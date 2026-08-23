@@ -191,23 +191,6 @@
     "longitude": -73.5387
   },
   {
-    "foundation_name": "Emwiga Foundation",
-    "foundation_ein": 133247601,
-    "foundation_city": "Greenwich",
-    "foundation_state": "CT",
-    "form_type": 2,
-    "total_assets": 11285355,
-    "total_revenue": 2813061,
-    "total_expenses": 1005487,
-    "grants_paid": 693539,
-    "payout_rate": 6.15,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2024,
-    "latitude": 41.0265,
-    "longitude": -73.6285
-  },
-  {
     "foundation_name": "Bemc Foundation",
     "foundation_ein": 854281986,
     "foundation_city": "Greenwich",
@@ -395,6 +378,23 @@
     "longitude": -71.0578
   },
   {
+    "foundation_name": "Hamoui Foundation",
+    "foundation_ein": 273280120,
+    "foundation_city": "Needham",
+    "foundation_state": "MA",
+    "form_type": 2,
+    "total_assets": 15587191,
+    "total_revenue": 1777251,
+    "total_expenses": 1963884,
+    "grants_paid": 937734,
+    "payout_rate": 6.02,
+    "has_red_flags": false,
+    "red_flags": "",
+    "filing_year": 2023,
+    "latitude": 42.2803,
+    "longitude": -71.2361
+  },
+  {
     "foundation_name": "Wagner Foundation",
     "foundation_ein": 206079941,
     "foundation_city": "Cambridge",
@@ -407,23 +407,6 @@
     "payout_rate": 6,
     "has_red_flags": false,
     "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 42.3656,
-    "longitude": -71.104
-  },
-  {
-    "foundation_name": "Pdb Foundation",
-    "foundation_ein": 823779206,
-    "foundation_city": "Cambridge",
-    "foundation_state": "MA",
-    "form_type": 2,
-    "total_assets": 76013824,
-    "total_revenue": 1758576,
-    "total_expenses": 5213514,
-    "grants_paid": 3794194,
-    "payout_rate": 4.99,
-    "has_red_flags": true,
-    "red_flags": "Low payout rate (<5%)",
     "filing_year": 2023,
     "latitude": 42.3656,
     "longitude": -71.104
@@ -1008,6 +991,23 @@
     "longitude": -71.4128
   },
   {
+    "foundation_name": "Beacon Foundation",
+    "foundation_ein": 854065871,
+    "foundation_city": "Warwick",
+    "foundation_state": "RI",
+    "form_type": 2,
+    "total_assets": 4160164,
+    "total_revenue": 807606,
+    "total_expenses": 177121,
+    "grants_paid": 170206,
+    "payout_rate": 4.09,
+    "has_red_flags": true,
+    "red_flags": "Low payout rate (<5%)",
+    "filing_year": 2023,
+    "latitude": 41.6993,
+    "longitude": -71.4586
+  },
+  {
     "foundation_name": "Collette Foundation",
     "foundation_ein": 208256603,
     "foundation_city": "Pawtucket",
@@ -1059,23 +1059,6 @@
     "filing_year": 2023,
     "latitude": 41.824,
     "longitude": -71.4128
-  },
-  {
-    "foundation_name": "Pisa Foundation",
-    "foundation_ein": 50494285,
-    "foundation_city": "N Kingstown",
-    "foundation_state": "RI",
-    "form_type": 2,
-    "total_assets": 5137947,
-    "total_revenue": 337914,
-    "total_expenses": 316282,
-    "grants_paid": 347036,
-    "payout_rate": 6.75,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 41.5514,
-    "longitude": -71.4694
   },
   {
     "foundation_name": "Keewaydin Foundation",
@@ -1197,6 +1180,23 @@
     "filing_year": 2022,
     "latitude": 44.4644,
     "longitude": -72.6856
+  },
+  {
+    "foundation_name": "Keal Foundation",
+    "foundation_ein": 30280402,
+    "foundation_city": "Colchester",
+    "foundation_state": "VT",
+    "form_type": 2,
+    "total_assets": 367563,
+    "total_revenue": 5351,
+    "total_expenses": 12079,
+    "grants_paid": 1527,
+    "payout_rate": 0.42,
+    "has_red_flags": true,
+    "red_flags": "Low payout rate (<5%)",
+    "filing_year": 2023,
+    "latitude": 44.5341,
+    "longitude": -73.1846
   },
   {
     "foundation_name": "Greater Hartford Gives Foundation",
