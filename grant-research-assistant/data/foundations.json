@@ -378,38 +378,23 @@
     "longitude": -71.0578
   },
   {
-    "foundation_name": "Hamoui Foundation",
-    "foundation_ein": 273280120,
-    "foundation_city": "Needham",
+    "foundation_name": "Longyear Foundation",
+    "foundation_ein": 42203829,
+    "foundation_city": "Chestnut Hill",
     "foundation_state": "MA",
-    "form_type": 2,
-    "total_assets": 15587191,
-    "total_revenue": 1777251,
-    "total_expenses": 1963884,
-    "grants_paid": 937734,
-    "payout_rate": 6.02,
+    "form_type": 0,
+    "total_assets": 86823475,
+    "total_revenue": 8558090,
+    "total_expenses": 5306676,
+    "admin_expenses": 274727,
+    "grants_paid": 8127141,
+    "payout_rate": 9.36,
+    "admin_ratio": 3.38,
     "has_red_flags": false,
     "red_flags": "",
     "filing_year": 2023,
-    "latitude": 42.2803,
-    "longitude": -71.2361
-  },
-  {
-    "foundation_name": "Wagner Foundation",
-    "foundation_ein": 206079941,
-    "foundation_city": "Cambridge",
-    "foundation_state": "MA",
-    "form_type": 2,
-    "total_assets": 167759079,
-    "total_revenue": 7904161,
-    "total_expenses": 15470355,
-    "grants_paid": 10073334,
-    "payout_rate": 6,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 42.3656,
-    "longitude": -71.104
+    "latitude": 42.3235,
+    "longitude": -71.1639
   },
   {
     "foundation_name": "Lunder Foundation",
@@ -535,6 +520,23 @@
     "longitude": -70.3945
   },
   {
+    "foundation_name": "Forum Foundation",
+    "foundation_ein": 203986056,
+    "foundation_city": "S Portland",
+    "foundation_state": "ME",
+    "form_type": 2,
+    "total_assets": 6818902,
+    "total_revenue": 35361,
+    "total_expenses": 797769,
+    "grants_paid": 6244,
+    "payout_rate": 0.09,
+    "has_red_flags": true,
+    "red_flags": "Low payout rate (<5%)",
+    "filing_year": 2023,
+    "latitude": 43.6382,
+    "longitude": -70.2529
+  },
+  {
     "foundation_name": "Anonimo Foundation",
     "foundation_ein": 223061717,
     "foundation_city": "Damariscotta",
@@ -620,25 +622,6 @@
     "filing_year": 2023,
     "latitude": 43.3875,
     "longitude": -72.0877
-  },
-  {
-    "foundation_name": "Hitchcock Foundation",
-    "foundation_ein": 20222139,
-    "foundation_city": "Lebanon",
-    "foundation_state": "NH",
-    "form_type": 0,
-    "total_assets": 35295737,
-    "total_revenue": 3943931,
-    "total_expenses": 2459988,
-    "admin_expenses": 0,
-    "grants_paid": 1392590,
-    "payout_rate": 3.95,
-    "admin_ratio": 0,
-    "has_red_flags": true,
-    "red_flags": "Low payout rate (<5%)",
-    "filing_year": 2023,
-    "latitude": 43.643,
-    "longitude": -72.2516
   },
   {
     "foundation_name": "Putnam Foundation",
@@ -730,23 +713,6 @@
     "longitude": -72.2892
   },
   {
-    "foundation_name": "Windhover Foundation",
-    "foundation_ein": 311630033,
-    "foundation_city": "Portsmouth",
-    "foundation_state": "NH",
-    "form_type": 2,
-    "total_assets": 1486959,
-    "total_revenue": 54666,
-    "total_expenses": 164424,
-    "grants_paid": 79322,
-    "payout_rate": 5.33,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 43.0751,
-    "longitude": -70.7602
-  },
-  {
     "foundation_name": "Dorr Foundation",
     "foundation_ein": 136017294,
     "foundation_city": "Portsmouth",
@@ -817,6 +783,40 @@
     "filing_year": 2023,
     "latitude": 43.3051,
     "longitude": -70.9754
+  },
+  {
+    "foundation_name": "Birdseye Foundation",
+    "foundation_ein": 261646116,
+    "foundation_city": "Lebanon",
+    "foundation_state": "NH",
+    "form_type": 2,
+    "total_assets": 2869261,
+    "total_revenue": 187184,
+    "total_expenses": 219652,
+    "grants_paid": 181678,
+    "payout_rate": 6.33,
+    "has_red_flags": false,
+    "red_flags": "",
+    "filing_year": 2023,
+    "latitude": 43.643,
+    "longitude": -72.2516
+  },
+  {
+    "foundation_name": "Weatherlow Foundation",
+    "foundation_ein": 274283491,
+    "foundation_city": "Portsmouth",
+    "foundation_state": "NH",
+    "form_type": 2,
+    "total_assets": 4926872,
+    "total_revenue": 138855,
+    "total_expenses": 273190,
+    "grants_paid": 260010,
+    "payout_rate": 5.28,
+    "has_red_flags": false,
+    "red_flags": "",
+    "filing_year": 2023,
+    "latitude": 43.0751,
+    "longitude": -70.7602
   },
   {
     "foundation_name": "Collis Foundation",
@@ -921,23 +921,6 @@
     "longitude": -71.4128
   },
   {
-    "foundation_name": "Fm Foundation",
-    "foundation_ein": 222773230,
-    "foundation_city": "Johnston",
-    "foundation_state": "RI",
-    "form_type": 2,
-    "total_assets": 23991621,
-    "total_revenue": 197753,
-    "total_expenses": 6543832,
-    "grants_paid": 1396951,
-    "payout_rate": 5.82,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 41.831,
-    "longitude": -71.5412
-  },
-  {
     "foundation_name": "Lifespan Foundation",
     "foundation_ein": 50493219,
     "foundation_city": "Providence",
@@ -955,6 +938,23 @@
     "filing_year": 2023,
     "latitude": 41.824,
     "longitude": -71.4128
+  },
+  {
+    "foundation_name": "Fm Foundation",
+    "foundation_ein": 222773230,
+    "foundation_city": "Johnston",
+    "foundation_state": "RI",
+    "form_type": 2,
+    "total_assets": 23991621,
+    "total_revenue": 197753,
+    "total_expenses": 6543832,
+    "grants_paid": 1396951,
+    "payout_rate": 5.82,
+    "has_red_flags": false,
+    "red_flags": "",
+    "filing_year": 2023,
+    "latitude": 41.831,
+    "longitude": -71.5412
   },
   {
     "foundation_name": "Bafflin Foundation",
@@ -991,6 +991,25 @@
     "longitude": -71.4128
   },
   {
+    "foundation_name": "Chartercare Foundation",
+    "foundation_ein": 260236669,
+    "foundation_city": "N Providence",
+    "foundation_state": "RI",
+    "form_type": 0,
+    "total_assets": 6008338,
+    "total_revenue": 245530,
+    "total_expenses": 422504,
+    "admin_expenses": 0,
+    "grants_paid": 61144,
+    "payout_rate": 1.02,
+    "admin_ratio": 0,
+    "has_red_flags": true,
+    "red_flags": "Low payout rate (<5%)",
+    "filing_year": 2023,
+    "latitude": 41.8501,
+    "longitude": -71.4662
+  },
+  {
     "foundation_name": "Beacon Foundation",
     "foundation_ein": 854065871,
     "foundation_city": "Warwick",
@@ -1023,25 +1042,6 @@
     "filing_year": 2023,
     "latitude": 41.879,
     "longitude": -71.3821
-  },
-  {
-    "foundation_name": "Providence Foundation",
-    "foundation_ein": 237423032,
-    "foundation_city": "Providence",
-    "foundation_state": "RI",
-    "form_type": 0,
-    "total_assets": 456216,
-    "total_revenue": 824379,
-    "total_expenses": 1000244,
-    "admin_expenses": 188383,
-    "grants_paid": 815474,
-    "payout_rate": 100,
-    "admin_ratio": 23.1,
-    "has_red_flags": true,
-    "red_flags": "High admin costs (>20%)",
-    "filing_year": 2023,
-    "latitude": 41.824,
-    "longitude": -71.4128
   },
   {
     "foundation_name": "Everhope Foundation",
@@ -1214,7 +1214,7 @@
     "has_red_flags": true,
     "red_flags": "Low payout rate (<5%)",
     "filing_year": 2023,
-    "latitude": 41.7646,
-    "longitude": -72.6909
+    "latitude": 41.7662,
+    "longitude": -72.6733
   }
 ]
