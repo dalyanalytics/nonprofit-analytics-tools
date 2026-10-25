@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-18 06:53:47",
+  "last_updated": "2026-10-25 07:12:43",
   "states_included": ["CT", "MA", "ME", "NH", "RI", "VT"],
   "total_foundations": 70,
   "data_source": "ProPublica Nonprofit Explorer API"

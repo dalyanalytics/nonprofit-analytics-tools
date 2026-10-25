@@ -87,6 +87,23 @@
     "longitude": -73.6285
   },
   {
+    "foundation_name": "Synchrony Foundation",
+    "foundation_ein": 822935158,
+    "foundation_city": "Stamford",
+    "foundation_state": "CT",
+    "form_type": 2,
+    "total_assets": 88394943,
+    "total_revenue": 2446644,
+    "total_expenses": 18711547,
+    "grants_paid": 4667827,
+    "payout_rate": 5.28,
+    "has_red_flags": false,
+    "red_flags": "",
+    "filing_year": 2023,
+    "latitude": 41.0534,
+    "longitude": -73.5387
+  },
+  {
     "foundation_name": "Mcchord Foundation",
     "foundation_ein": 364969620,
     "foundation_city": "Norwalk",
@@ -172,23 +189,6 @@
     "filing_year": 2023,
     "latitude": 41.2815,
     "longitude": -73.4982
-  },
-  {
-    "foundation_name": "Synchrony Foundation",
-    "foundation_ein": 822935158,
-    "foundation_city": "Stamford",
-    "foundation_state": "CT",
-    "form_type": 2,
-    "total_assets": 88394943,
-    "total_revenue": 2446644,
-    "total_expenses": 18711547,
-    "grants_paid": 4667827,
-    "payout_rate": 5.28,
-    "has_red_flags": false,
-    "red_flags": "",
-    "filing_year": 2023,
-    "latitude": 41.0534,
-    "longitude": -73.5387
   },
   {
     "foundation_name": "Bemc Foundation",
@@ -310,6 +310,23 @@
     "longitude": -71.0578
   },
   {
+    "foundation_name": "Rx Foundation",
+    "foundation_ein": 810556499,
+    "foundation_city": "Hadley",
+    "foundation_state": "MA",
+    "form_type": 2,
+    "total_assets": 41820351,
+    "total_revenue": 1727008,
+    "total_expenses": 3130512,
+    "grants_paid": 1978378,
+    "payout_rate": 4.73,
+    "has_red_flags": true,
+    "red_flags": "Low payout rate (<5%)",
+    "filing_year": 2023,
+    "latitude": 42.3423,
+    "longitude": -72.5891
+  },
+  {
     "foundation_name": "Janki Foundation",
     "foundation_ein": 823774059,
     "foundation_city": "Boston",
@@ -378,23 +395,23 @@
     "longitude": -71.0578
   },
   {
-    "foundation_name": "Longyear Foundation",
-    "foundation_ein": 42203829,
-    "foundation_city": "Chestnut Hill",
-    "foundation_state": "MA",
+    "foundation_name": "Foundation For Hao- Foundation Syndrome",
+    "foundation_ein": 821697564,
+    "foundation_city": "Falmouth",
+    "foundation_state": "ME",
     "form_type": 0,
-    "total_assets": 86823475,
-    "total_revenue": 8558090,
-    "total_expenses": 5306676,
-    "admin_expenses": 274727,
-    "grants_paid": 8127141,
-    "payout_rate": 9.36,
-    "admin_ratio": 3.38,
+    "total_assets": 189601,
+    "total_revenue": 54447,
+    "total_expenses": 81195,
+    "admin_expenses": 0,
+    "grants_paid": 54447,
+    "payout_rate": 28.72,
+    "admin_ratio": 0,
     "has_red_flags": false,
     "red_flags": "",
     "filing_year": 2023,
-    "latitude": 42.3235,
-    "longitude": -71.1639
+    "latitude": 43.722,
+    "longitude": -70.2327
   },
   {
     "foundation_name": "Lunder Foundation",
@@ -501,25 +518,6 @@
     "longitude": -69.9659
   },
   {
-    "foundation_name": "Algae Foundation",
-    "foundation_ein": 462312083,
-    "foundation_city": "Poland",
-    "foundation_state": "ME",
-    "form_type": 0,
-    "total_assets": 1489570,
-    "total_revenue": 1488145,
-    "total_expenses": 1023095,
-    "admin_expenses": 201577,
-    "grants_paid": 189613,
-    "payout_rate": 12.73,
-    "admin_ratio": 106.31,
-    "has_red_flags": true,
-    "red_flags": "High admin costs (>20%)",
-    "filing_year": 2023,
-    "latitude": 44.0616,
-    "longitude": -70.3945
-  },
-  {
     "foundation_name": "Forum Foundation",
     "foundation_ein": 203986056,
     "foundation_city": "S Portland",
@@ -571,23 +569,23 @@
     "longitude": -69.073
   },
   {
-    "foundation_name": "Timanous Foundation",
-    "foundation_ein": 352580434,
-    "foundation_city": "Raymond",
+    "foundation_name": "Algae Foundation",
+    "foundation_ein": 462312083,
+    "foundation_city": "Poland",
     "foundation_state": "ME",
     "form_type": 0,
-    "total_assets": 9566083,
-    "total_revenue": 2393274,
-    "total_expenses": 1616536,
-    "admin_expenses": 156924,
-    "grants_paid": 573044,
-    "payout_rate": 5.99,
-    "admin_ratio": 27.38,
+    "total_assets": 1489570,
+    "total_revenue": 1488145,
+    "total_expenses": 1023095,
+    "admin_expenses": 201577,
+    "grants_paid": 189613,
+    "payout_rate": 12.73,
+    "admin_ratio": 106.31,
     "has_red_flags": true,
     "red_flags": "High admin costs (>20%)",
     "filing_year": 2023,
-    "latitude": 43.9019,
-    "longitude": -70.4704
+    "latitude": 44.0616,
+    "longitude": -70.3945
   },
   {
     "foundation_name": "Jaffe Foundation",
@@ -656,6 +654,25 @@
     "filing_year": 2023,
     "latitude": 42.9956,
     "longitude": -71.4548
+  },
+  {
+    "foundation_name": "Seton Foundation",
+    "foundation_ein": 882333957,
+    "foundation_city": "Somersworth",
+    "foundation_state": "NH",
+    "form_type": 0,
+    "total_assets": 183584,
+    "total_revenue": 344088,
+    "total_expenses": 332094,
+    "admin_expenses": 42273,
+    "grants_paid": 102477,
+    "payout_rate": 55.82,
+    "admin_ratio": 41.25,
+    "has_red_flags": true,
+    "red_flags": "High admin costs (>20%)",
+    "filing_year": 2023,
+    "latitude": 43.2626,
+    "longitude": -70.8646
   },
   {
     "foundation_name": "Tamworth Foundation",
@@ -764,25 +781,6 @@
     "filing_year": 2022,
     "latitude": 43.2072,
     "longitude": -71.5375
-  },
-  {
-    "foundation_name": "Seton Foundation",
-    "foundation_ein": 882333957,
-    "foundation_city": "Rochester",
-    "foundation_state": "NH",
-    "form_type": 0,
-    "total_assets": 183584,
-    "total_revenue": 344088,
-    "total_expenses": 332094,
-    "admin_expenses": 42273,
-    "grants_paid": 102477,
-    "payout_rate": 55.82,
-    "admin_ratio": 41.25,
-    "has_red_flags": true,
-    "red_flags": "High admin costs (>20%)",
-    "filing_year": 2023,
-    "latitude": 43.3051,
-    "longitude": -70.9754
   },
   {
     "foundation_name": "Birdseye Foundation",
@@ -1093,8 +1091,8 @@
     "has_red_flags": true,
     "red_flags": "Low payout rate (<5%)",
     "filing_year": 2023,
-    "latitude": 44.3785,
-    "longitude": -73.2285
+    "latitude": 44.3783,
+    "longitude": -73.2276
   },
   {
     "foundation_name": "Onda Foundation",
